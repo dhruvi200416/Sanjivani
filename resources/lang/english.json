@@ -1,0 +1,20 @@
+{
+    "Welcome": "Welcome",
+    "Home": "Home",
+    "About": "About",
+    "Contact": "Contact",
+    "Dashboard": "Dashboard",
+    "Login": "Login",
+    "Register": "Register",
+    "Logout": "Logout",
+    "Manage Medicines": "Manage Medicines",
+    "Orders": "Orders",
+    "Profile": "Profile",
+    "Villages": "Villages",
+    "Pharmacies": "Pharmacies",
+    "Delivery Partners": "Delivery Partners",
+    "Cart": "Cart",
+    "Checkout": "Checkout",
+    "Prescription": "Prescription",
+    "Submit": "Submit"
+}

@@ -1,0 +1,166 @@
+<?php
+// resources/lang/en/messages.php
+
+return [
+    // ============ NAVBAR ============
+    'brand_name'                   => 'Sanjivani',
+    'brand_tagline'                => 'Your Health, Our Priority',
+    'topbar_delivery'              => 'Free Delivery on orders above ₹500',
+    'topbar_genuine'               => '100% Genuine Medicines',
+    'nav_home'                     => 'Home',
+    'nav_about'                    => 'About',
+    'nav_contact'                  => 'Contact',
+    'nav_login'                    => 'Login',
+    'nav_register'                 => 'Register',
+    'nav_logout'                   => 'Logout',
+    'nav_dashboard'                => 'Dashboard',
+    'lang_english'                 => 'English',
+    'lang_gujarati'                => 'ગુજરાતી',
+
+    // ============ HERO ============
+    'hero_badge'                   => '100% Genuine & Verified Medicines',
+    'hero_title'                   => 'Your Health Deserves <span class="highlight">The Best Care</span>',
+    'hero_subtitle'                => 'Order medicines online from verified local pharmacies and get them delivered to your doorstep within hours. Upload prescriptions, track orders and stay healthy — all in one place.',
+    'hero_search_placeholder'      => 'Search for medicines, brands, health products...',
+    'hero_search_btn'              => 'Search Now',
+    'hero_browse_medicines'        => 'Browse Medicines',
+    'hero_upload_prescription'     => 'Upload Prescription',
+    'hero_fast_delivery'           => 'Fast Delivery',
+    'hero_fast_delivery_sub'       => 'Within 2-4 Hours',
+    'hero_verified_sellers'        => 'Verified Sellers',
+    'hero_verified_sellers_sub'    => 'Licensed Pharmacies',
+    'hero_support'                 => '24/7 Support',
+    'hero_support_sub'             => 'Always Available',
+    'hero_medicines_available'     => 'Medicines Available',
+    'hero_happy_customers'         => 'Happy Customers',
+    'hero_partner_pharmacies'      => 'Partner Pharmacies',
+
+    // ============ FEATURES ============
+    'feat_express_title'           => 'Express Delivery',
+    'feat_express_desc'            => 'Get your medicines delivered within 2-4 hours from your nearest partnered pharmacy.',
+    'feat_genuine_title'           => 'Genuine Products',
+    'feat_genuine_desc'            => 'All medicines are sourced from licensed pharmacies with authentic quality assurance.',
+    'feat_best_price_title'        => 'Best Prices',
+    'feat_best_price_desc'         => 'Enjoy attractive discounts and affordable prices on all your medicine purchases.',
+    'feat_expert_title'            => 'Expert Guidance',
+    'feat_expert_desc'             => 'Certified pharmacists review your prescriptions to ensure correct medication.',
+
+    // ============ CATEGORIES ============
+    'categories_badge'             => 'Categories',
+    'categories_title'             => 'Shop By <span class="highlight">Health Category</span>',
+    'categories_desc'              => 'Find exactly what you need from our wide range of medicine categories curated for every health requirement.',
+    'cat_fever'                    => 'Fever & Pain',
+    'cat_cold'                     => 'Cold & Cough',
+    'cat_diabetes'                 => 'Diabetes Care',
+    'cat_heart'                    => 'Heart Care',
+    'cat_vitamins'                 => 'Vitamins',
+    'cat_skin'                     => 'Skin Care',
+    'cat_baby'                     => 'Baby Care',
+    'cat_firstaid'                 => 'First Aid',
+    'cat_ayurvedic'                => 'Ayurvedic',
+    'cat_digestive'                => 'Digestive',
+    'cat_eye'                      => 'Eye Care',
+    'cat_devices'                  => 'Devices',
+    'cat_explore'                  => 'Explore',
+
+    // ============ FEATURED MEDICINES ============
+    'featured_badge'               => 'Featured',
+    'featured_title'               => 'Popular <span class="highlight">Medicines</span>',
+    'featured_desc'                => 'Hand-picked, best-selling and trusted medicines available at the best prices with fast delivery.',
+    'in_stock'                     => 'In Stock',
+    'out_of_stock'                 => 'Out of Stock',
+    'view'                         => 'View',
+    'no_featured'                  => 'No featured medicines available right now',
+    'no_featured_desc'             => 'Please check back soon — our pharmacies are adding new stock daily.',
+    'browse_all'                   => 'Browse All Medicines',
+    'view_all'                     => 'View All Medicines',
+
+    // ============ HOW IT WORKS ============
+    'how_badge'                    => 'Process',
+    'how_title'                    => 'How <span style="color:#A5D6A7;">Sanjivani</span> Works',
+    'how_desc'                     => 'Getting your medicines delivered is simple. Just follow these four easy steps.',
+    'how_step1_title'              => 'Create Account',
+    'how_step1_desc'               => 'Register in seconds with your name, mobile number and delivery address.',
+    'how_step2_title'              => 'Search & Add',
+    'how_step2_desc'               => 'Browse medicines or upload your prescription and add items to your cart.',
+    'how_step3_title'              => 'Place Order',
+    'how_step3_desc'               => 'Confirm your order and pay online or choose cash on delivery option.',
+    'how_step4_title'              => 'Get Delivered',
+    'how_step4_desc'               => 'Our delivery partner brings your medicines safely to your doorstep.',
+
+    // ============ STATS ============
+    'stat_happy_customers'         => 'Happy Customers',
+    'stat_partner_pharmacies'      => 'Partner Pharmacies',
+    'stat_medicines_listed'        => 'Medicines Listed',
+    'stat_orders_delivered'        => 'Orders Delivered',
+
+    // ============ WHY CHOOSE US ============
+    'why_badge'                    => 'Why Choose Us',
+    'why_title'                    => 'Healthcare Made <span class="highlight">Simple & Reliable</span>',
+    'why_desc'                     => 'Sanjivani bridges the gap between patients and pharmacies, especially in rural and semi-urban areas, ensuring nobody has to travel far for essential medicines.',
+    'why_village_title'            => 'Village-Level Delivery Network',
+    'why_village_desc'             => 'We reach remote villages where pharmacies are hard to access, ensuring medicine availability for all.',
+    'why_prescription_title'       => 'Prescription Verification',
+    'why_prescription_desc'        => 'Every prescription is reviewed by a licensed pharmacist before your order is processed.',
+    'why_tracking_title'           => 'Real-Time Order Tracking',
+    'why_tracking_desc'            => 'Track your order status live — from pharmacy confirmation to delivery at your doorstep.',
+    'why_cod_title'                => 'Cash on Delivery Available',
+    'why_cod_desc'                 => 'Pay conveniently after receiving your order — no online payment required.',
+    'why_learn_more'               => 'Learn More About Us',
+
+    // ============ PRESCRIPTION CTA ============
+    'rx_title'                     => "Have a Doctor's Prescription?",
+    'rx_desc'                      => 'Simply upload a clear photo of your prescription. Our verified pharmacists will review it, prepare your medicines and deliver them to your address. Safe, quick and hassle-free.',
+    'rx_upload_btn'                => 'Upload Prescription Now',
+
+    // ============ TESTIMONIALS ============
+    'test_badge'                   => 'Testimonials',
+    'test_title'                   => 'What Our <span class="highlight">Customers Say</span>',
+    'test_desc'                    => 'Real experiences from real people who trust Sanjivani for their healthcare needs.',
+
+    // ============ PARTNER ============
+    'partner_badge'                => 'Join Us',
+    'partner_title'                => 'Grow With <span class="highlight">Sanjivani</span>',
+    'partner_desc'                 => 'Are you a pharmacy owner or looking for delivery work? Partner with us and grow your income.',
+    'partner_pharmacy_title'       => 'Register Your Pharmacy',
+    'partner_pharmacy_desc'        => 'List your medical store on Sanjivani and reach thousands of customers in your area. Manage inventory, receive orders and increase your daily sales — all from one dashboard.',
+    'partner_pharmacy_btn'         => 'Join as Pharmacy',
+    'partner_delivery_title'       => 'Become a Delivery Partner',
+    'partner_delivery_desc'        => 'Earn on your own schedule by delivering medicines in your locality. Flexible working hours, weekly payouts and a simple app to manage all your deliveries.',
+    'partner_delivery_btn'         => 'Join as Delivery Partner',
+
+    // ============ FINAL CTA ============
+    'cta_title'                    => 'Ready to Order Your Medicines?',
+    'cta_desc'                     => 'Join thousands of families who trust Sanjivani for safe and timely medicine delivery.',
+    'cta_create_account'           => 'Create Free Account',
+    'cta_talk'                     => 'Talk to Us',
+
+    // ============ FOOTER ============
+    'footer_desc'                  => 'Your trusted online pharmacy delivering genuine medicines right to your doorstep. We connect you with verified local pharmacies for safe and reliable healthcare.',
+    'footer_quick_links'           => 'Quick Links',
+    'footer_about_us'              => 'About Us',
+    'footer_services'              => 'Services',
+    'footer_medicine_delivery'     => 'Medicine Delivery',
+    'footer_prescription'          => 'Prescription',
+    'footer_health_checkup'        => 'Health Checkup',
+    'footer_lab_tests'             => 'Lab Tests',
+    'footer_health_tips'           => 'Health Tips',
+    'footer_contact_us'            => 'Contact Us',
+    'footer_address'               => 'Address',
+    'footer_address_value'         => '123 Health Street, Medical Plaza, India - 400001',
+    'footer_phone'                 => 'Phone',
+    'footer_phone_value'           => '+91 98765 43210 / +91 12345 67890',
+    'footer_email'                 => 'Email',
+    'footer_working_hours'         => 'Working Hours',
+    'footer_working_hours_value'   => 'Mon - Sat: 8:00 AM - 10:00 PM',
+    'footer_rights'                => 'All Rights Reserved.',
+    'footer_made_with'             => 'Made with',
+    'footer_for_healthcare'        => 'for better healthcare.',
+
+    // ============ JS VALIDATION ============
+    'js_search_required'           => 'Please enter a medicine name to search.',
+    'js_search_min'                => 'Please enter at least 2 characters.',
+    'js_search_invalid'            => 'Only letters, numbers, spaces, +, - and . are allowed.',
+    'js_email_required'            => 'Please enter your email address.',
+    'js_email_invalid'             => 'Please enter a valid email address.',
+];
