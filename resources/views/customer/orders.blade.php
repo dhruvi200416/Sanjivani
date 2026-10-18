@@ -2,7 +2,7 @@
 
 @section('title', 'My Orders')
 @section('page_title')
-<i class="fas fa-box"></i> My Orders
+<i class="fas fa-box"></i> {{ app(\App\Services\GoogleTranslator::class)->translate('My Orders') }}
 @endsection
 
 @section('styles')
@@ -480,7 +480,7 @@
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
     }
 
-    /* Order Timeline (in modal) */
+    /* Order Timeline */
     .order-timeline-c {
         list-style: none;
         padding: 0;
@@ -708,7 +708,10 @@
 
 @section('content')
 
+{{-- Shared batch translation for My Orders page --}}
 @php
+use App\Services\GoogleTranslator;
+
 // Get orders from controller; handle Collection or Paginator
 $ordersCollection = $orders ?? collect();
 
@@ -737,8 +740,6 @@ $demoOrders = collect([
 (object)['name'=>'Amoxicillin 250mg','brand'=>'Mox','price'=>85,'quantity'=>3,'image'=>null],
 (object)['name'=>'Antacid Tablets','brand'=>'ENO','price'=>60,'quantity'=>2,'image'=>null],
 (object)['name'=>'Multivitamin','brand'=>'Revital','price'=>320,'quantity'=>1,'image'=>null],
-(object)['name'=>'Face Wash','brand'=>'Himalaya','price'=>130,'quantity'=>2,'image'=>null],
-(object)['name'=>'Ashwagandha','brand'=>'Patanjali','price'=>240,'quantity'=>1,'image'=>null],
 ]
 ],
 (object)[
@@ -750,62 +751,112 @@ $demoOrders = collect([
 (object)['name'=>'Antiseptic','brand'=>'Savlon','price'=>55,'quantity'=>3,'image'=>null],
 ]
 ],
-(object)[
-'id'=>4, 'created_at'=>now()->subDays(10), 'status'=>'delivered',
-'payment_method'=>'online', 'total_amount'=>920, 'items_count'=>4,
-'delivery_address'=>'Sai Nagar, Plot 78, Aurangabad',
-'items'=>[
-(object)['name'=>'Insulin Injection','brand'=>'Humulin','price'=>450,'quantity'=>1,'image'=>null],
-(object)['name'=>'BP Medicine','brand'=>'Amlong','price'=>75,'quantity'=>3,'image'=>null],
-(object)['name'=>'Diabetes Strip','brand'=>'Accu-Chek','price'=>245,'quantity'=>1,'image'=>null],
-]
-],
-(object)[
-'id'=>5, 'created_at'=>now()->subDays(15), 'status'=>'cancelled',
-'payment_method'=>'cod', 'total_amount'=>340, 'items_count'=>2,
-'delivery_address'=>'Bank Colony, Solapur',
-'items'=>[
-(object)['name'=>'Cough Syrup','brand'=>'Benadryl','price'=>145,'quantity'=>1,'image'=>null],
-(object)['name'=>'Paracetamol','brand'=>'Crocin','price'=>25,'quantity'=>3,'image'=>null],
-]
-],
-(object)[
-'id'=>6, 'created_at'=>now()->subDays(20), 'status'=>'delivered',
-'payment_method'=>'upi', 'total_amount'=>1580, 'items_count'=>6,
-'delivery_address'=>'Ring Road 456, Nagpur',
-'items'=>[
-(object)['name'=>'Vitamin C','brand'=>'Limcee','price'=>180,'quantity'=>3,'image'=>null],
-(object)['name'=>'Multivitamin','brand'=>'Revital','price'=>320,'quantity'=>2,'image'=>null],
-(object)['name'=>'Ashwagandha','brand'=>'Patanjali','price'=>240,'quantity'=>2,'image'=>null],
-]
-],
 ]);
 } else {
 $demoOrders = $ordersCollection;
 }
 
-// Counts using Collection methods
+// Batch translate all order item names & brands + status names
+$allItemNames = [];
+$allItemBrands = [];
+foreach ($demoOrders as $o) {
+$orderItems = $o->items instanceof \Illuminate\Support\Collection ? $o->items : collect($o->items);
+foreach ($orderItems as $it) {
+$allItemNames[] = $it->name;
+$allItemBrands[] = $it->brand;
+}
+}
+$tItemNames = GoogleTranslator::translateBatch($allItemNames);
+$tItemBrands = GoogleTranslator::translateBatch($allItemBrands);
+
+$nameIdx = 0;
+foreach ($demoOrders as $o) {
+$orderItems = $o->items instanceof \Illuminate\Support\Collection ? $o->items : collect($o->items);
+foreach ($orderItems as $it) {
+$it->name = $tItemNames[$nameIdx] ?? $it->name;
+$it->brand = $tItemBrands[$nameIdx] ?? $it->brand;
+$nameIdx++;
+}
+}
+
+// Status labels
+$statusLabels = [
+'pending' => ['icon'=>'fa-clock','label'=>GoogleTranslator::translate('Pending')],
+'confirmed' => ['icon'=>'fa-check','label'=>GoogleTranslator::translate('Confirmed')],
+'processing' => ['icon'=>'fa-cogs','label'=>GoogleTranslator::translate('Processing')],
+'out_for_delivery' => ['icon'=>'fa-motorcycle','label'=>GoogleTranslator::translate('Out for Delivery')],
+'delivered' => ['icon'=>'fa-check-circle','label'=>GoogleTranslator::translate('Delivered')],
+'cancelled' => ['icon'=>'fa-times-circle','label'=>GoogleTranslator::translate('Cancelled')],
+];
+
+// Compute counts from the collection
 $allCount = $demoOrders->count();
 $pendingCount = $demoOrders->filter(fn($o) => in_array($o->status, ['pending','confirmed','processing']))->count();
 $transitCount = $demoOrders->filter(fn($o) => $o->status == 'out_for_delivery')->count();
 $deliveredCount = $demoOrders->filter(fn($o) => $o->status == 'delivered')->count();
 
-$statusLabels = [
-'pending' => ['icon'=>'fa-clock','label'=>'Pending'],
-'confirmed' => ['icon'=>'fa-check','label'=>'Confirmed'],
-'processing' => ['icon'=>'fa-cogs','label'=>'Processing'],
-'out_for_delivery' => ['icon'=>'fa-motorcycle','label'=>'Out for Delivery'],
-'delivered' => ['icon'=>'fa-check-circle','label'=>'Delivered'],
-'cancelled' => ['icon'=>'fa-times-circle','label'=>'Cancelled'],
-];
-
 $timelineSteps = ['pending','confirmed','processing','out_for_delivery','delivered'];
+
+// Static UI strings
+$strings = GoogleTranslator::translateBatch([
+// Header
+'header_title' => 'My Orders',
+'header_desc' => 'Track your orders, view delivery status and reorder your favourite medicines.',
+
+// Stat cards
+'stat_all' => 'All Orders',
+'stat_progress' => 'In Progress',
+'stat_transit' => 'On the Way',
+'stat_delivered' => 'Delivered',
+
+// Filter bar
+'search_placeholder' => 'Search by Order ID, medicine name...',
+'sort_newest' => 'Newest First',
+'sort_oldest' => 'Oldest First',
+'sort_high' => 'Highest Amount',
+'sort_low' => 'Lowest Amount',
+
+// Order card
+'items_label' => 'items',
+'more_label' => 'more',
+'btn_track' => 'Track',
+'btn_reorder' => 'Reorder',
+'btn_cancel' => 'Cancel',
+
+// Empty state
+'empty_title' => 'No orders yet',
+'empty_desc' => "You haven't placed any orders yet. Start shopping and get medicines delivered to your doorstep!",
+'browse_medicines' => 'Browse Medicines',
+
+// Tracking modal
+'track_title' => 'Order Tracking —',
+'tl_order_placed' => 'Order Placed',
+'tl_order_placed_desc' => 'Your order has been received and is awaiting confirmation.',
+'tl_order_confirmed' => 'Order Confirmed',
+'tl_order_confirmed_desc' => 'Pharmacy has confirmed your order.',
+'tl_processing' => 'Processing',
+'tl_processing_desc' => 'Your medicines are being packed and prepared.',
+'tl_out_for_delivery' => 'Out for Delivery',
+'tl_out_for_delivery_desc' => 'Delivery partner is on the way to your address.',
+'tl_delivered' => 'Delivered',
+'tl_delivered_desc' => 'Order successfully delivered to your doorstep.',
+'tl_completed' => 'Completed',
+'tl_current' => 'Current Status',
+'tl_pending' => 'Pending',
+
+// JS messages
+'js_reorder_confirm' => 'Add all items from this order to your cart?',
+'js_reorder_added' => '✓ All items added to cart!',
+'js_reorder_failed' => 'Failed to reorder',
+'js_cancel_confirm_1' => '⚠ Are you sure you want to cancel order ',
+'js_cancel_confirm_2' => '?\nThis action cannot be undone.',
+]);
 @endphp
 
 <!-- Header Banner -->
 <div class="orders-header-banner">
-    <h3><i class="fas fa-box me-2"></i> My Orders</h3>
-    <p>Track your orders, view delivery status and reorder your favourite medicines.</p>
+    <h3><i class="fas fa-box me-2"></i> {{ $strings['header_title'] }}</h3>
+    <p>{{ $strings['header_desc'] }}</p>
 </div>
 
 <!-- Stats Row -->
@@ -814,28 +865,28 @@ $timelineSteps = ['pending','confirmed','processing','out_for_delivery','deliver
         <div class="os-icon-c all"><i class="fas fa-list"></i></div>
         <div>
             <div class="os-val">{{ $allCount }}</div>
-            <div class="os-lbl">All Orders</div>
+            <div class="os-lbl">{{ $strings['stat_all'] }}</div>
         </div>
     </div>
     <div class="order-stat-c" data-filter="active">
         <div class="os-icon-c pending"><i class="fas fa-clock"></i></div>
         <div>
             <div class="os-val">{{ $pendingCount }}</div>
-            <div class="os-lbl">In Progress</div>
+            <div class="os-lbl">{{ $strings['stat_progress'] }}</div>
         </div>
     </div>
     <div class="order-stat-c" data-filter="transit">
         <div class="os-icon-c transit"><i class="fas fa-truck"></i></div>
         <div>
             <div class="os-val">{{ $transitCount }}</div>
-            <div class="os-lbl">On the Way</div>
+            <div class="os-lbl">{{ $strings['stat_transit'] }}</div>
         </div>
     </div>
     <div class="order-stat-c" data-filter="delivered">
         <div class="os-icon-c delivered"><i class="fas fa-check-circle"></i></div>
         <div>
             <div class="os-val">{{ $deliveredCount }}</div>
-            <div class="os-lbl">Delivered</div>
+            <div class="os-lbl">{{ $strings['stat_delivered'] }}</div>
         </div>
     </div>
 </div>
@@ -844,13 +895,13 @@ $timelineSteps = ['pending','confirmed','processing','out_for_delivery','deliver
 <div class="orders-filter-bar" data-aos="fade-up">
     <div class="orders-search-wrap">
         <i class="fas fa-search"></i>
-        <input type="text" id="orderSearch" placeholder="Search by Order ID, medicine name...">
+        <input type="text" id="orderSearch" placeholder="{{ $strings['search_placeholder'] }}">
     </div>
     <select class="orders-sort-select" id="orderSort">
-        <option value="newest">Newest First</option>
-        <option value="oldest">Oldest First</option>
-        <option value="high">Highest Amount</option>
-        <option value="low">Lowest Amount</option>
+        <option value="newest">{{ $strings['sort_newest'] }}</option>
+        <option value="oldest">{{ $strings['sort_oldest'] }}</option>
+        <option value="high">{{ $strings['sort_high'] }}</option>
+        <option value="low">{{ $strings['sort_low'] }}</option>
     </select>
 </div>
 
@@ -862,14 +913,12 @@ $timelineSteps = ['pending','confirmed','processing','out_for_delivery','deliver
     $st = strtolower(str_replace(' ', '_', $order->status));
     $stInfo = $statusLabels[$st] ?? $statusLabels['pending'];
 
-    // Convert items to a collection if needed
     $items = $order->items instanceof \Illuminate\Support\Collection ? $order->items : collect($order->items);
     $displayItems = $items->slice(0, 3);
     $remainingItems = $items->count() - 3;
     @endphp
 
     <div class="order-card status-{{ $st }}" data-status="{{ $st }}" data-amount="{{ $order->total_amount }}" data-date="{{ strtotime($order->created_at) }}">
-        <!-- Header -->
         <div class="order-card-header">
             <div class="order-id-info">
                 <span class="order-id">#ORD-{{ str_pad($order->id, 4, '0', STR_PAD_LEFT) }}</span>
@@ -883,9 +932,7 @@ $timelineSteps = ['pending','confirmed','processing','out_for_delivery','deliver
             </span>
         </div>
 
-        <!-- Body -->
         <div class="order-card-body">
-            <!-- Items Thumbnails -->
             <div class="order-items-list">
                 @foreach($displayItems as $item)
                 <div class="order-item-thumb">
@@ -901,14 +948,13 @@ $timelineSteps = ['pending','confirmed','processing','out_for_delivery','deliver
                 </div>
                 @endforeach
                 @if($remainingItems > 0)
-                <div class="more-items-badge">+{{ $remainingItems }} more</div>
+                <div class="more-items-badge">+{{ $remainingItems }} {{ $strings['more_label'] }}</div>
                 @endif
             </div>
 
-            <!-- Summary & Actions -->
             <div class="order-summary-row">
                 <div class="order-total-info">
-                    <span class="oti-item"><i class="fas fa-shopping-bag me-1" style="color:var(--primary-green);"></i> <strong>{{ $order->items_count }}</strong> items</span>
+                    <span class="oti-item"><i class="fas fa-shopping-bag me-1" style="color:var(--primary-green);"></i> <strong>{{ $order->items_count }}</strong> {{ $strings['items_label'] }}</span>
                     <span class="oti-payment {{ $order->payment_method }}">{{ strtoupper($order->payment_method) }}</span>
                     <span class="oti-total">₹{{ number_format($order->total_amount, 2) }}</span>
                 </div>
@@ -918,13 +964,13 @@ $timelineSteps = ['pending','confirmed','processing','out_for_delivery','deliver
                         data-order-id="{{ $order->id }}"
                         data-order-num="#ORD-{{ str_pad($order->id, 4, '0', STR_PAD_LEFT) }}"
                         data-status="{{ $st }}">
-                        <i class="fas fa-route"></i> Track
+                        <i class="fas fa-route"></i> {{ $strings['btn_track'] }}
                     </button>
 
                     @if($st == 'delivered')
                     <button type="button" class="btn-order-action btn-reorder btn-reorder-order"
                         data-order-id="{{ $order->id }}">
-                        <i class="fas fa-redo"></i> Reorder
+                        <i class="fas fa-redo"></i> {{ $strings['btn_reorder'] }}
                     </button>
                     @endif
 
@@ -932,7 +978,7 @@ $timelineSteps = ['pending','confirmed','processing','out_for_delivery','deliver
                     <button type="button" class="btn-order-action btn-cancel-order btn-cancel-my-order"
                         data-order-id="{{ $order->id }}"
                         data-order-num="#ORD-{{ str_pad($order->id, 4, '0', STR_PAD_LEFT) }}">
-                        <i class="fas fa-times"></i> Cancel
+                        <i class="fas fa-times"></i> {{ $strings['btn_cancel'] }}
                     </button>
                     @endif
                 </div>
@@ -943,10 +989,10 @@ $timelineSteps = ['pending','confirmed','processing','out_for_delivery','deliver
     @else
     <div class="empty-orders-state">
         <div class="eo-icon"><i class="fas fa-box-open"></i></div>
-        <h4>No orders yet</h4>
-        <p>You haven't placed any orders yet. Start shopping and get medicines delivered to your doorstep!</p>
+        <h4>{{ $strings['empty_title'] }}</h4>
+        <p>{{ $strings['empty_desc'] }}</p>
         <a href="{{ url('/customer/medicines') }}">
-            <i class="fas fa-pills"></i> Browse Medicines
+            <i class="fas fa-pills"></i> {{ $strings['browse_medicines'] }}
         </a>
     </div>
     @endif
@@ -957,7 +1003,7 @@ $timelineSteps = ['pending','confirmed','processing','out_for_delivery','deliver
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content modal-content-c">
             <div class="modal-header modal-header-c">
-                <h5 class="modal-title"><i class="fas fa-route me-2"></i> Order Tracking — <span id="trackOrderNum"></span></h5>
+                <h5 class="modal-title"><i class="fas fa-route me-2"></i> {{ $strings['track_title'] }} <span id="trackOrderNum"></span></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body" style="padding:30px;">
@@ -981,7 +1027,51 @@ $timelineSteps = ['pending','confirmed','processing','out_for_delivery','deliver
 <script>
     $(document).ready(function() {
 
-        /* ============ STATUS FILTER (STAT CARDS) ============ */
+        /* ============ TRANSLATED JS STRINGS ============ */
+        var jsStrings = {
+            reorderConfirm: @json($strings['js_reorder_confirm']),
+            reorderAdded: @json($strings['js_reorder_added']),
+            reorderFailed: @json($strings['js_reorder_failed']),
+            cancelConfirm1: @json($strings['js_cancel_confirm_1']),
+            cancelConfirm2: @json($strings['js_cancel_confirm_2'])
+        };
+
+        /* ============ TIMELINE LABELS (already translated server-side) ============ */
+        var timelineData = {
+            'pending': {
+                label: @json($strings['tl_order_placed']),
+                icon: 'fa-clock',
+                desc: @json($strings['tl_order_placed_desc'])
+            },
+            'confirmed': {
+                label: @json($strings['tl_order_confirmed']),
+                icon: 'fa-check',
+                desc: @json($strings['tl_order_confirmed_desc'])
+            },
+            'processing': {
+                label: @json($strings['tl_processing']),
+                icon: 'fa-cogs',
+                desc: @json($strings['tl_processing_desc'])
+            },
+            'out_for_delivery': {
+                label: @json($strings['tl_out_for_delivery']),
+                icon: 'fa-motorcycle',
+                desc: @json($strings['tl_out_for_delivery_desc'])
+            },
+            'delivered': {
+                label: @json($strings['tl_delivered']),
+                icon: 'fa-check-circle',
+                desc: @json($strings['tl_delivered_desc'])
+            }
+        };
+
+        var tlLabels = {
+            completed: @json($strings['tl_completed']),
+            current: @json($strings['tl_current']),
+            pending: @json($strings['tl_pending'])
+        };
+
+        /* ============ STATUS FILTER ============ */
         $('.order-stat-c').on('click', function() {
             $('.order-stat-c').removeClass('active');
             $(this).addClass('active');
@@ -1032,38 +1122,9 @@ $timelineSteps = ['pending','confirmed','processing','out_for_delivery','deliver
         });
 
         /* ============ ORDER TRACKING TIMELINE ============ */
-        var timelineData = {
-            'pending': {
-                label: 'Order Placed',
-                icon: 'fa-clock',
-                desc: 'Your order has been received and is awaiting confirmation.'
-            },
-            'confirmed': {
-                label: 'Order Confirmed',
-                icon: 'fa-check',
-                desc: 'Pharmacy has confirmed your order.'
-            },
-            'processing': {
-                label: 'Processing',
-                icon: 'fa-cogs',
-                desc: 'Your medicines are being packed and prepared.'
-            },
-            'out_for_delivery': {
-                label: 'Out for Delivery',
-                icon: 'fa-motorcycle',
-                desc: 'Delivery partner is on the way to your address.'
-            },
-            'delivered': {
-                label: 'Delivered',
-                icon: 'fa-check-circle',
-                desc: 'Order successfully delivered to your doorstep.'
-            }
-        };
-
         var stepKeys = Object.keys(timelineData);
 
         $('.btn-view-timeline').on('click', function() {
-            var orderId = $(this).data('order-id');
             var orderNum = $(this).data('order-num');
             var currentStatus = $(this).data('status');
 
@@ -1082,9 +1143,13 @@ $timelineSteps = ['pending','confirmed','processing','out_for_delivery','deliver
                 var dotContent = isDone ? '<i class="fas fa-check"></i>' : '';
 
                 var timeLabel = '';
-                if (isDone) timeLabel = '<span class="tl-time-c"><i class="fas fa-check me-1" style="color:#2E7D32;"></i>Completed</span>';
-                else if (isCurrent) timeLabel = '<span class="tl-time-c" style="color:#FB8C00;font-weight:600;"><i class="fas fa-circle me-1" style="font-size:0.45rem;"></i>Current Status</span>';
-                else timeLabel = '<span class="tl-time-c"><i class="fas fa-hourglass-half me-1"></i>Pending</span>';
+                if (isDone) {
+                    timeLabel = '<span class="tl-time-c"><i class="fas fa-check me-1" style="color:#2E7D32;"></i>' + tlLabels.completed + '</span>';
+                } else if (isCurrent) {
+                    timeLabel = '<span class="tl-time-c" style="color:#FB8C00;font-weight:600;"><i class="fas fa-circle me-1" style="font-size:0.45rem;"></i>' + tlLabels.current + '</span>';
+                } else {
+                    timeLabel = '<span class="tl-time-c"><i class="fas fa-hourglass-half me-1"></i>' + tlLabels.pending + '</span>';
+                }
 
                 html += `
                 <li>
@@ -1108,7 +1173,7 @@ $timelineSteps = ['pending','confirmed','processing','out_for_delivery','deliver
             var $btn = $(this);
             var original = $btn.html();
 
-            if (!confirm('Add all items from this order to your cart?')) return;
+            if (!confirm(jsStrings.reorderConfirm)) return;
 
             $btn.html('<i class="fas fa-spinner fa-spin"></i>').prop('disabled', true);
 
@@ -1122,25 +1187,22 @@ $timelineSteps = ['pending','confirmed','processing','out_for_delivery','deliver
                 dataType: 'json',
                 success: function(res) {
                     if (res.success) {
-                        showToast('✓ All items added to cart!');
-                        $btn.html('<i class="fas fa-check"></i> Added').css('background', 'linear-gradient(135deg, #FB8C00, #FFA726)');
-
+                        showToast(jsStrings.reorderAdded);
+                        $btn.html('<i class="fas fa-check"></i>').css('background', 'linear-gradient(135deg, #FB8C00, #FFA726)');
                         if (res.cart_count !== undefined) {
                             $('.cart-badge, .cart-count').text(res.cart_count).show();
                         }
-
                         setTimeout(function() {
                             $btn.html(original).prop('disabled', false).css('background', '');
                         }, 2500);
                     } else {
                         $btn.html(original).prop('disabled', false);
-                        showToast('⚠ ' + (res.message || 'Failed to reorder'), 'error');
+                        showToast('⚠ ' + (res.message || jsStrings.reorderFailed), 'error');
                     }
                 },
                 error: function() {
-                    // Demo fallback
-                    showToast('✓ All items added to cart!');
-                    $btn.html('<i class="fas fa-check"></i> Added').css('background', 'linear-gradient(135deg, #FB8C00, #FFA726)');
+                    showToast(jsStrings.reorderAdded);
+                    $btn.html('<i class="fas fa-check"></i>').css('background', 'linear-gradient(135deg, #FB8C00, #FFA726)');
                     setTimeout(function() {
                         $btn.html(original).prop('disabled', false).css('background', '');
                     }, 2500);
@@ -1153,7 +1215,7 @@ $timelineSteps = ['pending','confirmed','processing','out_for_delivery','deliver
             var orderId = $(this).data('order-id');
             var orderNum = $(this).data('order-num');
 
-            if (!confirm('⚠ Are you sure you want to cancel order ' + orderNum + '?\nThis action cannot be undone.')) return;
+            if (!confirm(jsStrings.cancelConfirm1 + orderNum + jsStrings.cancelConfirm2)) return;
 
             var $form = $('<form>', {
                 method: 'POST',

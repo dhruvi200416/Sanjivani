@@ -7,9 +7,23 @@ use Illuminate\Database\Eloquent\Model;
 class DeliveryPartner extends Model
 {
     protected $fillable = [
-        'name', 'email', 'phone', 'password', 'village_id', 'address',
-        'vehicle_type', 'vehicle_number', 'aadhar_number', 'license_dl',
-        'rating', 'total_deliveries', 'total_earnings', 'availability', 'status', 'last_login'
+        'name',
+        'email',
+        'phone',
+        'password',
+        'village_id',
+        'address',
+        'avatar',
+        'vehicle_type',
+        'vehicle_number',
+        'aadhar_number',
+        'license_dl',
+        'rating',
+        'total_deliveries',
+        'total_earnings',
+        'availability',
+        'status',
+        'last_login'
     ];
 
     protected $hidden = ['password', 'aadhar_number'];

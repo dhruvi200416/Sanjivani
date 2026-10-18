@@ -2,7 +2,7 @@
 
 @section('title', 'Checkout')
 @section('page_title')
-<i class="fas fa-credit-card"></i> Checkout
+<i class="fas fa-credit-card"></i> {{ app(\App\Services\GoogleTranslator::class)->translate('Checkout') }}
 @endsection
 
 @section('styles')
@@ -686,60 +686,254 @@
         .checkout-section-body { padding: 16px; }
         .payment-option { padding: 12px; }
     }
+
+    /* ============ CUSTOM MODAL STYLES ============ */
+    .custom-modal-overlay {
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 10005;
+        padding: 20px;
+    }
+    .custom-modal-overlay.show {
+        display: flex;
+    }
+    .custom-modal {
+        background: var(--white);
+        border-radius: 16px;
+        width: 100%;
+        max-width: 400px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        overflow: hidden;
+        transform: scale(0.95);
+        transition: transform 0.3s ease;
+    }
+    .custom-modal-overlay.show .custom-modal {
+        transform: scale(1);
+    }
+    .custom-modal-header {
+        padding: 20px 25px;
+        background: var(--off-white);
+        border-bottom: 1px solid #E0E0E0;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    .custom-modal-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+    }
+    .custom-modal-icon.warning { background: #FFF3E0; color: #FB8C00; }
+    .custom-modal-icon.success { background: #E8F5E9; color: #2E7D32; }
+    .custom-modal-icon.error { background: #FFEBEE; color: #C62828; }
+    
+    .custom-modal-header h5 {
+        margin: 0;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--dark-text);
+    }
+    .custom-modal-body {
+        padding: 20px 25px;
+        font-size: 0.95rem;
+        color: var(--gray-text);
+        line-height: 1.5;
+    }
+    .custom-modal-footer {
+        padding: 15px 25px;
+        background: var(--off-white);
+        border-top: 1px solid #E0E0E0;
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+    }
+    .btn-modal {
+        padding: 8px 20px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        border: none;
+    }
+    .btn-modal-cancel {
+        background: transparent;
+        color: var(--gray-text);
+        border: 1px solid #E0E0E0;
+    }
+    .btn-modal-cancel:hover {
+        background: #F5F5F5;
+    }
+    .btn-modal-confirm {
+        background: linear-gradient(135deg, var(--primary-green), var(--light-green));
+        color: var(--white);
+    }
+    .btn-modal-confirm:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 10px rgba(46,125,50,0.3);
+    }
 </style>
 @endsection
 
 @section('content')
 
 @php
-    // Demo cart data
-    $cartItems = $cartItems ?? [
-        (object)['id'=>1,'medicine_id'=>1,'name'=>'Paracetamol 500mg','brand'=>'Crocin','price'=>25,'mrp'=>30,'quantity'=>2,'image'=>null,'prescription_required'=>0],
-        (object)['id'=>2,'medicine_id'=>2,'name'=>'Vitamin C 500mg','brand'=>'Limcee','price'=>180,'mrp'=>200,'quantity'=>1,'image'=>null,'prescription_required'=>0],
-        (object)['id'=>3,'medicine_id'=>4,'name'=>'Cough Syrup 100ml','brand'=>'Benadryl','price'=>145,'mrp'=>160,'quantity'=>1,'image'=>null,'prescription_required'=>0],
-    ];
+use App\Services\GoogleTranslator;
 
-    $customer = $customer ?? (object)[
-        'name' => session('customer_name') ?? 'Ramesh Patil',
-        'phone' => '9876543210',
-        'email' => 'ramesh@example.com'
-    ];
+// Demo cart data
+$cartItems = $cartItems ?? [
+    (object)['id'=>1,'medicine_id'=>1,'name'=>'Paracetamol 500mg','brand'=>'Crocin','price'=>25,'mrp'=>30,'quantity'=>2,'image'=>null,'prescription_required'=>0],
+    (object)['id'=>2,'medicine_id'=>2,'name'=>'Vitamin C 500mg','brand'=>'Limcee','price'=>180,'mrp'=>200,'quantity'=>1,'image'=>null,'prescription_required'=>0],
+    (object)['id'=>3,'medicine_id'=>4,'name'=>'Cough Syrup 100ml','brand'=>'Benadryl','price'=>145,'mrp'=>160,'quantity'=>1,'image'=>null,'prescription_required'=>0],
+];
 
-    $addresses = $addresses ?? [
-        (object)['id'=>1,'name'=>'Ramesh Patil','phone'=>'9876543210','address_line'=>'House No. 45, Gandhi Road','landmark'=>'Near Sai Temple','city'=>'Nashik','state'=>'Maharashtra','pincode'=>'422001','type'=>'home','is_default'=>1],
-        (object)['id'=>2,'name'=>'Ramesh Patil','phone'=>'9812345678','address_line'=>'Office Complex, 3rd Floor','landmark'=>'MG Road','city'=>'Nashik','state'=>'Maharashtra','pincode'=>'422002','type'=>'work','is_default'=>0],
-    ];
+$customer = $customer ?? (object)[
+    'name' => session('customer_name') ?? 'Ramesh Patil',
+    'phone' => '9876543210',
+    'email' => 'ramesh@example.com'
+];
 
-    $villages = $villages ?? [
-        (object)['id'=>1,'name'=>'Nashik'],
-        (object)['id'=>2,'name'=>'Pune'],
-        (object)['id'=>3,'name'=>'Mumbai'],
-        (object)['id'=>4,'name'=>'Aurangabad'],
-    ];
+$addresses = $addresses ?? [
+    (object)['id'=>1,'name'=>'Ramesh Patil','phone'=>'9876543210','address_line'=>'House No. 45, Gandhi Road','landmark'=>'Near Sai Temple','city'=>'Nashik','state'=>'Maharashtra','pincode'=>'422001','type'=>'home','is_default'=>1],
+    (object)['id'=>2,'name'=>'Ramesh Patil','phone'=>'9812345678','address_line'=>'Office Complex, 3rd Floor','landmark'=>'MG Road','city'=>'Nashik','state'=>'Maharashtra','pincode'=>'422002','type'=>'work','is_default'=>0],
+];
 
-    $subtotal = 0;
-    $totalMrp = 0;
-    foreach ($cartItems as $item) {
-        $subtotal += $item->price * $item->quantity;
-        $totalMrp += $item->mrp * $item->quantity;
-    }
-    $productDiscount = $totalMrp - $subtotal;
-    $couponDiscount = session('cart_coupon_discount', 0);
-    $couponCode = session('cart_coupon_code', '');
-    $deliveryCharge = $subtotal >= 500 ? 0 : 50;
-    $tax = round($subtotal * 0.05, 2);
-    $grandTotal = $subtotal + $deliveryCharge + $tax - $couponDiscount;
+$villages = $villages ?? [
+    (object)['id'=>1,'name'=>'Nashik'],
+    (object)['id'=>2,'name'=>'Pune'],
+    (object)['id'=>3,'name'=>'Mumbai'],
+    (object)['id'=>4,'name'=>'Aurangabad'],
+];
 
-    $hasRxItems = collect($cartItems)->contains(function($i) { return $i->prescription_required ?? false; });
+$subtotal = 0;
+$totalMrp = 0;
+foreach ($cartItems as $item) {
+    $subtotal += $item->price * $item->quantity;
+    $totalMrp += $item->mrp * $item->quantity;
+}
+$productDiscount = $totalMrp - $subtotal;
+$couponDiscount = session('cart_coupon_discount', 0);
+$couponCode = session('cart_coupon_code', '');
+$deliveryCharge = $subtotal >= 500 ? 0 : 50;
+$tax = round($subtotal * 0.05, 2);
+$grandTotal = $subtotal + $deliveryCharge + $tax - $couponDiscount;
+
+$hasRxItems = collect($cartItems)->contains(function($i) { return $i->prescription_required ?? false; });
+
+$strings = GoogleTranslator::translateBatch([
+    'steps_cart' => 'Cart',
+    'steps_cart_sub' => 'Items reviewed',
+    'steps_checkout' => 'Checkout',
+    'steps_checkout_sub' => 'Address & Payment',
+    'steps_conf' => 'Confirmation',
+    'steps_conf_sub' => 'Order placed',
+    
+    'addr_title' => 'Delivery Address',
+    'btn_add_new' => 'Add New',
+    'btn_cancel' => 'Cancel',
+    'lbl_default' => 'Default',
+    'no_addr' => 'No saved addresses. Please add a new address below.',
+    
+    'form_add_title' => 'Add New Address',
+    'lbl_name' => 'Full Name',
+    'lbl_phone' => 'Mobile Number',
+    'ph_phone' => '10-digit mobile',
+    'lbl_addr_line' => 'Complete Address',
+    'ph_addr_line' => 'House No., Street, Area',
+    'lbl_landmark' => 'Landmark',
+    'ph_landmark' => 'Near ...',
+    'lbl_village' => 'Village/City',
+    'select_placeholder' => '-- Select --',
+    'lbl_state' => 'State',
+    'lbl_pincode' => 'Pincode',
+    'ph_pincode' => '6-digit pincode',
+    'lbl_addr_type' => 'Address Type',
+    'lbl_save_addr' => 'Save this address for future orders',
+    
+    'rx_title' => 'Prescription Required',
+    'rx_desc' => "Some items in your cart require a valid doctor's prescription. Please upload a clear photo or PDF.",
+    'rx_upload' => 'Click to upload prescription',
+    'rx_format' => 'JPG, PNG or PDF (max 5MB)',
+    
+    'pay_title' => 'Payment Method',
+    'pay_cod' => 'Cash on Delivery (COD)',
+    'pay_cod_desc' => 'Pay when you receive your order',
+    'pay_recommended' => 'Recommended',
+    'pay_upi' => 'UPI Payment',
+    'pay_upi_desc' => 'Google Pay, PhonePe, Paytm & more',
+    'pay_card' => 'Debit / Credit Card',
+    'pay_card_desc' => 'Visa, Mastercard, RuPay accepted',
+    'pay_online' => 'Net Banking',
+    'pay_online_desc' => 'All major banks supported',
+    
+    'review_title' => 'Review Your Order',
+    'btn_edit_cart' => 'Edit Cart',
+    'notes_title' => 'Delivery Instructions (Optional)',
+    'notes_ph' => 'E.g., Deliver after 6 PM, Ring the bell twice, etc.',
+    'notes_max' => 'Max 200 characters',
+    
+    'sum_title' => 'Price Details',
+    'sum_subtotal' => 'Subtotal',
+    'sum_discount' => 'Product Discount',
+    'sum_coupon' => 'Coupon',
+    'sum_delivery' => 'Delivery Charge',
+    'sum_tax' => 'Tax (GST 5%)',
+    'sum_total' => 'Total to Pay',
+    'sum_free' => 'FREE',
+    'sum_saving' => "🎉 You're saving ₹:amount on this order!",
+    
+    'terms_agree' => 'I agree to the',
+    'terms_tnc' => 'Terms & Conditions',
+    'terms_and' => 'and',
+    'terms_return' => 'Return Policy',
+    'terms_of' => 'of Sanjivani.',
+    
+    'btn_place' => 'Place Order',
+    'btn_back_cart' => 'Back to Cart',
+    'secure_note' => 'Your data is 100% secure with us',
+    'loading_text' => 'Placing your order... Please wait',
+    
+    // JS Validation & Modal Strings (Fixed Line Breaks)
+    'js_alert_title' => 'Notice',
+    'js_confirm_title' => 'Confirm Order',
+    'js_ok' => 'OK',
+    'js_yes' => 'Yes, Place Order',
+    'js_no' => 'Cancel',
+    
+    'js_addr_req' => 'Please select a delivery address or add a new one.',
+    'js_name_req' => 'Name required',
+    'js_name_min' => 'Min 2 characters',
+    'js_phone_req' => 'Phone required',
+    'js_phone_inv' => 'Must be 10 digits, starts 6-9',
+    'js_addr_line_req' => 'Address required',
+    'js_addr_line_min' => 'Min 10 characters',
+    'js_village_req' => 'Please select village',
+    'js_state_req' => 'State required',
+    'js_pin_req' => 'Pincode required',
+    'js_pin_inv' => 'Must be 6 digits',
+    'js_rx_req' => 'Please upload the prescription',
+    'js_terms_req' => 'Please accept the Terms & Conditions',
+    'js_file_size' => 'File must be less than 5MB',
+    'js_file_type' => 'Only JPG, PNG or PDF files allowed',
+    'js_confirm_msg' => 'Place order for ₹:amount?'
+]);
 @endphp
 
 @if(count($cartItems) == 0)
     <div style="background:var(--white);padding:60px;text-align:center;border-radius:20px;box-shadow:var(--shadow);">
         <i class="fas fa-cart-shopping" style="font-size:5rem;color:var(--mint-green);"></i>
-        <h4 style="margin-top:20px;color:var(--dark-text);">Your cart is empty</h4>
-        <p style="color:var(--gray-text);">Add items to cart before checkout</p>
+        <h4 style="margin-top:20px;color:var(--dark-text);">{{ app(\App\Services\GoogleTranslator::class)->translate('Your cart is empty') }}</h4>
+        <p style="color:var(--gray-text);">{{ app(\App\Services\GoogleTranslator::class)->translate('Add items to cart before checkout') }}</p>
         <a href="{{ url('/customer/medicines') }}" class="btn-place-order" style="max-width:250px;margin:15px auto 0;text-decoration:none;">
-            <i class="fas fa-pills"></i> Browse Medicines
+            <i class="fas fa-pills"></i> {{ app(\App\Services\GoogleTranslator::class)->translate('Browse Medicines') }}
         </a>
     </div>
 @else
@@ -749,22 +943,22 @@
     <div class="step-item done">
         <div class="step-num-c"><i class="fas fa-check"></i></div>
         <div class="step-info">
-            <h6>Cart</h6>
-            <span>Items reviewed</span>
+            <h6>{{ $strings['steps_cart'] }}</h6>
+            <span>{{ $strings['steps_cart_sub'] }}</span>
         </div>
     </div>
     <div class="step-item active">
         <div class="step-num-c">2</div>
         <div class="step-info">
-            <h6>Checkout</h6>
-            <span>Address & Payment</span>
+            <h6>{{ $strings['steps_checkout'] }}</h6>
+            <span>{{ $strings['steps_checkout_sub'] }}</span>
         </div>
     </div>
     <div class="step-item">
         <div class="step-num-c">3</div>
         <div class="step-info">
-            <h6>Confirmation</h6>
-            <span>Order placed</span>
+            <h6>{{ $strings['steps_conf'] }}</h6>
+            <span>{{ $strings['steps_conf_sub'] }}</span>
         </div>
     </div>
 </div>
@@ -779,9 +973,9 @@
             <!-- Delivery Address -->
             <div class="checkout-section">
                 <div class="checkout-section-header">
-                    <h6><i class="fas fa-location-dot"></i> Delivery Address</h6>
+                    <h6><i class="fas fa-location-dot"></i> {{ $strings['addr_title'] }}</h6>
                     <button type="button" class="btn-toggle-form" id="toggleNewAddress">
-                        <i class="fas fa-plus me-1"></i> Add New
+                        <i class="fas fa-plus me-1"></i> {{ $strings['btn_add_new'] }}
                     </button>
                 </div>
                 <div class="checkout-section-body">
@@ -792,30 +986,30 @@
                                 <div class="address-header">
                                     <input type="radio" name="address_id" value="{{ $addr->id }}"
                                            {{ $addr->is_default ? 'checked' : '' }}>
-                                    <strong>{{ $addr->name }}</strong>
-                                    <span class="addr-tag {{ $addr->type }}">{{ ucfirst($addr->type) }}</span>
+                                    <strong>{{ GoogleTranslator::translate($addr->name) }}</strong>
+                                    <span class="addr-tag {{ $addr->type }}">{{ GoogleTranslator::translate(ucfirst($addr->type)) }}</span>
                                     @if($addr->is_default)
-                                        <span class="addr-tag" style="background:#E8F5E9;color:#2E7D32;">Default</span>
+                                        <span class="addr-tag" style="background:#E8F5E9;color:#2E7D32;">{{ $strings['lbl_default'] }}</span>
                                     @endif
                                 </div>
                                 <div class="address-details">
-                                    {{ $addr->address_line }},
-                                    @if(!empty($addr->landmark)){{ $addr->landmark }},@endif
-                                    {{ $addr->city }}, {{ $addr->state }} - {{ $addr->pincode }}
+                                    {{ GoogleTranslator::translate($addr->address_line) }},
+                                    @if(!empty($addr->landmark)){{ GoogleTranslator::translate($addr->landmark) }},@endif
+                                    {{ GoogleTranslator::translate($addr->city) }}, {{ GoogleTranslator::translate($addr->state) }} - {{ $addr->pincode }}
                                     <span class="address-phone"><i class="fas fa-phone"></i> {{ $addr->phone }}</span>
                                 </div>
                             </div>
                         @endforeach
                     @else
                         <p style="text-align:center;color:var(--gray-text);padding:20px;">
-                            <i class="fas fa-info-circle me-1"></i> No saved addresses. Please add a new address below.
+                            <i class="fas fa-info-circle me-1"></i> {{ $strings['no_addr'] }}
                         </p>
                     @endif
 
                     <!-- New Address Form -->
                     <div class="new-address-form" id="newAddressForm">
                         <h6 style="font-weight:700;color:var(--dark-text);margin-bottom:15px;font-size:0.95rem;">
-                            <i class="fas fa-plus-circle me-1" style="color:var(--primary-green);"></i> Add New Address
+                            <i class="fas fa-plus-circle me-1" style="color:var(--primary-green);"></i> {{ $strings['form_add_title'] }}
                         </h6>
 
                         <input type="hidden" name="use_new_address" id="useNewAddress" value="0">
@@ -823,38 +1017,38 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group-co">
-                                    <label class="form-label-co">Full Name <span class="req">*</span></label>
+                                    <label class="form-label-co">{{ $strings['lbl_name'] }} <span class="req">*</span></label>
                                     <input type="text" name="new_name" id="new_name" class="form-control-co" value="{{ $customer->name }}">
                                     <span class="err-msg-co" id="err_new_name"></span>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group-co">
-                                    <label class="form-label-co">Mobile Number <span class="req">*</span></label>
-                                    <input type="text" name="new_phone" id="new_phone" class="form-control-co" placeholder="10-digit mobile" maxlength="10" value="{{ $customer->phone }}">
+                                    <label class="form-label-co">{{ $strings['lbl_phone'] }} <span class="req">*</span></label>
+                                    <input type="text" name="new_phone" id="new_phone" class="form-control-co" placeholder="{{ $strings['ph_phone'] }}" maxlength="10" value="{{ $customer->phone }}">
                                     <span class="err-msg-co" id="err_new_phone"></span>
                                 </div>
                             </div>
                             <div class="col-12">
                                 <div class="form-group-co">
-                                    <label class="form-label-co">Complete Address <span class="req">*</span></label>
-                                    <textarea name="new_address_line" id="new_address_line" class="form-control-co" placeholder="House No., Street, Area"></textarea>
+                                    <label class="form-label-co">{{ $strings['lbl_addr_line'] }} <span class="req">*</span></label>
+                                    <textarea name="new_address_line" id="new_address_line" class="form-control-co" placeholder="{{ $strings['ph_addr_line'] }}"></textarea>
                                     <span class="err-msg-co" id="err_new_address_line"></span>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group-co">
-                                    <label class="form-label-co">Landmark</label>
-                                    <input type="text" name="new_landmark" id="new_landmark" class="form-control-co" placeholder="Near ..." >
+                                    <label class="form-label-co">{{ $strings['lbl_landmark'] }}</label>
+                                    <input type="text" name="new_landmark" id="new_landmark" class="form-control-co" placeholder="{{ $strings['ph_landmark'] }}" >
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group-co">
-                                    <label class="form-label-co">Village/City <span class="req">*</span></label>
+                                    <label class="form-label-co">{{ $strings['lbl_village'] }} <span class="req">*</span></label>
                                     <select name="new_village_id" id="new_village_id" class="form-select-co">
-                                        <option value="">-- Select --</option>
+                                        <option value="">{{ $strings['select_placeholder'] }}</option>
                                         @foreach($villages as $v)
-                                            <option value="{{ $v->id }}">{{ $v->name }}</option>
+                                            <option value="{{ $v->id }}">{{ GoogleTranslator::translate($v->name) }}</option>
                                         @endforeach
                                     </select>
                                     <span class="err-msg-co" id="err_new_village_id"></span>
@@ -862,30 +1056,30 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group-co">
-                                    <label class="form-label-co">State <span class="req">*</span></label>
-                                    <input type="text" name="new_state" id="new_state" class="form-control-co" placeholder="Maharashtra" value="Maharashtra">
+                                    <label class="form-label-co">{{ $strings['lbl_state'] }} <span class="req">*</span></label>
+                                    <input type="text" name="new_state" id="new_state" class="form-control-co" placeholder="Gujarat" value="Gujarat">
                                     <span class="err-msg-co" id="err_new_state"></span>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group-co">
-                                    <label class="form-label-co">Pincode <span class="req">*</span></label>
-                                    <input type="text" name="new_pincode" id="new_pincode" class="form-control-co" placeholder="6-digit pincode" maxlength="6">
+                                    <label class="form-label-co">{{ $strings['lbl_pincode'] }} <span class="req">*</span></label>
+                                    <input type="text" name="new_pincode" id="new_pincode" class="form-control-co" placeholder="{{ $strings['ph_pincode'] }}" maxlength="6">
                                     <span class="err-msg-co" id="err_new_pincode"></span>
                                 </div>
                             </div>
                             <div class="col-12">
                                 <div class="form-group-co">
-                                    <label class="form-label-co">Address Type <span class="req">*</span></label>
+                                    <label class="form-label-co">{{ $strings['lbl_addr_type'] }} <span class="req">*</span></label>
                                     <div style="display:flex;gap:15px;">
                                         <label style="display:flex;align-items:center;gap:6px;cursor:pointer;">
-                                            <input type="radio" name="new_type" value="home" checked style="accent-color:var(--primary-green);"> Home
+                                            <input type="radio" name="new_type" value="home" checked style="accent-color:var(--primary-green);"> {{ GoogleTranslator::translate('Home') }}
                                         </label>
                                         <label style="display:flex;align-items:center;gap:6px;cursor:pointer;">
-                                            <input type="radio" name="new_type" value="work" style="accent-color:var(--primary-green);"> Work
+                                            <input type="radio" name="new_type" value="work" style="accent-color:var(--primary-green);"> {{ GoogleTranslator::translate('Work') }}
                                         </label>
                                         <label style="display:flex;align-items:center;gap:6px;cursor:pointer;">
-                                            <input type="radio" name="new_type" value="other" style="accent-color:var(--primary-green);"> Other
+                                            <input type="radio" name="new_type" value="other" style="accent-color:var(--primary-green);"> {{ GoogleTranslator::translate('Other') }}
                                         </label>
                                     </div>
                                 </div>
@@ -893,7 +1087,7 @@
                             <div class="col-12">
                                 <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:0.85rem;color:var(--dark-text);">
                                     <input type="checkbox" name="save_address" value="1" style="accent-color:var(--primary-green);width:18px;height:18px;">
-                                    Save this address for future orders
+                                    {{ $strings['lbl_save_addr'] }}
                                 </label>
                             </div>
                         </div>
@@ -905,17 +1099,17 @@
             @if($hasRxItems)
             <div class="checkout-section">
                 <div class="checkout-section-header">
-                    <h6><i class="fas fa-file-prescription"></i> Prescription Required</h6>
+                    <h6><i class="fas fa-file-prescription"></i> {{ $strings['rx_title'] }}</h6>
                 </div>
                 <div class="checkout-section-body">
                     <div class="prescription-notice">
-                        <h6><i class="fas fa-triangle-exclamation me-1"></i> Prescription Required</h6>
-                        <p>Some items in your cart require a valid doctor's prescription. Please upload a clear photo or PDF.</p>
+                        <h6><i class="fas fa-triangle-exclamation me-1"></i> {{ $strings['rx_title'] }}</h6>
+                        <p>{{ $strings['rx_desc'] }}</p>
 
                         <div class="rx-upload-area" onclick="$('#rxUpload').click()">
                             <i class="fas fa-cloud-upload-alt"></i>
-                            <p id="rxUploadText">Click to upload prescription</p>
-                            <small style="color:#6D4C41;font-size:0.72rem;">JPG, PNG or PDF (max 5MB)</small>
+                            <p id="rxUploadText">{{ $strings['rx_upload'] }}</p>
+                            <small style="color:#6D4C41;font-size:0.72rem;">{{ $strings['rx_format'] }}</small>
                         </div>
                         <input type="file" name="prescription" id="rxUpload" accept="image/*,.pdf" style="display:none;">
                         <span class="err-msg-co" id="err_prescription" style="text-align:center;"></span>
@@ -927,25 +1121,25 @@
             <!-- Payment Method -->
             <div class="checkout-section">
                 <div class="checkout-section-header">
-                    <h6><i class="fas fa-credit-card"></i> Payment Method</h6>
+                    <h6><i class="fas fa-credit-card"></i> {{ $strings['pay_title'] }}</h6>
                 </div>
                 <div class="checkout-section-body">
                     <div class="payment-option selected" data-method="cod">
                         <input type="radio" name="payment_method" value="cod" checked>
                         <div class="pay-icon cod"><i class="fas fa-money-bill-wave"></i></div>
                         <div class="pay-info">
-                            <strong>Cash on Delivery (COD)</strong>
-                            <span>Pay when you receive your order</span>
+                            <strong>{{ $strings['pay_cod'] }}</strong>
+                            <span>{{ $strings['pay_cod_desc'] }}</span>
                         </div>
-                        <span class="pay-badge">Recommended</span>
+                        <span class="pay-badge">{{ $strings['pay_recommended'] }}</span>
                     </div>
 
                     <div class="payment-option" data-method="upi">
                         <input type="radio" name="payment_method" value="upi">
                         <div class="pay-icon upi"><i class="fas fa-mobile-screen"></i></div>
                         <div class="pay-info">
-                            <strong>UPI Payment</strong>
-                            <span>Google Pay, PhonePe, Paytm & more</span>
+                            <strong>{{ $strings['pay_upi'] }}</strong>
+                            <span>{{ $strings['pay_upi_desc'] }}</span>
                         </div>
                     </div>
 
@@ -953,8 +1147,8 @@
                         <input type="radio" name="payment_method" value="card">
                         <div class="pay-icon card"><i class="fas fa-credit-card"></i></div>
                         <div class="pay-info">
-                            <strong>Debit / Credit Card</strong>
-                            <span>Visa, Mastercard, RuPay accepted</span>
+                            <strong>{{ $strings['pay_card'] }}</strong>
+                            <span>{{ $strings['pay_card_desc'] }}</span>
                         </div>
                     </div>
 
@@ -962,8 +1156,8 @@
                         <input type="radio" name="payment_method" value="online">
                         <div class="pay-icon online"><i class="fas fa-university"></i></div>
                         <div class="pay-info">
-                            <strong>Net Banking</strong>
-                            <span>All major banks supported</span>
+                            <strong>{{ $strings['pay_online'] }}</strong>
+                            <span>{{ $strings['pay_online_desc'] }}</span>
                         </div>
                     </div>
                 </div>
@@ -972,9 +1166,9 @@
             <!-- Order Review -->
             <div class="checkout-section">
                 <div class="checkout-section-header">
-                    <h6><i class="fas fa-list-check"></i> Review Your Order ({{ count($cartItems) }} items)</h6>
+                    <h6><i class="fas fa-list-check"></i> {{ $strings['review_title'] }} ({{ count($cartItems) }} {{ app(\App\Services\GoogleTranslator::class)->translate('items') }})</h6>
                     <a href="{{ url('/customer/cart') }}" style="color:var(--primary-green);font-size:0.82rem;font-weight:600;text-decoration:none;">
-                        <i class="fas fa-edit me-1"></i> Edit Cart
+                        <i class="fas fa-edit me-1"></i> {{ $strings['btn_edit_cart'] }}
                     </a>
                 </div>
                 <div class="checkout-section-body">
@@ -988,8 +1182,8 @@
                                 @endif
                             </div>
                             <div class="rv-info">
-                                <strong>{{ $item->name }}</strong>
-                                <span><i class="fas fa-tag me-1" style="color:var(--primary-green);"></i>{{ $item->brand }} · ₹{{ number_format($item->price) }}/unit</span>
+                                <strong>{{ GoogleTranslator::translate($item->name) }}</strong>
+                                <span><i class="fas fa-tag me-1" style="color:var(--primary-green);"></i>{{ GoogleTranslator::translate($item->brand) }} · ₹{{ number_format($item->price) }}/{{ app(\App\Services\GoogleTranslator::class)->translate('unit') }}</span>
                             </div>
                             <span class="rv-qty">×{{ $item->quantity }}</span>
                             <span class="rv-price">₹{{ number_format($item->price * $item->quantity, 2) }}</span>
@@ -999,10 +1193,10 @@
                     <!-- Delivery Notes -->
                     <div class="notes-section">
                         <label class="form-label-co">
-                            <i class="fas fa-sticky-note me-1" style="color:var(--primary-green);"></i> Delivery Instructions (Optional)
+                            <i class="fas fa-sticky-note me-1" style="color:var(--primary-green);"></i> {{ $strings['notes_title'] }}
                         </label>
-                        <textarea name="notes" id="orderNotes" class="form-control-co" placeholder="E.g., Deliver after 6 PM, Ring the bell twice, etc." maxlength="200"></textarea>
-                        <small style="color:var(--gray-text);font-size:0.72rem;">Max 200 characters</small>
+                        <textarea name="notes" id="orderNotes" class="form-control-co" placeholder="{{ $strings['notes_ph'] }}" maxlength="200"></textarea>
+                        <small style="color:var(--gray-text);font-size:0.72rem;">{{ $strings['notes_max'] }}</small>
                     </div>
                 </div>
             </div>
@@ -1013,68 +1207,68 @@
         <div class="col-lg-4">
             <div class="summary-card-co">
                 <div class="summary-header-co">
-                    <h6><i class="fas fa-receipt me-2"></i> Price Details</h6>
+                    <h6><i class="fas fa-receipt me-2"></i> {{ $strings['sum_title'] }}</h6>
                 </div>
                 <div class="summary-body-co">
                     <div class="summary-row-co">
-                        <span>Subtotal <span style="font-size:0.72rem;color:var(--gray-text);">({{ count($cartItems) }} items)</span></span>
+                        <span>{{ $strings['sum_subtotal'] }} <span style="font-size:0.72rem;color:var(--gray-text);">({{ count($cartItems) }} {{ app(\App\Services\GoogleTranslator::class)->translate('items') }})</span></span>
                         <span>₹{{ number_format($subtotal, 2) }}</span>
                     </div>
                     @if($productDiscount > 0)
                     <div class="summary-row-co discount">
-                        <span>Product Discount</span>
+                        <span>{{ $strings['sum_discount'] }}</span>
                         <span>− ₹{{ number_format($productDiscount, 2) }}</span>
                     </div>
                     @endif
                     @if($couponDiscount > 0)
                     <div class="summary-row-co discount">
-                        <span>Coupon ({{ $couponCode }})</span>
+                        <span>{{ $strings['sum_coupon'] }} ({{ $couponCode }})</span>
                         <span>− ₹{{ number_format($couponDiscount, 2) }}</span>
                     </div>
                     @endif
                     <div class="summary-row-co">
-                        <span>Delivery Charge</span>
+                        <span>{{ $strings['sum_delivery'] }}</span>
                         <span>
                             @if($deliveryCharge == 0)
-                                <span style="color:#2E7D32;font-weight:600;">FREE</span>
+                                <span style="color:#2E7D32;font-weight:600;">{{ $strings['sum_free'] }}</span>
                             @else
                                 ₹{{ number_format($deliveryCharge, 2) }}
                             @endif
                         </span>
                     </div>
                     <div class="summary-row-co">
-                        <span>Tax (GST 5%)</span>
+                        <span>{{ $strings['sum_tax'] }}</span>
                         <span>₹{{ number_format($tax, 2) }}</span>
                     </div>
                     <div class="summary-row-co total-final">
-                        <span>Total to Pay</span>
+                        <span>{{ $strings['sum_total'] }}</span>
                         <span>₹{{ number_format($grandTotal, 2) }}</span>
                     </div>
 
                     @if($productDiscount + $couponDiscount > 0)
                     <div style="background:#E8F5E9;color:#2E7D32;padding:8px 12px;border-radius:8px;text-align:center;font-size:0.82rem;font-weight:600;margin-top:10px;">
-                        🎉 You're saving ₹{{ number_format($productDiscount + $couponDiscount, 2) }} on this order!
+                        {!! str_replace(':amount', number_format($productDiscount + $couponDiscount, 2), $strings['sum_saving']) !!}
                     </div>
                     @endif
 
                     <div class="terms-check-co">
                         <input type="checkbox" name="terms" id="termsAccept">
                         <label for="termsAccept">
-                            I agree to the <a href="#" onclick="return false;">Terms & Conditions</a> and <a href="#" onclick="return false;">Return Policy</a> of Sanjivani.
+                            {{ $strings['terms_agree'] }} <a href="#" onclick="return false;">{{ $strings['terms_tnc'] }}</a> {{ $strings['terms_and'] }} <a href="#" onclick="return false;">{{ $strings['terms_return'] }}</a> {{ $strings['terms_of'] }}
                         </label>
                     </div>
                     <span class="err-msg-co" id="err_terms" style="margin-top:-8px;margin-bottom:8px;"></span>
 
                     <button type="submit" class="btn-place-order" id="placeOrderBtn">
-                        <i class="fas fa-lock"></i> Place Order · ₹{{ number_format($grandTotal, 2) }}
+                        <i class="fas fa-lock"></i> {{ $strings['btn_place'] }} · ₹{{ number_format($grandTotal, 2) }}
                     </button>
 
                     <a href="{{ url('/customer/cart') }}" class="btn-back-cart">
-                        <i class="fas fa-arrow-left me-1"></i> Back to Cart
+                        <i class="fas fa-arrow-left me-1"></i> {{ $strings['btn_back_cart'] }}
                     </a>
 
                     <div class="secure-note">
-                        <i class="fas fa-shield-halved"></i> Your data is 100% secure with us
+                        <i class="fas fa-shield-halved"></i> {{ $strings['secure_note'] }}
                     </div>
                 </div>
             </div>
@@ -1087,7 +1281,30 @@
 <!-- Loading Overlay -->
 <div class="loading-overlay" id="loadingOverlay">
     <div class="spinner"></div>
-    <p>Placing your order... Please wait</p>
+    <p>{{ $strings['loading_text'] }}</p>
+</div>
+
+<!-- Custom Modal (Replaces native alert/confirm) -->
+<div class="custom-modal-overlay" id="customModal">
+    <div class="custom-modal">
+        <div class="custom-modal-header">
+            <div class="custom-modal-icon warning" id="modalIconContainer">
+                <i class="fas fa-exclamation-triangle" id="modalIcon"></i>
+            </div>
+            <h5 id="modalTitle">Notice</h5>
+        </div>
+        <div class="custom-modal-body" id="modalMessage">
+            Message goes here...
+        </div>
+        <div class="custom-modal-footer">
+            <button type="button" class="btn-modal btn-modal-cancel" id="modalCancelBtn" style="display:none;">
+                {{ $strings['js_no'] }}
+            </button>
+            <button type="button" class="btn-modal btn-modal-confirm" id="modalConfirmBtn">
+                {{ $strings['js_ok'] }}
+            </button>
+        </div>
+    </div>
 </div>
 
 @endsection
@@ -1096,6 +1313,36 @@
 <script>
 $(document).ready(function () {
 
+    /* ============ CUSTOM MODAL LOGIC ============ */
+    var modalCallback = null;
+
+    function showAlert(message, type = 'warning', title = '{{ $strings['js_alert_title'] }}') {
+        $('#modalTitle').text(title);
+        $('#modalMessage').text(message);
+        $('#modalIconContainer').attr('class', 'custom-modal-icon ' + type);
+        $('#modalIcon').attr('class', 'fas ' + (type === 'warning' ? 'fa-exclamation-triangle' : (type === 'error' ? 'fa-times-circle' : 'fa-check-circle')));
+        $('#modalCancelBtn').hide();
+        $('#modalConfirmBtn').text('{{ $strings['js_ok'] }}').off('click').on('click', function() {
+            $('#customModal').removeClass('show');
+        });
+        $('#customModal').addClass('show');
+    }
+
+    function showConfirm(message, callback, title = '{{ $strings['js_confirm_title'] }}') {
+        $('#modalTitle').text(title);
+        $('#modalMessage').text(message);
+        $('#modalIconContainer').attr('class', 'custom-modal-icon warning');
+        $('#modalIcon').attr('class', 'fas fa-question-circle');
+        $('#modalCancelBtn').show().text('{{ $strings['js_no'] }}').off('click').on('click', function() {
+            $('#customModal').removeClass('show');
+        });
+        $('#modalConfirmBtn').text('{{ $strings['js_yes'] }}').off('click').on('click', function() {
+            $('#customModal').removeClass('show');
+            if (typeof callback === 'function') callback();
+        });
+        $('#customModal').addClass('show');
+    }
+
     /* ============ ADDRESS SELECTION ============ */
     $('.address-card').on('click', function () {
         $('.address-card').removeClass('selected');
@@ -1103,7 +1350,7 @@ $(document).ready(function () {
         $(this).find('input[type="radio"]').prop('checked', true);
         $('#useNewAddress').val('0');
         $('#newAddressForm').removeClass('show');
-        $('#toggleNewAddress').html('<i class="fas fa-plus me-1"></i> Add New');
+        $('#toggleNewAddress').html('<i class="fas fa-plus me-1"></i> {{ $strings['btn_add_new'] }}');
     });
 
     /* ============ TOGGLE NEW ADDRESS FORM ============ */
@@ -1113,11 +1360,11 @@ $(document).ready(function () {
 
         if (isShown) {
             $form.removeClass('show');
-            $(this).html('<i class="fas fa-plus me-1"></i> Add New');
+            $(this).html('<i class="fas fa-plus me-1"></i> {{ $strings['btn_add_new'] }}');
             $('#useNewAddress').val('0');
         } else {
             $form.addClass('show');
-            $(this).html('<i class="fas fa-times me-1"></i> Cancel');
+            $(this).html('<i class="fas fa-times me-1"></i> {{ $strings['btn_cancel'] }}');
             $('#useNewAddress').val('1');
             $('.address-card').removeClass('selected');
             $('.address-card input[type="radio"]').prop('checked', false);
@@ -1136,14 +1383,14 @@ $(document).ready(function () {
         var file = this.files[0];
         if (file) {
             if (file.size > 5 * 1024 * 1024) {
-                $('#err_prescription').text('⚠ File must be less than 5MB').addClass('show');
+                $('#err_prescription').text('⚠ {{ $strings['js_file_size'] }}').addClass('show');
                 $(this).val('');
                 return;
             }
 
             var validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'application/pdf'];
             if (!validTypes.includes(file.type)) {
-                $('#err_prescription').text('⚠ Only JPG, PNG or PDF files allowed').addClass('show');
+                $('#err_prescription').text('⚠ {{ $strings['js_file_type'] }}').addClass('show');
                 $(this).val('');
                 return;
             }
@@ -1196,7 +1443,7 @@ $(document).ready(function () {
         var hasSelected = $('input[name="address_id"]:checked').length > 0;
 
         if (!useNew && !hasSelected) {
-            alert('⚠ Please select a delivery address or add a new one.');
+            showAlert('⚠ {{ $strings['js_addr_req'] }}', 'warning');
             isValid = false;
             return false;
         }
@@ -1204,32 +1451,32 @@ $(document).ready(function () {
         // If using new address, validate its fields
         if (useNew) {
             var name = $.trim($('#new_name').val());
-            if (name === '') { showErr($('#new_name'), '⚠ Name required'); isValid = false; }
-            else if (name.length < 2) { showErr($('#new_name'), '⚠ Min 2 characters'); isValid = false; }
+            if (name === '') { showErr($('#new_name'), '⚠ {{ $strings['js_name_req'] }}'); isValid = false; }
+            else if (name.length < 2) { showErr($('#new_name'), '⚠ {{ $strings['js_name_min'] }}'); isValid = false; }
 
             var phone = $.trim($('#new_phone').val());
-            if (phone === '') { showErr($('#new_phone'), '⚠ Phone required'); isValid = false; }
-            else if (!/^[6-9]\d{9}$/.test(phone)) { showErr($('#new_phone'), '⚠ Must be 10 digits, starts 6-9'); isValid = false; }
+            if (phone === '') { showErr($('#new_phone'), '⚠ {{ $strings['js_phone_req'] }}'); isValid = false; }
+            else if (!/^[6-9]\d{9}$/.test(phone)) { showErr($('#new_phone'), '⚠ {{ $strings['js_phone_inv'] }}'); isValid = false; }
 
             var addr = $.trim($('#new_address_line').val());
-            if (addr === '') { showErr($('#new_address_line'), '⚠ Address required'); isValid = false; }
-            else if (addr.length < 10) { showErr($('#new_address_line'), '⚠ Min 10 characters'); isValid = false; }
+            if (addr === '') { showErr($('#new_address_line'), '⚠ {{ $strings['js_addr_line_req'] }}'); isValid = false; }
+            else if (addr.length < 10) { showErr($('#new_address_line'), '⚠ {{ $strings['js_addr_line_min'] }}'); isValid = false; }
 
-            if ($('#new_village_id').val() === '') { showErr($('#new_village_id'), '⚠ Please select village'); isValid = false; }
+            if ($('#new_village_id').val() === '') { showErr($('#new_village_id'), '⚠ {{ $strings['js_village_req'] }}'); isValid = false; }
 
             var state = $.trim($('#new_state').val());
-            if (state === '') { showErr($('#new_state'), '⚠ State required'); isValid = false; }
+            if (state === '') { showErr($('#new_state'), '⚠ {{ $strings['js_state_req'] }}'); isValid = false; }
 
             var pin = $.trim($('#new_pincode').val());
-            if (pin === '') { showErr($('#new_pincode'), '⚠ Pincode required'); isValid = false; }
-            else if (!/^\d{6}$/.test(pin)) { showErr($('#new_pincode'), '⚠ Must be 6 digits'); isValid = false; }
+            if (pin === '') { showErr($('#new_pincode'), '⚠ {{ $strings['js_pin_req'] }}'); isValid = false; }
+            else if (!/^\d{6}$/.test(pin)) { showErr($('#new_pincode'), '⚠ {{ $strings['js_pin_inv'] }}'); isValid = false; }
         }
 
         // Check prescription if required
         @if($hasRxItems)
         var rxFile = $('#rxUpload')[0].files[0];
         if (!rxFile) {
-            $('#err_prescription').text('⚠ Please upload the prescription').addClass('show');
+            $('#err_prescription').text('⚠ {{ $strings['js_rx_req'] }}').addClass('show');
             isValid = false;
             $('html, body').animate({
                 scrollTop: $('#rxUpload').closest('.checkout-section').offset().top - 100
@@ -1239,7 +1486,7 @@ $(document).ready(function () {
 
         // Check terms
         if (!$('#termsAccept').is(':checked')) {
-            $('#err_terms').text('⚠ Please accept the Terms & Conditions').addClass('show');
+            $('#err_terms').text('⚠ {{ $strings['js_terms_req'] }}').addClass('show');
             isValid = false;
         }
 
@@ -1252,14 +1499,18 @@ $(document).ready(function () {
             return false;
         }
 
-        // Confirm order
-        if (!confirm('Place order for ₹{{ number_format($grandTotal, 2) }}?')) return false;
+        // Confirm order using custom modal
+        var confirmMsg = '{{ $strings['js_confirm_msg'] }}'.replace(':amount', '{{ number_format($grandTotal, 2) }}');
+        
+        showConfirm(confirmMsg, function() {
+            $('#loadingOverlay').addClass('show');
+            $('#placeOrderBtn').prop('disabled', true);
 
-        $('#loadingOverlay').addClass('show');
-        $('#placeOrderBtn').prop('disabled', true);
-
-        // Submit form
-        setTimeout(() => { this.submit(); }, 500);
+            // Submit form
+            setTimeout(function() { 
+                $('#checkoutForm')[0].submit(); 
+            }, 500);
+        }, '{{ $strings['js_confirm_title'] }}');
     });
 
     /* ============ TERMS CHECKBOX CLEAR ERROR ============ */

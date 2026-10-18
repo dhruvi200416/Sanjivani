@@ -8,6 +8,7 @@ use App\Models\Medicine;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Village;
+use Stichoza\GoogleTranslate\GoogleTranslate;
 
 class PharmacyController extends Controller
 {
@@ -297,23 +298,39 @@ class PharmacyController extends Controller
             'email'         => 'required|email',
             'phone'         => 'required|digits:10',
             'village_id'    => 'required|exists:villages,id',
-            'address'       => 'required|string|min:10|max:300'
+            'address'       => 'required|string|min:10|max:300',
+            'logo'          => 'nullable|image|mimes:jpg,jpeg,png|max:2048' // Added validation for logo
         ]);
 
         $pharmacy = Pharmacy::findOrFail(session('pharmacy_id'));
 
-        $pharmacy->update($request->only([
+        $data = $request->only([
             'pharmacy_name',
             'owner_name',
             'email',
             'phone',
             'village_id',
             'address'
-        ]));
+        ]);
+
+        // Handle Logo Upload
+        if ($request->hasFile('logo')) {
+            // Delete old image if it exists
+            if ($pharmacy->logo && file_exists(public_path('images/' . $pharmacy->logo))) {
+                unlink(public_path('images/' . $pharmacy->logo));
+            }
+
+            // Upload new image to public/images
+            $imageName = 'pharm_' . time() . '_' . uniqid() . '.' . $request->logo->extension();
+            $request->logo->move(public_path('images'), $imageName);
+            $data['logo'] = $imageName;
+        }
+
+        $pharmacy->update($data);
 
         session(['pharmacy_name' => $pharmacy->pharmacy_name]);
 
-        return back()->with('profile_success', 'Pharmacy profile updated.');
+        return back()->with('profile_success', 'Pharmacy profile updated successfully.');
     }
 
     public function changePassword(Request $request)

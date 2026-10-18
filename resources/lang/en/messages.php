@@ -54,6 +54,7 @@ return [
     'cat_diabetes'                 => 'Diabetes Care',
     'cat_heart'                    => 'Heart Care',
     'cat_vitamins'                 => 'Vitamins',
+    'cat_antibiotic'               => 'Antibiotic',
     'cat_skin'                     => 'Skin Care',
     'cat_baby'                     => 'Baby Care',
     'cat_firstaid'                 => 'First Aid',
@@ -74,6 +75,38 @@ return [
     'no_featured_desc'             => 'Please check back soon — our pharmacies are adding new stock daily.',
     'browse_all'                   => 'Browse All Medicines',
     'view_all'                     => 'View All Medicines',
+
+    // ============================================================
+    // FEATURED MEDICINES — PRODUCT CARD LABELS
+    // (English values — used when locale = 'en')
+    // ============================================================
+
+    // Category labels (small green caps on each medicine card)
+    'med_cat_general'              => 'General',
+    'med_cat_fever_pain'           => 'Fever & Pain',
+    'med_cat_digestive'            => 'Digestive',
+    'med_cat_first_aid'            => 'First Aid',
+    'med_cat_vitamins'             => 'Vitamins',
+    'med_cat_antibiotic'           => 'Antibiotic',
+    'med_cat_diabetes'             => 'Diabetes',
+    'med_cat_heart'                => 'Heart Care',
+    'med_cat_skin'                 => 'Skin Care',
+    'med_cat_baby'                 => 'Baby Care',
+    'med_cat_cold'                 => 'Cold & Cough',
+    'med_cat_ayurvedic'            => 'Ayurvedic',
+    'med_cat_eye'                  => 'Eye Care',
+    'med_cat_devices'              => 'Devices',
+
+    // Pharmacy / store names
+    'pharmacy_medicare'            => 'MediCare Pharmacy',
+    'pharmacy_healthplus'          => 'HealthPlus Pharmacy',
+    'pharmacy_sanjivani_store'     => 'Sanjivani Store',
+
+    // Medicine names
+    'med_paracetamol_500'          => 'Paracetamol 500mg',
+    'med_antacid_tablets'          => 'Antacid Tablets',
+    'med_antiseptic_cream'         => 'Antiseptic Cream',
+    'med_vitamin_c_500'            => 'Vitamin C 500mg',
 
     // ============ HOW IT WORKS ============
     'how_badge'                    => 'Process',
@@ -117,6 +150,19 @@ return [
     'test_badge'                   => 'Testimonials',
     'test_title'                   => 'What Our <span class="highlight">Customers Say</span>',
     'test_desc'                    => 'Real experiences from real people who trust Sanjivani for their healthcare needs.',
+
+    // TESTIMONIALS — CARD CONTENT
+    'test_1_name'                  => 'Ramesh Patil',
+    'test_1_location'              => 'Nashik, Maharashtra',
+    'test_1_text'                  => 'Living in a small village, getting medicines was always a struggle. Sanjivani delivers right to my home within hours. Truly a life saver for my elderly parents.',
+
+    'test_2_name'                  => 'Sunita Sharma',
+    'test_2_location'              => 'Jaipur, Rajasthan',
+    'test_2_text'                  => 'I uploaded my prescription at night and got all medicines the next morning. The pharmacist even called me to confirm the dosage. Excellent service!',
+
+    'test_3_name'                  => 'Arjun Verma',
+    'test_3_location'              => 'Pune, Maharashtra',
+    'test_3_text'                  => 'Prices are much better than local shops and the app is very easy to use. Order tracking keeps me updated at every step. Highly recommended.',
 
     // ============ PARTNER ============
     'partner_badge'                => 'Join Us',
@@ -163,4 +209,112 @@ return [
     'js_search_invalid'            => 'Only letters, numbers, spaces, +, - and . are allowed.',
     'js_email_required'            => 'Please enter your email address.',
     'js_email_invalid'             => 'Please enter a valid email address.',
+
+    // ============================================================
+    // ABOUT PAGE  →  about.blade.php
+    // ============================================================
+    'about_banner_badge'           => 'About Sanjivani',
+    'about_banner_title'           => 'Our Story',
+    'about_banner_desc'            => 'Discover how Sanjivani is transforming healthcare accessibility in India by connecting patients with verified pharmacies and delivering medicines to every doorstep — even in the remotest villages.',
+    'about_breadcrumb_home'        => 'Home',
+    'about_breadcrumb_current'     => 'About Us',
+
+    'about_story_badge'            => 'Our Journey',
+    'about_story_title'            => 'Bringing <span class="highlight">Healthcare</span> Closer to You',
+    'about_story_years_label'      => 'Years',
+    'about_story_lead'             => 'Sanjivani was born from a simple yet powerful idea — nobody should struggle to get essential medicines, no matter where they live.',
+    'about_story_para1'            => 'Founded in 2015, we started with a mission to eliminate the healthcare gap between urban and rural India. Today, we proudly serve thousands of families across the country through our network of verified pharmacies and dedicated delivery partners.',
+    'about_story_para2'            => 'Our technology-driven platform ensures 100% genuine medicines, transparent pricing and lightning-fast delivery — bringing peace of mind to families and saving countless lives every single day.',
+
+    'about_hl_iso'                 => 'ISO Certified',
+    'about_hl_licensed'            => 'Licensed Partners',
+    'about_hl_delivery'            => 'Same Day Delivery',
+    'about_hl_trusted'             => 'Trusted by Millions',
+
+    'about_founder_name'           => 'Dr. Rajesh Kumar',
+    'about_founder_designation'    => 'Founder & CEO, Sanjivani',
+
+    'about_mv_badge'               => 'Purpose',
+    'about_mv_title'               => 'Our Mission & <span class="highlight">Vision</span>',
+    'about_mv_desc'                => 'We are driven by a clear purpose — to make quality healthcare accessible, affordable and reliable for every Indian household.',
+
+    'about_mission_title'          => 'Our Mission',
+    'about_mission_text'           => 'To revolutionize medicine delivery in India by leveraging technology to connect patients with verified pharmacies, ensuring timely access to genuine medicines at fair prices — from bustling cities to the most remote villages.',
+    'about_mission_li1'            => 'Bridge the urban-rural healthcare gap',
+    'about_mission_li2'            => 'Deliver 100% authentic medicines',
+    'about_mission_li3'            => 'Empower local pharmacies to grow',
+    'about_mission_li4'            => 'Create employment through delivery network',
+
+    'about_vision_title'           => 'Our Vision',
+    'about_vision_text'            => 'To become India\'s most trusted digital healthcare partner, ensuring that no family — regardless of their location or income — has to worry about accessing essential medicines when they need them the most.',
+    'about_vision_li1'             => 'Reach 10,000+ villages by 2030',
+    'about_vision_li2'             => 'Serve 10 million happy customers',
+    'about_vision_li3'             => 'Partner with 5,000+ pharmacies',
+    'about_vision_li4'             => 'Set new standards in healthcare delivery',
+
+    'about_values_badge'           => 'What Drives Us',
+    'about_values_title'           => 'Our Core <span class="highlight">Values</span>',
+    'about_values_desc'            => 'These principles guide every decision we make and every action we take at Sanjivani.',
+
+    'about_val1_title'             => 'Compassion',
+    'about_val1_desc'              => 'We care deeply about our customers and treat every order as if it were for our own family.',
+    'about_val2_title'             => 'Trust',
+    'about_val2_desc'              => 'Transparent pricing, genuine medicines and honest service — trust is our foundation.',
+    'about_val3_title'             => 'Efficiency',
+    'about_val3_desc'              => 'Fast, seamless and reliable — we value your time and health above everything else.',
+    'about_val4_title'             => 'Innovation',
+    'about_val4_desc'              => 'Constantly improving our technology to make healthcare simpler and better for all.',
+    'about_val5_title'             => 'Community',
+    'about_val5_desc'              => 'Building strong relationships with pharmacies, delivery partners and communities we serve.',
+    'about_val6_title'             => 'Sustainability',
+    'about_val6_desc'              => 'Eco-friendly packaging and responsible practices for a healthier planet tomorrow.',
+
+    'about_ach_badge'              => 'Milestones',
+    'about_ach_title'              => 'Our Achievements <span style="color:#A5D6A7;">In Numbers</span>',
+    'about_ach_desc'               => 'A decade of dedication reflected in numbers that continue to grow every day.',
+    'about_ach_customers'          => 'Happy Customers',
+    'about_ach_pharmacies'         => 'Verified Pharmacies',
+    'about_ach_villages'           => 'Villages Served',
+    'about_ach_awards'             => 'Awards Won',
+
+    'about_team_badge'             => 'Leadership',
+    'about_team_title'             => 'Meet Our <span class="highlight">Expert Team</span>',
+    'about_team_desc'              => 'Passionate professionals dedicated to transforming healthcare accessibility across India.',
+
+    'about_team1_name'             => 'Dr. Rajesh Kumar',
+    'about_team1_role'             => 'Founder & CEO',
+    'about_team1_desc'             => '20+ years of experience in healthcare and pharmacy industry.',
+    'about_team2_name'             => 'Priya Sharma',
+    'about_team2_role'             => 'Chief Operating Officer',
+    'about_team2_desc'             => 'Expert in operations and supply chain management.',
+    'about_team3_name'             => 'Amit Patel',
+    'about_team3_role'             => 'Head of Technology',
+    'about_team3_desc'             => 'Building innovative platforms for seamless healthcare delivery.',
+    'about_team4_name'             => 'Dr. Sunita Verma',
+    'about_team4_role'             => 'Chief Pharmacist',
+    'about_team4_desc'             => 'Ensures quality and authenticity of every medicine delivered.',
+
+    'about_tl_badge'               => 'Our Journey',
+    'about_tl_title'               => 'From Idea to <span class="highlight">Impact</span>',
+    'about_tl_desc'                => 'A timeline of milestones that shaped Sanjivani into what it is today.',
+
+    'about_tl1_title'              => 'The Beginning',
+    'about_tl1_desc'               => 'Sanjivani was founded with a mission to deliver medicines to underserved rural areas of Maharashtra.',
+    'about_tl2_title'              => 'First 100 Pharmacies',
+    'about_tl2_desc'               => 'Reached a milestone of 100 verified partner pharmacies across 3 states.',
+    'about_tl3_title'              => 'Launched Mobile App',
+    'about_tl3_desc'               => 'Introduced our user-friendly mobile application making ordering easier than ever.',
+    'about_tl4_title'              => 'Rural Expansion',
+    'about_tl4_desc'               => 'Extended services to 300+ villages, bringing medicines to previously unreached communities.',
+    'about_tl5_title'              => 'Award Recognition',
+    'about_tl5_desc'               => 'Honored with the "Best Healthcare Startup" award by the Ministry of Health.',
+    'about_tl6_title'              => 'Nationwide Network',
+    'about_tl6_desc'               => 'Serving thousands of families daily across India with same-day delivery in most locations.',
+
+    'about_cta_title'              => 'Ready to Experience Better Healthcare?',
+    'about_cta_desc'               => 'Join thousands of families who trust Sanjivani for safe, timely and affordable medicine delivery. Your health, our priority.',
+    'about_cta_start'              => 'Get Started Today',
+    'about_cta_contact'            => 'Contact Us',
+
+    
 ];

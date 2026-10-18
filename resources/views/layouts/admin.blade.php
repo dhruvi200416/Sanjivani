@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="{{ app()->getLocale() }}">
 
 <head>
     <meta charset="UTF-8">
@@ -12,7 +12,8 @@
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome 6 CDN -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" /> <!-- Chart.js -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1"></script>
 
     <style>
@@ -23,6 +24,7 @@
             --accent-green: #66BB6A;
             --pale-green: #E8F5E9;
             --mint-green: #C8E6C9;
+            --white: #FFFFFF;
             --off-white: #F1F8E9;
             --dark-text: #1A1A2E;
             --gray-text: #555555;
@@ -345,6 +347,7 @@
             font-size: 0.9rem;
         }
 
+        /* Updated Topbar Icons to match Delivery Layout */
         .topbar-icon {
             position: relative;
             width: 42px;
@@ -383,6 +386,7 @@
             border: 2px solid var(--white);
         }
 
+        /* Updated User Dropdown to match Delivery Layout */
         .user-dropdown {
             display: flex;
             align-items: center;
@@ -419,12 +423,12 @@
 
         .user-info strong {
             display: block;
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             color: var(--dark-text);
         }
 
         .user-info span {
-            font-size: 0.72rem;
+            font-size: 0.7rem;
             color: var(--gray-text);
         }
 
@@ -629,12 +633,90 @@
                 padding: calc(var(--topbar-height) + 15px) 15px 15px;
             }
         }
+
+        /* Force white text inside profile header cards */
+        .profile-header-card h2,
+        .profile-header-card .role,
+        .profile-header-card .meta span,
+        .profile-header-card .meta span i {
+            color: #FFFFFF !important;
+        }
+
+        /* Keep the edit button text green so it's visible */
+        .profile-header-card .edit-profile-btn {
+            color: var(--primary-green) !important;
+        }
     </style>
 
     @yield('styles')
 </head>
 
 <body>
+
+    @php
+    use App\Services\GoogleTranslator;
+    use App\Models\Admin;
+
+    // Translate all static layout strings to the active locale (Gujarati/English)
+    $adminLayoutStrings = GoogleTranslator::translateBatch([
+    // Brand
+    'brand_name' => 'Sanjivani',
+    'portal_name' => 'Admin Panel',
+
+    // Sidebar sections
+    'menu_main' => 'Main',
+    'menu_mgmt' => 'Management',
+
+    // Sidebar links
+    'link_dashboard' => 'Dashboard',
+    'link_orders' => 'Orders',
+    'link_medicines' => 'Medicines',
+    'link_pharmacies' => 'Pharmacies',
+    'link_delivery' => 'Delivery Partners',
+    'link_customers' => 'Customers',
+    'link_villages' => 'Villages',
+    'link_profile' => 'My Profile',
+    'link_logout' => 'Logout',
+
+    // Topbar & Dropdowns
+    'search_placeholder' => 'Search...',
+    'notif_title' => 'Notifications',
+    'notif_new' => 'New',
+    'notif_view_all' => 'View All Notifications',
+    'role_admin' => 'Administrator',
+    'dd_profile' => 'My Profile',
+    'dd_edit_profile' => 'Edit Profile',
+    'dd_logout' => 'Logout',
+
+    // Demo Notifications
+    'notif_low_stock' => 'Low Stock Alert',
+    'notif_low_stock_p' => 'Paracetamol 500mg is running low',
+    'notif_new_order' => 'New Order',
+    'notif_new_order_p' => 'Order #ORD-2025-0042 placed',
+    'notif_new_pharm' => 'New Pharmacy',
+    'notif_new_pharm_p' => 'Medicore Pharmacy registered',
+    'time_5m' => '5 minutes ago',
+    'time_30m' => '30 minutes ago',
+    'time_2h' => '2 hours ago',
+    ]);
+
+    // Fetch the admin details dynamically from database
+    $adminId = session('user_id');
+    $adminUser = null;
+
+    if ($adminId) {
+    $adminUser = Admin::find($adminId);
+    }
+
+    // Fallback logic for raw name
+    $rawAdminName = $adminUser ? $adminUser->name : (session('admin_name') ?? 'Admin');
+
+    // Translate the database name dynamically into the active locale (Gujarati)
+    $translatedAdminName = GoogleTranslator::translate($rawAdminName);
+
+    // Initial for the avatar circle
+    $adminInitial = strtoupper(substr($translatedAdminName, 0, 1));
+    @endphp
 
     <!-- Sidebar Overlay for Mobile -->
     <div id="sidebarOverlay"></div>
@@ -650,56 +732,56 @@
                 @endif
             </div>
             <div class="brand-info">
-                <h5>Sanjivani</h5>
-                <span>Admin Panel</span>
+                <h5>{{ $adminLayoutStrings['brand_name'] }}</h5>
+                <span>{{ $adminLayoutStrings['portal_name'] }}</span>
             </div>
         </div>
 
         <nav class="sidebar-nav">
-            <div class="nav-section-title">Main</div>
+            <div class="nav-section-title">{{ $adminLayoutStrings['menu_main'] }}</div>
             <a href="{{ url('/admin/dashboard') }}" class="sidebar-link {{ request()->is('admin/dashboard') ? 'active' : '' }}">
                 <i class="fas fa-tachometer-alt"></i>
-                <span class="link-title">Dashboard</span>
+                <span class="link-title">{{ $adminLayoutStrings['link_dashboard'] }}</span>
             </a>
             <a href="{{ url('/admin/orders') }}" class="sidebar-link {{ request()->is('admin/orders*') ? 'active' : '' }}">
                 <i class="fas fa-shopping-cart"></i>
-                <span class="link-title">Orders</span>
+                <span class="link-title">{{ $adminLayoutStrings['link_orders'] }}</span>
                 @if(isset($pendingOrdersCount) && $pendingOrdersCount > 0)
                 <span class="badge">{{ $pendingOrdersCount }}</span>
                 @endif
             </a>
             <a href="{{ url('/admin/medicines') }}" class="sidebar-link {{ request()->is('admin/medicines*') ? 'active' : '' }}">
                 <i class="fas fa-pills"></i>
-                <span class="link-title">Medicines</span>
+                <span class="link-title">{{ $adminLayoutStrings['link_medicines'] }}</span>
             </a>
             <a href="{{ url('/admin/pharmacies') }}" class="sidebar-link {{ request()->is('admin/pharmacies*') ? 'active' : '' }}">
                 <i class="fas fa-store"></i>
-                <span class="link-title">Pharmacies</span>
+                <span class="link-title">{{ $adminLayoutStrings['link_pharmacies'] }}</span>
             </a>
             <a href="{{ url('/admin/delivery-partners') }}" class="sidebar-link {{ request()->is('admin/delivery-partners*') ? 'active' : '' }}">
                 <i class="fas fa-motorcycle"></i>
-                <span class="link-title">Delivery Partners</span>
+                <span class="link-title">{{ $adminLayoutStrings['link_delivery'] }}</span>
             </a>
 
-            <div class="nav-section-title">Management</div>
+            <div class="nav-section-title">{{ $adminLayoutStrings['menu_mgmt'] }}</div>
             <a href="{{ url('/admin/users') }}" class="sidebar-link {{ request()->is('admin/users*') ? 'active' : '' }}">
                 <i class="fas fa-users"></i>
-                <span class="link-title">Customers</span>
+                <span class="link-title">{{ $adminLayoutStrings['link_customers'] }}</span>
             </a>
             <a href="{{ url('/admin/villages') }}" class="sidebar-link {{ request()->is('admin/villages*') ? 'active' : '' }}">
                 <i class="fas fa-map-marker-alt"></i>
-                <span class="link-title">Villages</span>
+                <span class="link-title">{{ $adminLayoutStrings['link_villages'] }}</span>
             </a>
             <a href="{{ url('/admin/profile') }}" class="sidebar-link {{ request()->is('admin/profile*') ? 'active' : '' }}">
                 <i class="fas fa-user-circle"></i>
-                <span class="link-title">My Profile</span>
+                <span class="link-title">{{ $adminLayoutStrings['link_profile'] }}</span>
             </a>
         </nav>
 
         <div class="sidebar-footer">
             <a href="{{ url('/logout') }}" class="logout-btn">
                 <i class="fas fa-sign-out-alt"></i>
-                <span>Logout</span>
+                <span>{{ $adminLayoutStrings['link_logout'] }}</span>
             </a>
         </div>
     </aside>
@@ -717,14 +799,14 @@
                     <i class="fas fa-bars"></i>
                 </button>
                 <h5 class="page-title">
-                    @yield('page_title', 'Dashboard')
+                    @yield('page_title', $adminLayoutStrings['link_dashboard'])
                 </h5>
             </div>
 
             <div class="topbar-right">
                 <div class="topbar-search d-none d-md-block">
                     <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Search..." autocomplete="off">
+                    <input type="text" placeholder="{{ $adminLayoutStrings['search_placeholder'] }}" autocomplete="off">
                 </div>
 
                 <!-- Notifications Dropdown -->
@@ -735,35 +817,35 @@
                     </button>
                     <div class="dropdown-menu dropdown-menu-end notification-dropdown">
                         <div class="notif-header">
-                            Notifications
-                            <span>3 New</span>
+                            {{ $adminLayoutStrings['notif_title'] }}
+                            <span>3 {{ $adminLayoutStrings['notif_new'] }}</span>
                         </div>
                         <div class="notification-item">
                             <div class="notif-icon warning"><i class="fas fa-exclamation-triangle"></i></div>
                             <div class="notif-content">
-                                <strong>Low Stock Alert</strong>
-                                <p>Paracetamol 500mg is running low</p>
-                                <span class="notif-time">5 minutes ago</span>
+                                <strong>{{ $adminLayoutStrings['notif_low_stock'] }}</strong>
+                                <p>{{ $adminLayoutStrings['notif_low_stock_p'] }}</p>
+                                <span class="notif-time">{{ $adminLayoutStrings['time_5m'] }}</span>
                             </div>
                         </div>
                         <div class="notification-item">
                             <div class="notif-icon success"><i class="fas fa-check-circle"></i></div>
                             <div class="notif-content">
-                                <strong>New Order</strong>
-                                <p>Order #ORD-2025-0042 placed</p>
-                                <span class="notif-time">30 minutes ago</span>
+                                <strong>{{ $adminLayoutStrings['notif_new_order'] }}</strong>
+                                <p>{{ $adminLayoutStrings['notif_new_order_p'] }}</p>
+                                <span class="notif-time">{{ $adminLayoutStrings['time_30m'] }}</span>
                             </div>
                         </div>
                         <div class="notification-item">
                             <div class="notif-icon success"><i class="fas fa-user-plus"></i></div>
                             <div class="notif-content">
-                                <strong>New Pharmacy</strong>
-                                <p>Medicore Pharmacy registered</p>
-                                <span class="notif-time">2 hours ago</span>
+                                <strong>{{ $adminLayoutStrings['notif_new_pharm'] }}</strong>
+                                <p>{{ $adminLayoutStrings['notif_new_pharm_p'] }}</p>
+                                <span class="notif-time">{{ $adminLayoutStrings['time_2h'] }}</span>
                             </div>
                         </div>
                         <div class="notif-footer">
-                            <a href="#">View All Notifications</a>
+                            <a href="#">{{ $adminLayoutStrings['notif_view_all'] }}</a>
                         </div>
                     </div>
                 </div>
@@ -772,21 +854,20 @@
                 <div class="dropdown">
                     <button class="user-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
                         <div class="user-avatar">
-                            {{ strtoupper(substr(session('admin_name') ?? 'Admin', 0, 1)) }}
+                            {{ $adminInitial }}
                         </div>
                         <div class="user-info d-none d-md-block">
-                            <strong>{{ session('admin_name') ?? 'Admin' }}</strong>
-                            <span>Administrator</span>
+                            <strong>{{ $translatedAdminName }}</strong>
+                            <span>{{ $adminLayoutStrings['role_admin'] }}</span>
                         </div>
-                        <i class="fas fa-chevron-down d-none d-md-block" style="font-size:0.75rem;color:var(--gray-text);"></i>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end dropdown-menu-custom">
-                        <li><a class="dropdown-item" href="{{ url('/admin/profile') }}"><i class="fas fa-user me-2"></i> My Profile</a></li>
-                        <li><a class="dropdown-item" href="{{ url('/admin/edit-profile') }}"><i class="fas fa-edit me-2"></i> Edit Profile</a></li>
+                        <li><a class="dropdown-item" href="{{ url('/admin/profile') }}"><i class="fas fa-user me-2"></i> {{ $adminLayoutStrings['dd_profile'] }}</a></li>
+                        <li><a class="dropdown-item" href="{{ url('/admin/edit-profile') }}"><i class="fas fa-edit me-2"></i> {{ $adminLayoutStrings['dd_edit_profile'] }}</a></li>
                         <li>
                             <hr class="dropdown-divider">
                         </li>
-                        <li><a class="dropdown-item text-danger" href="{{ url('/logout') }}"><i class="fas fa-sign-out-alt me-2"></i> Logout</a></li>
+                        <li><a class="dropdown-item text-danger" href="{{ url('/logout') }}"><i class="fas fa-sign-out-alt me-2"></i> {{ $adminLayoutStrings['dd_logout'] }}</a></li>
                     </ul>
                 </div>
             </div>
@@ -845,7 +926,8 @@
                 if (e.which === 13) {
                     var query = $(this).val().trim();
                     if (query.length > 0) {
-                        window.location.href = '{{ url(' / admin / medicines ? search = ') }}' + encodeURIComponent(query);
+                        // Fixed the URL spacing bug here
+                        window.location.href = '{{ url("/admin/medicines?search=") }}' + encodeURIComponent(query);
                     }
                 }
             });

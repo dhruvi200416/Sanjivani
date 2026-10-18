@@ -2,7 +2,7 @@
 
 @section('title', 'My Cart')
 @section('page_title')
-<i class="fas fa-shopping-cart"></i> Shopping Cart
+<i class="fas fa-shopping-cart"></i> {{ app(\App\Services\GoogleTranslator::class)->translate('Shopping Cart') }}
 @endsection
 
 @section('styles')
@@ -43,7 +43,7 @@
 
     .cart-header p span {
         font-weight: 700;
-        background: rgba(255,255,255,0.2);
+        background: rgba(255, 255, 255, 0.2);
         padding: 3px 10px;
         border-radius: 15px;
         margin-left: 5px;
@@ -409,7 +409,7 @@
 
     .btn-apply-coupon:hover:not(:disabled) {
         transform: translateY(-1px);
-        box-shadow: 0 4px 10px rgba(46,125,50,0.3);
+        box-shadow: 0 4px 10px rgba(46, 125, 50, 0.3);
     }
 
     .coupon-msg {
@@ -418,9 +418,17 @@
         display: none;
     }
 
-    .coupon-msg.show { display: block; }
-    .coupon-msg.success { color: #2E7D32; }
-    .coupon-msg.error { color: #E53935; }
+    .coupon-msg.show {
+        display: block;
+    }
+
+    .coupon-msg.success {
+        color: #2E7D32;
+    }
+
+    .coupon-msg.error {
+        color: #E53935;
+    }
 
     .applied-coupon {
         background: #E8F5E9;
@@ -469,14 +477,14 @@
         align-items: center;
         justify-content: center;
         gap: 8px;
-        box-shadow: 0 6px 15px rgba(46,125,50,0.25);
+        box-shadow: 0 6px 15px rgba(46, 125, 50, 0.25);
         margin-top: 15px;
         text-decoration: none;
     }
 
     .btn-checkout:hover:not(:disabled) {
         transform: translateY(-2px);
-        box-shadow: 0 10px 25px rgba(46,125,50,0.35);
+        box-shadow: 0 10px 25px rgba(46, 125, 50, 0.35);
         color: var(--white);
     }
 
@@ -581,7 +589,7 @@
 
     .empty-cart-state a:hover {
         transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(46,125,50,0.3);
+        box-shadow: 0 8px 20px rgba(46, 125, 50, 0.3);
         color: var(--white);
     }
 
@@ -661,7 +669,7 @@
         color: var(--white);
         padding: 14px 22px;
         border-radius: 12px;
-        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
         z-index: 10000;
         display: none;
         align-items: center;
@@ -671,7 +679,10 @@
     }
 
     @media (max-width: 991px) {
-        .summary-card { position: static; margin-top: 25px; }
+        .summary-card {
+            position: static;
+            margin-top: 25px;
+        }
     }
 
     @media (max-width: 767px) {
@@ -679,23 +690,43 @@
             grid-template-columns: 70px 1fr auto;
             gap: 12px;
         }
-        .cart-item-img { width: 70px; height: 70px; }
+
+        .cart-item-img {
+            width: 70px;
+            height: 70px;
+        }
+
         .cart-item-price,
         .cart-qty-selector,
         .cart-item-total,
         .btn-remove-item {
             grid-column: 2 / -1;
         }
-        .cart-item-price { text-align: left; margin-top: 5px; }
-        .cart-qty-selector { justify-self: start; margin-top: 5px; }
-        .cart-item-total { text-align: left; }
+
+        .cart-item-price {
+            text-align: left;
+            margin-top: 5px;
+        }
+
+        .cart-qty-selector {
+            justify-self: start;
+            margin-top: 5px;
+        }
+
+        .cart-item-total {
+            text-align: left;
+        }
+
         .btn-remove-item {
             position: absolute;
             top: 20px;
             right: 20px;
             justify-self: end;
         }
-        .cart-item { position: relative; }
+
+        .cart-item {
+            position: relative;
+        }
     }
 </style>
 @endsection
@@ -703,35 +734,112 @@
 @section('content')
 
 @php
-    // Demo cart data
-    $cartItems = $cartItems ?? [
-        (object)['id'=>1,'medicine_id'=>1,'name'=>'Paracetamol 500mg','brand'=>'Crocin','category'=>'Fever & Pain','price'=>25,'mrp'=>30,'quantity'=>2,'stock'=>150,'image'=>null],
-        (object)['id'=>2,'medicine_id'=>2,'name'=>'Vitamin C 500mg','brand'=>'Limcee','category'=>'Vitamins','price'=>180,'mrp'=>200,'quantity'=>1,'stock'=>80,'image'=>null],
-        (object)['id'=>3,'medicine_id'=>4,'name'=>'Cough Syrup 100ml','brand'=>'Benadryl','category'=>'Cold & Cough','price'=>145,'mrp'=>160,'quantity'=>1,'stock'=>15,'image'=>null],
-    ];
+use App\Services\GoogleTranslator;
 
-    $subtotal = 0;
-    $totalMrp = 0;
-    foreach ($cartItems as $item) {
-        $subtotal += $item->price * $item->quantity;
-        $totalMrp += $item->mrp * $item->quantity;
-    }
+// Real cart items come from the controller. Fallback only used if not passed.
+$cartItems = $cartItems ?? [
+(object)['id'=>1,'medicine_id'=>1,'name'=>'Paracetamol 500mg','brand'=>'Crocin','category'=>'Fever & Pain','price'=>25,'mrp'=>30,'quantity'=>2,'stock'=>150,'image'=>null],
+(object)['id'=>2,'medicine_id'=>2,'name'=>'Vitamin C 500mg','brand'=>'Limcee','category'=>'Vitamins','price'=>180,'mrp'=>200,'quantity'=>1,'stock'=>80,'image'=>null],
+(object)['id'=>3,'medicine_id'=>4,'name'=>'Cough Syrup 100ml','brand'=>'Benadryl','category'=>'Cold & Cough','price'=>145,'mrp'=>160,'quantity'=>1,'stock'=>15,'image'=>null],
+];
 
-    $productDiscount = $totalMrp - $subtotal;
-    $couponDiscount = session('cart_coupon_discount', 0);
-    $couponCode = session('cart_coupon_code', '');
-    $deliveryCharge = $subtotal >= 500 ? 0 : 50;
-    $tax = round($subtotal * 0.05, 2); // 5% GST for demo
-    $grandTotal = $subtotal + $deliveryCharge + $tax - $couponDiscount;
+// Normalize Collection to Array
+$cartItemsArr = is_array($cartItems) ? $cartItems : $cartItems->all();
+$cartItemNames = array_map(fn($i) => $i->name, $cartItemsArr);
+$cartItemBrands = array_map(fn($i) => $i->brand, $cartItemsArr);
 
-    $freeShippingRemaining = 500 - $subtotal;
-    $freeShippingPercent = min(100, ($subtotal / 500) * 100);
+// Translate medicine names & brands
+$tCartNames = GoogleTranslator::translateBatch($cartItemNames);
+$tCartBrands = GoogleTranslator::translateBatch($cartItemBrands);
+
+foreach ($cartItemsArr as $i => $item) {
+$item->name = $tCartNames[$i] ?? $item->name;
+$item->brand = $tCartBrands[$i] ?? $item->brand;
+}
+
+$subtotal = 0;
+$totalMrp = 0;
+foreach ($cartItems as $item) {
+$subtotal += $item->price * $item->quantity;
+$totalMrp += $item->mrp * $item->quantity;
+}
+
+$productDiscount = $totalMrp - $subtotal;
+$couponDiscount = session('cart_coupon_discount', 0);
+$couponCode = session('cart_coupon_code', '');
+$deliveryCharge = $subtotal >= 500 ? 0 : 50;
+$tax = round($subtotal * 0.05, 2);
+$grandTotal = $subtotal + $deliveryCharge + $tax - $couponDiscount;
+
+$freeShippingRemaining = 500 - $subtotal;
+$freeShippingPercent = min(100, ($subtotal / 500) * 100);
+
+// Translate all static UI strings using the GoogleTranslator service
+$strings = GoogleTranslator::translateBatch([
+'cart_title' => 'My Shopping Cart',
+'cart_have' => 'You have',
+'cart_item' => 'item',
+'cart_items' => 'items',
+'cart_in_your' => 'in your cart',
+'cart_list_title' => 'Cart Items',
+'clear_cart' => 'Clear Cart',
+'unit_price' => 'Unit Price',
+'total' => 'Total',
+'in_stock' => 'In Stock',
+'only_left' => 'Only :n left in stock',
+'avail_coupons' => 'Available Coupons',
+'coupon1_title' => 'Get 10% OFF (Max ₹100)',
+'coupon1_sub' => 'Applicable on orders above ₹300',
+'coupon2_title' => 'Flat ₹50 OFF',
+'coupon2_sub' => 'Applicable on orders above ₹500',
+'coupon3_title' => '₹100 OFF for New Users',
+'coupon3_sub' => 'Valid for first-time customers',
+'order_summary' => 'Order Summary',
+'free_ship_add' => 'Add',
+'free_ship_more' => 'more for',
+'free_ship_free' => 'FREE delivery!',
+'free_ship_qualified'=> 'Congrats! You qualify for FREE delivery.',
+'have_coupon' => 'Have a Coupon Code?',
+'coupon_placeholder' => 'ENTER CODE',
+'apply_btn' => 'Apply',
+'coupon_applied' => ':code Applied',
+'you_saved' => 'You saved ₹:amount',
+'subtotal' => 'Subtotal',
+'product_discount' => 'Product Discount',
+'coupon_discount' => 'Coupon Discount',
+'delivery_charge' => 'Delivery Charge',
+'free' => 'FREE',
+'tax_gst' => 'Tax (GST 5%)',
+'grand_total' => 'Grand Total',
+'proceed_checkout' => 'Proceed to Checkout',
+'continue_shopping' => 'Continue Shopping',
+'empty_title' => 'Your cart is empty',
+'empty_desc' => "Looks like you haven't added any medicines to your cart yet. Start shopping now!",
+'browse_medicines' => 'Browse Medicines',
+'js_remove_confirm' => 'Remove ":name" from cart?',
+'js_remove_title' => '✓ Item removed from cart',
+'js_remove_fail' => '⚠ Failed to remove',
+'js_clear_confirm' => '⚠ Are you sure you want to clear your entire cart?\nThis will remove all items.',
+'js_clearing' => 'Clearing...',
+'js_coupon_empty' => '⚠ Please enter a coupon code.',
+'js_coupon_invalid' => '⚠ Invalid coupon code.',
+'js_coupon_success' => '✓ Coupon applied successfully!',
+'js_coupon_failed' => '⚠ Invalid coupon code',
+'js_coupon_remove' => 'Remove applied coupon?',
+'js_stock_warn' => '⚠ Only :n items available in stock',
+'js_cart_updated' => 'Cart updated!',
+'js_update_failed' => '⚠ Failed to update',
+]);
 @endphp
 
 <!-- Cart Header -->
 <div class="cart-header">
-    <h3><i class="fas fa-shopping-cart me-2"></i> My Shopping Cart</h3>
-    <p>You have <span>{{ count($cartItems) }} {{ count($cartItems) == 1 ? 'item' : 'items' }}</span> in your cart</p>
+    <h3><i class="fas fa-shopping-cart me-2"></i> {{ $strings['cart_title'] ?? 'My Shopping Cart' }}</h3>
+    <p>
+        {{ $strings['cart_have'] ?? 'You have' }}
+        <span>{{ count($cartItems) }} {{ count($cartItems) == 1 ? ($strings['cart_item'] ?? 'item') : ($strings['cart_items'] ?? 'items') }}</span>
+        {{ $strings['cart_in_your'] ?? 'in your cart' }}
+    </p>
 </div>
 
 @if(count($cartItems) > 0)
@@ -741,80 +849,80 @@
     <div class="col-lg-8">
         <div class="cart-items-card">
             <div class="cart-items-header">
-                <h6><i class="fas fa-list"></i> Cart Items</h6>
+                <h6><i class="fas fa-list"></i> {{ $strings['cart_list_title'] ?? 'Cart Items' }}</h6>
                 <button type="button" class="btn-clear-cart" id="clearCartBtn">
-                    <i class="fas fa-trash-alt me-1"></i> Clear Cart
+                    <i class="fas fa-trash-alt me-1"></i> {{ $strings['clear_cart'] ?? 'Clear Cart' }}
                 </button>
             </div>
 
             @foreach($cartItems as $item)
-                <div class="cart-item" data-cart-id="{{ $item->id }}" data-price="{{ $item->price }}" data-mrp="{{ $item->mrp }}" data-stock="{{ $item->stock }}">
-                    <div class="cart-item-img">
-                        @if(!empty($item->image) && file_exists(public_path('uploads/medicines/'.$item->image)))
-                            <img src="{{ asset('uploads/medicines/'.$item->image) }}" alt="{{ $item->name }}">
-                        @else
-                            <i class="fas fa-pills"></i>
-                        @endif
-                    </div>
-
-                    <div class="cart-item-info">
-                        <span class="cart-item-cat">{{ $item->category }}</span>
-                        <h6>
-                            <a href="{{ url('/customer/medicine/'.$item->medicine_id) }}">{{ $item->name }}</a>
-                        </h6>
-                        <div class="cart-item-brand"><i class="fas fa-tag"></i> {{ $item->brand }}</div>
-                        <div class="cart-item-stock {{ $item->stock < 20 ? 'low' : '' }}">
-                            <i class="fas fa-check-circle"></i>
-                            {{ $item->stock < 20 ? 'Only '.$item->stock.' left in stock' : 'In Stock' }}
-                        </div>
-                    </div>
-
-                    <div class="cart-item-price">
-                        <span class="unit-price">Unit Price</span>
-                        <span class="price-val">₹{{ number_format($item->price, 2) }}</span>
-                    </div>
-
-                    <div class="cart-qty-selector">
-                        <button type="button" class="cart-qty-btn qty-minus" {{ $item->quantity <= 1 ? 'disabled' : '' }}>−</button>
-                        <input type="number" class="cart-qty-input qty-input" value="{{ $item->quantity }}" min="1" max="{{ $item->stock }}">
-                        <button type="button" class="cart-qty-btn qty-plus" {{ $item->quantity >= $item->stock ? 'disabled' : '' }}>+</button>
-                    </div>
-
-                    <div class="cart-item-total">
-                        <span class="total-lbl">Total</span>
-                        <span class="total-val item-total">₹{{ number_format($item->price * $item->quantity, 2) }}</span>
-                    </div>
-
-                    <button type="button" class="btn-remove-item" title="Remove from cart">
-                        <i class="fas fa-trash"></i>
-                    </button>
+            <div class="cart-item" data-cart-id="{{ $item->id }}" data-price="{{ $item->price }}" data-mrp="{{ $item->mrp }}" data-stock="{{ $item->stock }}">
+                <div class="cart-item-img">
+                    @if(!empty($item->image) && file_exists(public_path('uploads/medicines/'.$item->image)))
+                    <img src="{{ asset('uploads/medicines/'.$item->image) }}" alt="{{ $item->name }}">
+                    @else
+                    <i class="fas fa-pills"></i>
+                    @endif
                 </div>
+
+                <div class="cart-item-info">
+                    <span class="cart-item-cat">{{ $item->category }}</span>
+                    <h6>
+                        <a href="{{ url('/customer/medicine/'.$item->medicine_id) }}">{{ $item->name }}</a>
+                    </h6>
+                    <div class="cart-item-brand"><i class="fas fa-tag"></i> {{ $item->brand }}</div>
+                    <div class="cart-item-stock {{ $item->stock < 20 ? 'low' : '' }}">
+                        <i class="fas fa-check-circle"></i>
+                        {{ $item->stock < 20 ? str_replace(':n', $item->stock, $strings['only_left'] ?? 'Only :n left in stock') : ($strings['in_stock'] ?? 'In Stock') }}
+                    </div>
+                </div>
+
+                <div class="cart-item-price">
+                    <span class="unit-price">{{ $strings['unit_price'] ?? 'Unit Price' }}</span>
+                    <span class="price-val">₹{{ number_format($item->price, 2) }}</span>
+                </div>
+
+                <div class="cart-qty-selector">
+                    <button type="button" class="cart-qty-btn qty-minus" {{ $item->quantity <= 1 ? 'disabled' : '' }}>−</button>
+                    <input type="number" class="cart-qty-input qty-input" value="{{ $item->quantity }}" min="1" max="{{ $item->stock }}">
+                    <button type="button" class="cart-qty-btn qty-plus" {{ $item->quantity >= $item->stock ? 'disabled' : '' }}>+</button>
+                </div>
+
+                <div class="cart-item-total">
+                    <span class="total-lbl">{{ $strings['total'] ?? 'Total' }}</span>
+                    <span class="total-val item-total">₹{{ number_format($item->price * $item->quantity, 2) }}</span>
+                </div>
+
+                <button type="button" class="btn-remove-item" title="Remove from cart">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
             @endforeach
         </div>
 
         <!-- Available Coupons -->
         <div class="available-coupons-card">
             <div class="header-c">
-                <h6><i class="fas fa-tag"></i> Available Coupons</h6>
+                <h6><i class="fas fa-tag"></i> {{ $strings['avail_coupons'] ?? 'Available Coupons' }}</h6>
             </div>
             <div class="coupon-item apply-suggestion" data-code="SANJIVANI10">
                 <div class="cp-info">
-                    <strong>Get 10% OFF (Max ₹100)</strong>
-                    <span>Applicable on orders above ₹300</span>
+                    <strong>{{ $strings['coupon1_title'] ?? 'Get 10% OFF (Max ₹100)' }}</strong>
+                    <span>{{ $strings['coupon1_sub'] ?? 'Applicable on orders above ₹300' }}</span>
                 </div>
                 <span class="cp-code">SANJIVANI10</span>
             </div>
             <div class="coupon-item apply-suggestion" data-code="HEALTH50">
                 <div class="cp-info">
-                    <strong>Flat ₹50 OFF</strong>
-                    <span>Applicable on orders above ₹500</span>
+                    <strong>{{ $strings['coupon2_title'] ?? 'Flat ₹50 OFF' }}</strong>
+                    <span>{{ $strings['coupon2_sub'] ?? 'Applicable on orders above ₹500' }}</span>
                 </div>
                 <span class="cp-code">HEALTH50</span>
             </div>
             <div class="coupon-item apply-suggestion" data-code="NEWUSER100">
                 <div class="cp-info">
-                    <strong>₹100 OFF for New Users</strong>
-                    <span>Valid for first-time customers</span>
+                    <strong>{{ $strings['coupon3_title'] ?? '₹100 OFF for New Users' }}</strong>
+                    <span>{{ $strings['coupon3_sub'] ?? 'Valid for first-time customers' }}</span>
                 </div>
                 <span class="cp-code">NEWUSER100</span>
             </div>
@@ -825,7 +933,7 @@
     <div class="col-lg-4">
         <div class="summary-card">
             <div class="summary-header">
-                <h6><i class="fas fa-receipt me-2"></i> Order Summary</h6>
+                <h6><i class="fas fa-receipt me-2"></i> {{ $strings['order_summary'] ?? 'Order Summary' }}</h6>
             </div>
 
             <div class="summary-body">
@@ -833,437 +941,480 @@
                 <!-- Free Shipping Progress -->
                 @if($subtotal < 500)
                     <div class="free-shipping-bar">
-                        <div class="fs-text">
-                            Add <strong>₹{{ number_format($freeShippingRemaining, 2) }}</strong> more for <strong>FREE delivery!</strong>
-                        </div>
-                        <div class="fs-progress">
-                            <div class="fs-fill" style="width: {{ $freeShippingPercent }}%;"></div>
-                        </div>
+                    <div class="fs-text">
+                        {{ $strings['free_ship_add'] ?? 'Add' }} <strong>₹{{ number_format($freeShippingRemaining, 2) }}</strong>
+                        {{ $strings['free_ship_more'] ?? 'more for' }} <strong>{{ $strings['free_ship_free'] ?? 'FREE delivery!' }}</strong>
                     </div>
-                @else
-                    <div class="free-shipping-bar">
-                        <div class="fs-text success">
-                            <i class="fas fa-check-circle me-1"></i> Congrats! You qualify for FREE delivery.
-                        </div>
+                    <div class="fs-progress">
+                        <div class="fs-fill" style="width: {{ $freeShippingPercent }}%;"></div>
                     </div>
-                @endif
-
-                <!-- Coupon Code -->
-                <div class="coupon-section">
-                    <label class="coupon-label"><i class="fas fa-ticket me-1" style="color:var(--primary-green);"></i> Have a Coupon Code?</label>
-
-                    @if(!empty($couponCode))
-                        <div class="applied-coupon" id="appliedCouponBox">
-                            <div class="code-info">
-                                <strong><i class="fas fa-check-circle me-1"></i> {{ $couponCode }} Applied</strong>
-                                <span>You saved ₹{{ number_format($couponDiscount, 2) }}</span>
-                            </div>
-                            <button type="button" class="btn-remove-coupon" id="removeCouponBtn" title="Remove coupon">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
-                    @else
-                        <div class="coupon-input-wrap">
-                            <input type="text" class="coupon-input" id="couponInput" placeholder="ENTER CODE" maxlength="20">
-                            <button type="button" class="btn-apply-coupon" id="applyCouponBtn">Apply</button>
-                        </div>
-                        <div class="coupon-msg" id="couponMsg"></div>
-                    @endif
-                </div>
-
-                <!-- Price Breakdown -->
-                <div class="summary-row">
-                    <span>Subtotal <span style="font-size:0.75rem;color:var(--gray-text);">({{ count($cartItems) }} items)</span></span>
-                    <span id="summarySubtotal">₹{{ number_format($subtotal, 2) }}</span>
-                </div>
-                @if($productDiscount > 0)
-                <div class="summary-row discount">
-                    <span>Product Discount</span>
-                    <span>− ₹{{ number_format($productDiscount, 2) }}</span>
-                </div>
-                @endif
-                @if($couponDiscount > 0)
-                <div class="summary-row discount" id="couponDiscountRow">
-                    <span>Coupon Discount</span>
-                    <span>− ₹{{ number_format($couponDiscount, 2) }}</span>
-                </div>
-                @endif
-                <div class="summary-row">
-                    <span>Delivery Charge</span>
-                    <span id="summaryDelivery">
-                        @if($deliveryCharge == 0)
-                            <span style="color:#2E7D32;font-weight:600;">FREE</span>
-                        @else
-                            ₹{{ number_format($deliveryCharge, 2) }}
-                        @endif
-                    </span>
-                </div>
-                <div class="summary-row">
-                    <span>Tax (GST 5%)</span>
-                    <span id="summaryTax">₹{{ number_format($tax, 2) }}</span>
-                </div>
-                <div class="summary-row total-final">
-                    <span>Grand Total</span>
-                    <span id="summaryTotal">₹{{ number_format($grandTotal, 2) }}</span>
-                </div>
-
-                <a href="{{ url('/customer/checkout') }}" class="btn-checkout" id="proceedCheckoutBtn">
-                    <i class="fas fa-lock"></i> Proceed to Checkout
-                    <i class="fas fa-arrow-right ms-1"></i>
-                </a>
-
-                <a href="{{ url('/customer/medicines') }}" class="btn-continue-shopping">
-                    <i class="fas fa-arrow-left me-1"></i> Continue Shopping
-                </a>
             </div>
+            @else
+            <div class="free-shipping-bar">
+                <div class="fs-text success">
+                    <i class="fas fa-check-circle me-1"></i> {{ $strings['free_ship_qualified'] ?? 'Congrats! You qualify for FREE delivery.' }}
+                </div>
+            </div>
+            @endif
+
+            <!-- Coupon Code -->
+            <div class="coupon-section">
+                <label class="coupon-label">
+                    <i class="fas fa-ticket me-1" style="color:var(--primary-green);"></i>
+                    {{ $strings['have_coupon'] ?? 'Have a Coupon Code?' }}
+                </label>
+
+                @if(!empty($couponCode))
+                <div class="applied-coupon" id="appliedCouponBox">
+                    <div class="code-info">
+                        <strong><i class="fas fa-check-circle me-1"></i>
+                            {{ str_replace(':code', $couponCode, $strings['coupon_applied'] ?? ':code Applied') }}
+                        </strong>
+                        <span>{{ str_replace(':amount', number_format($couponDiscount, 2), $strings['you_saved'] ?? 'You saved ₹:amount') }}</span>
+                    </div>
+                    <button type="button" class="btn-remove-coupon" id="removeCouponBtn" title="Remove coupon">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                @else
+                <div class="coupon-input-wrap">
+                    <input type="text" class="coupon-input" id="couponInput" placeholder="{{ $strings['coupon_placeholder'] ?? 'ENTER CODE' }}" maxlength="20">
+                    <button type="button" class="btn-apply-coupon" id="applyCouponBtn">{{ $strings['apply_btn'] ?? 'Apply' }}</button>
+                </div>
+                <div class="coupon-msg" id="couponMsg"></div>
+                @endif
+            </div>
+
+            <!-- Price Breakdown -->
+            <div class="summary-row">
+                <span>{{ $strings['subtotal'] ?? 'Subtotal' }} <span style="font-size:0.75rem;color:var(--gray-text);">({{ count($cartItems) }} {{ count($cartItems) == 1 ? ($strings['cart_item'] ?? 'item') : ($strings['cart_items'] ?? 'items') }})</span></span>
+                <span id="summarySubtotal">₹{{ number_format($subtotal, 2) }}</span>
+            </div>
+            @if($productDiscount > 0)
+            <div class="summary-row discount">
+                <span>{{ $strings['product_discount'] ?? 'Product Discount' }}</span>
+                <span>− ₹{{ number_format($productDiscount, 2) }}</span>
+            </div>
+            @endif
+
+            <div class="summary-row discount" id="couponDiscountRow" style="{{ $couponDiscount > 0 ? '' : 'display:none;' }}">
+                <span>{{ $strings['coupon_discount'] ?? 'Coupon Discount' }}</span>
+                <span id="couponDiscountVal">− ₹{{ number_format($couponDiscount, 2) }}</span>
+            </div>
+
+            <div class="summary-row">
+                <span>{{ $strings['delivery_charge'] ?? 'Delivery Charge' }}</span>
+                <span id="summaryDelivery">
+                    @if($deliveryCharge == 0)
+                    <span style="color:#2E7D32;font-weight:600;">{{ $strings['free'] ?? 'FREE' }}</span>
+                    @else
+                    ₹{{ number_format($deliveryCharge, 2) }}
+                    @endif
+                </span>
+            </div>
+            <div class="summary-row">
+                <span>{{ $strings['tax_gst'] ?? 'Tax (GST 5%)' }}</span>
+                <span id="summaryTax">₹{{ number_format($tax, 2) }}</span>
+            </div>
+            <div class="summary-row total-final">
+                <span>{{ $strings['grand_total'] ?? 'Grand Total' }}</span>
+                <span id="summaryTotal">₹{{ number_format($grandTotal, 2) }}</span>
+            </div>
+
+            <a href="{{ url('/customer/checkout') }}" class="btn-checkout" id="proceedCheckoutBtn">
+                <i class="fas fa-lock"></i> {{ $strings['proceed_checkout'] ?? 'Proceed to Checkout' }}
+                <i class="fas fa-arrow-right ms-1"></i>
+            </a>
+
+            <a href="{{ url('/customer/medicines') }}" class="btn-continue-shopping">
+                <i class="fas fa-arrow-left me-1"></i> {{ $strings['continue_shopping'] ?? 'Continue Shopping' }}
+            </a>
         </div>
     </div>
 </div>
+</div>
 
 @else
-    <!-- Empty Cart -->
-    <div class="empty-cart-state">
-        <div class="ec-icon">
-            <i class="fas fa-cart-shopping"></i>
-        </div>
-        <h4>Your cart is empty</h4>
-        <p>Looks like you haven't added any medicines to your cart yet. Start shopping now!</p>
-        <a href="{{ url('/customer/medicines') }}">
-            <i class="fas fa-pills"></i> Browse Medicines
-        </a>
+<!-- Empty Cart -->
+<div class="empty-cart-state">
+    <div class="ec-icon">
+        <i class="fas fa-cart-shopping"></i>
     </div>
+    <h4>{{ $strings['empty_title'] ?? 'Your cart is empty' }}</h4>
+    <p>{{ $strings['empty_desc'] ?? "Looks like you haven't added any medicines to your cart yet. Start shopping now!" }}</p>
+    <a href="{{ url('/customer/medicines') }}">
+        <i class="fas fa-pills"></i> {{ $strings['browse_medicines'] ?? 'Browse Medicines' }}
+    </a>
+</div>
 @endif
 
 <!-- Toast -->
 <div class="cart-toast" id="cartToast">
     <i class="fas fa-check-circle"></i>
-    <span id="toastMessage">Cart updated!</span>
+    <span id="toastMessage">{{ $strings['js_cart_updated'] ?? 'Cart updated!' }}</span>
 </div>
 
 @endsection
 
 @section('scripts')
 <script>
-$(document).ready(function () {
+    $(document).ready(function() {
 
-    var deliveryFreeThreshold = 500;
-    var taxRate = 0.05;
+        var deliveryFreeThreshold = 500;
+        var taxRate = 0.05;
 
-    /* ============ QUANTITY UPDATE ============ */
-    $('.qty-plus').on('click', function () {
-        var $item = $(this).closest('.cart-item');
-        var $input = $item.find('.qty-input');
-        var stock = parseInt($item.data('stock'));
-        var current = parseInt($input.val()) || 1;
+        /* ============ TRANSLATED JS STRINGS ============ */
+        var jsStrings = {
+            removeConfirm: @json($strings['js_remove_confirm'] ?? 'Remove ":name" from cart?'),
+            removeTitle: @json($strings['js_remove_title'] ?? '✓ Item removed from cart'),
+            removeFail: @json($strings['js_remove_fail'] ?? '⚠ Failed to remove'),
+            clearConfirm: @json($strings['js_clear_confirm'] ?? '⚠ Are you sure you want to clear your entire cart?\nThis will remove all items.'),
+            clearing: @json($strings['js_clearing'] ?? 'Clearing...'),
+            couponEmpty: @json($strings['js_coupon_empty'] ?? '⚠ Please enter a coupon code.'),
+            couponInvalid: @json($strings['js_coupon_invalid'] ?? '⚠ Invalid coupon code.'),
+            couponSuccess: @json($strings['js_coupon_success'] ?? '✓ Coupon applied successfully!'),
+            couponFailed: @json($strings['js_coupon_failed'] ?? '⚠ Invalid coupon code'),
+            couponRemove: @json($strings['js_coupon_remove'] ?? 'Remove applied coupon?'),
+            stockWarn: @json($strings['js_stock_warn'] ?? '⚠ Only :n items available in stock'),
+            cartUpdated: @json($strings['js_cart_updated'] ?? 'Cart updated!'),
+            updateFailed: @json($strings['js_update_failed'] ?? '⚠ Failed to update'),
+            free: @json($strings['free'] ?? 'FREE'),
+            freeShipAdd: @json($strings['free_ship_add'] ?? 'Add'),
+            freeShipMore: @json($strings['free_ship_more'] ?? 'more for'),
+            freeShipFree: @json($strings['free_ship_free'] ?? 'FREE delivery!'),
+            freeShipQualified: @json($strings['free_ship_qualified'] ?? 'Congrats! You qualify for FREE delivery.')
+        };
 
-        if (current < stock) {
-            $input.val(current + 1);
-            updateItemTotal($item);
-            updateCartOnServer($item);
+        function tpl(str, key, val) {
+            return str.replace(':' + key, val);
         }
 
-        toggleQtyButtons($item);
-    });
+        /* ============ QUANTITY UPDATE ============ */
+        $('.qty-plus').on('click', function() {
+            var $item = $(this).closest('.cart-item');
+            var $input = $item.find('.qty-input');
+            var stock = parseInt($item.data('stock'));
+            var current = parseInt($input.val()) || 1;
 
-    $('.qty-minus').on('click', function () {
-        var $item = $(this).closest('.cart-item');
-        var $input = $item.find('.qty-input');
-        var current = parseInt($input.val()) || 1;
-
-        if (current > 1) {
-            $input.val(current - 1);
-            updateItemTotal($item);
-            updateCartOnServer($item);
-        }
-
-        toggleQtyButtons($item);
-    });
-
-    $('.qty-input').on('input', function () {
-        var $item = $(this).closest('.cart-item');
-        var stock = parseInt($item.data('stock'));
-        var v = parseInt($(this).val()) || 1;
-
-        if (v < 1) v = 1;
-        if (v > stock) {
-            v = stock;
-            showToast('⚠ Only ' + stock + ' items available in stock', 'error');
-        }
-
-        $(this).val(v);
-        updateItemTotal($item);
-        toggleQtyButtons($item);
-    });
-
-    $('.qty-input').on('change', function () {
-        var $item = $(this).closest('.cart-item');
-        updateCartOnServer($item);
-    });
-
-    function toggleQtyButtons($item) {
-        var $input = $item.find('.qty-input');
-        var stock = parseInt($item.data('stock'));
-        var current = parseInt($input.val()) || 1;
-
-        $item.find('.qty-minus').prop('disabled', current <= 1);
-        $item.find('.qty-plus').prop('disabled', current >= stock);
-    }
-
-    function updateItemTotal($item) {
-        var price = parseFloat($item.data('price'));
-        var qty = parseInt($item.find('.qty-input').val()) || 1;
-        var total = price * qty;
-        $item.find('.item-total').text('₹' + total.toFixed(2));
-        updateOrderSummary();
-    }
-
-    function updateOrderSummary() {
-        var subtotal = 0;
-        var totalMrp = 0;
-
-        $('.cart-item').each(function () {
-            var price = parseFloat($(this).data('price'));
-            var mrp = parseFloat($(this).data('mrp'));
-            var qty = parseInt($(this).find('.qty-input').val()) || 1;
-            subtotal += price * qty;
-            totalMrp += mrp * qty;
-        });
-
-        var deliveryCharge = subtotal >= deliveryFreeThreshold ? 0 : 50;
-        var tax = subtotal * taxRate;
-        var couponDiscount = parseFloat($('#couponDiscountRow').find('span:last').text().replace(/[^\d.]/g, '')) || 0;
-        var grandTotal = subtotal + deliveryCharge + tax - couponDiscount;
-
-        $('#summarySubtotal').text('₹' + subtotal.toFixed(2));
-        $('#summaryTax').text('₹' + tax.toFixed(2));
-
-        if (deliveryCharge == 0) {
-            $('#summaryDelivery').html('<span style="color:#2E7D32;font-weight:600;">FREE</span>');
-        } else {
-            $('#summaryDelivery').text('₹' + deliveryCharge.toFixed(2));
-        }
-
-        $('#summaryTotal').text('₹' + grandTotal.toFixed(2));
-
-        // Update free shipping bar
-        var $fs = $('.free-shipping-bar');
-        if (subtotal < deliveryFreeThreshold) {
-            var remaining = deliveryFreeThreshold - subtotal;
-            var pct = (subtotal / deliveryFreeThreshold) * 100;
-            $fs.find('.fs-text').removeClass('success').html(
-                'Add <strong>₹' + remaining.toFixed(2) + '</strong> more for <strong>FREE delivery!</strong>'
-            );
-            $fs.find('.fs-fill').css('width', pct + '%');
-        } else {
-            $fs.find('.fs-text').addClass('success').html(
-                '<i class="fas fa-check-circle me-1"></i> Congrats! You qualify for FREE delivery.'
-            );
-            $fs.find('.fs-fill').css('width', '100%');
-        }
-    }
-
-    function updateCartOnServer($item) {
-        var cartId = $item.data('cart-id');
-        var qty = parseInt($item.find('.qty-input').val()) || 1;
-
-        $.ajax({
-            url: '{{ url("/customer/cart/update") }}',
-            method: 'POST',
-            data: {
-                _token: '{{ csrf_token() }}',
-                cart_id: cartId,
-                quantity: qty
-            },
-            dataType: 'json',
-            success: function (res) {
-                if (!res.success) {
-                    showToast('⚠ ' + (res.message || 'Failed to update'), 'error');
-                }
-            },
-            error: function () {
-                // Silent fail for demo
+            if (current < stock) {
+                $input.val(current + 1);
+                updateItemTotal($item);
+                updateCartOnServer($item);
             }
+
+            toggleQtyButtons($item);
         });
-    }
 
-    /* ============ REMOVE ITEM ============ */
-    $('.btn-remove-item').on('click', function () {
-        var $item = $(this).closest('.cart-item');
-        var cartId = $item.data('cart-id');
-        var itemName = $item.find('h6').text().trim();
+        $('.qty-minus').on('click', function() {
+            var $item = $(this).closest('.cart-item');
+            var $input = $item.find('.qty-input');
+            var current = parseInt($input.val()) || 1;
 
-        if (!confirm('Remove "' + itemName + '" from cart?')) return;
+            if (current > 1) {
+                $input.val(current - 1);
+                updateItemTotal($item);
+                updateCartOnServer($item);
+            }
 
-        var $btn = $(this);
-        $btn.html('<i class="fas fa-spinner fa-spin"></i>').prop('disabled', true);
+            toggleQtyButtons($item);
+        });
 
-        $.ajax({
-            url: '{{ url("/customer/cart/remove") }}',
-            method: 'POST',
-            data: {
-                _token: '{{ csrf_token() }}',
-                cart_id: cartId
-            },
-            dataType: 'json',
-            success: function (res) {
-                if (res.success) {
-                    $item.fadeOut(400, function () {
+        $('.qty-input').on('input', function() {
+            var $item = $(this).closest('.cart-item');
+            var stock = parseInt($item.data('stock'));
+            var v = parseInt($(this).val()) || 1;
+
+            if (v < 1) v = 1;
+            if (v > stock) {
+                v = stock;
+                showToast('⚠ ' + tpl(jsStrings.stockWarn, 'n', stock), 'error');
+            }
+
+            $(this).val(v);
+            updateItemTotal($item);
+            toggleQtyButtons($item);
+        });
+
+        $('.qty-input').on('change', function() {
+            var $item = $(this).closest('.cart-item');
+            updateCartOnServer($item);
+        });
+
+        function toggleQtyButtons($item) {
+            var $input = $item.find('.qty-input');
+            var stock = parseInt($item.data('stock'));
+            var current = parseInt($input.val()) || 1;
+
+            $item.find('.qty-minus').prop('disabled', current <= 1);
+            $item.find('.qty-plus').prop('disabled', current >= stock);
+        }
+
+        function updateItemTotal($item) {
+            var price = parseFloat($item.data('price'));
+            var qty = parseInt($item.find('.qty-input').val()) || 1;
+            var total = price * qty;
+            $item.find('.item-total').text('₹' + total.toFixed(2));
+            updateOrderSummary();
+        }
+
+        function updateOrderSummary() {
+            var subtotal = 0;
+            var totalMrp = 0;
+
+            $('.cart-item').each(function() {
+                var price = parseFloat($(this).data('price'));
+                var mrp = parseFloat($(this).data('mrp'));
+                var qty = parseInt($(this).find('.qty-input').val()) || 1;
+                subtotal += price * qty;
+                totalMrp += mrp * qty;
+            });
+
+            var deliveryCharge = subtotal >= deliveryFreeThreshold ? 0 : 50;
+            var tax = subtotal * taxRate;
+
+            // Safely parse coupon discount from the specific span
+            var couponDiscount = parseFloat($('#couponDiscountVal').text().replace(/[^\d.]/g, '')) || 0;
+
+            var grandTotal = subtotal + deliveryCharge + tax - couponDiscount;
+
+            $('#summarySubtotal').text('₹' + subtotal.toFixed(2));
+            $('#summaryTax').text('₹' + tax.toFixed(2));
+
+            if (deliveryCharge == 0) {
+                $('#summaryDelivery').html('<span style="color:#2E7D32;font-weight:600;">' + jsStrings.free + '</span>');
+            } else {
+                $('#summaryDelivery').text('₹' + deliveryCharge.toFixed(2));
+            }
+
+            $('#summaryTotal').text('₹' + grandTotal.toFixed(2));
+
+            var $fs = $('.free-shipping-bar');
+            if (subtotal < deliveryFreeThreshold) {
+                var remaining = deliveryFreeThreshold - subtotal;
+                var pct = (subtotal / deliveryFreeThreshold) * 100;
+                $fs.find('.fs-text').removeClass('success').html(
+                    jsStrings.freeShipAdd + ' <strong>₹' + remaining.toFixed(2) + '</strong> ' +
+                    jsStrings.freeShipMore + ' <strong>' + jsStrings.freeShipFree + '</strong>'
+                );
+                $fs.find('.fs-fill').css('width', pct + '%');
+            } else {
+                $fs.find('.fs-text').addClass('success').html(
+                    '<i class="fas fa-check-circle me-1"></i> ' + jsStrings.freeShipQualified
+                );
+                $fs.find('.fs-fill').css('width', '100%');
+            }
+        }
+
+        function updateCartOnServer($item) {
+            var cartId = $item.data('cart-id');
+            var qty = parseInt($item.find('.qty-input').val()) || 1;
+
+            $.ajax({
+                url: '{{ url("/customer/cart/update") }}',
+                method: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    cart_id: cartId,
+                    quantity: qty
+                },
+                dataType: 'json',
+                success: function(res) {
+                    if (!res.success) showToast('⚠ ' + (res.message || jsStrings.updateFailed), 'error');
+                },
+                error: function() {}
+            });
+        }
+
+        /* ============ REMOVE ITEM ============ */
+        $('.btn-remove-item').on('click', function() {
+            var $item = $(this).closest('.cart-item');
+            var cartId = $item.data('cart-id');
+            var itemName = $item.find('h6').text().trim();
+
+            if (!confirm(tpl(jsStrings.removeConfirm, 'name', itemName))) return;
+
+            var $btn = $(this);
+            $btn.html('<i class="fas fa-spinner fa-spin"></i>').prop('disabled', true);
+
+            $.ajax({
+                url: '{{ url("/customer/cart/remove") }}',
+                method: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    cart_id: cartId
+                },
+                dataType: 'json',
+                success: function(res) {
+                    if (res.success) {
+                        $item.fadeOut(400, function() {
+                            $(this).remove();
+                            updateOrderSummary();
+                            showToast(jsStrings.removeTitle);
+                            if ($('.cart-item').length === 0) location.reload();
+                            if (res.cart_count !== undefined) {
+                                if (res.cart_count > 0) {
+                                    $('.cart-badge, .cart-count').text(res.cart_count);
+                                } else {
+                                    $('.cart-badge, .cart-count').hide();
+                                }
+                            }
+                        });
+                    } else {
+                        $btn.html('<i class="fas fa-trash"></i>').prop('disabled', false);
+                        showToast(jsStrings.removeFail, 'error');
+                    }
+                },
+                error: function() {
+                    $item.fadeOut(400, function() {
                         $(this).remove();
                         updateOrderSummary();
-                        showToast('✓ Item removed from cart');
-
-                        if ($('.cart-item').length === 0) {
-                            location.reload();
-                        }
-
-                        // Update cart badges
-                        if (res.cart_count !== undefined) {
-                            if (res.cart_count > 0) {
-                                $('.cart-badge, .cart-count').text(res.cart_count);
-                            } else {
-                                $('.cart-badge, .cart-count').hide();
-                            }
-                        }
+                        showToast(jsStrings.removeTitle);
+                        if ($('.cart-item').length === 0) location.reload();
                     });
-                } else {
-                    $btn.html('<i class="fas fa-trash"></i>').prop('disabled', false);
-                    showToast('⚠ Failed to remove', 'error');
                 }
-            },
-            error: function () {
-                // Demo fallback
-                $item.fadeOut(400, function () {
-                    $(this).remove();
-                    updateOrderSummary();
-                    showToast('✓ Item removed from cart');
-                    if ($('.cart-item').length === 0) {
-                        location.reload();
+            });
+        });
+
+        /* ============ CLEAR CART ============ */
+        $('#clearCartBtn').on('click', function() {
+            if (!confirm(jsStrings.clearConfirm)) return;
+
+            var $btn = $(this);
+            $btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-1"></i> ' + jsStrings.clearing);
+
+            var $form = $('<form>', {
+                method: 'POST',
+                action: '{{ url("/customer/cart/clear") }}'
+            });
+            $form.append('<input type="hidden" name="_token" value="{{ csrf_token() }}">');
+            $('body').append($form);
+            $form.submit();
+        });
+
+        /* ============ COUPON: SUGGESTED COUPON CLICK ============ */
+        $('.apply-suggestion').on('click', function() {
+            var code = $(this).data('code');
+            $('#couponInput').val(code);
+            $('#applyCouponBtn').trigger('click');
+        });
+
+        /* ============ COUPON APPLY ============ */
+        $('#applyCouponBtn').on('click', function() {
+            var code = $.trim($('#couponInput').val()).toUpperCase();
+            var $msg = $('#couponMsg');
+            var $input = $('#couponInput');
+
+            $msg.removeClass('show success error').text('');
+            $input.removeClass('error success');
+
+            if (code === '') {
+                $msg.addClass('show error').text(jsStrings.couponEmpty);
+                $input.addClass('error');
+                return;
+            }
+
+            if (code.length < 4) {
+                $msg.addClass('show error').text(jsStrings.couponInvalid);
+                $input.addClass('error');
+                return;
+            }
+
+            var $btn = $(this);
+            var original = $btn.text();
+            $btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i>');
+
+            $.ajax({
+                url: '{{ url("/customer/cart/apply-coupon") }}',
+                method: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    coupon_code: code
+                },
+                dataType: 'json',
+                success: function(res) {
+                    $btn.prop('disabled', false).text(original);
+
+                    if (res.success) {
+                        $input.addClass('success');
+                        $msg.addClass('show success').text('✓ ' + (res.message || jsStrings.couponSuccess));
+                        setTimeout(function() {
+                            location.reload();
+                        }, 1500);
+                    } else {
+                        $input.addClass('error');
+                        $msg.addClass('show error').text('⚠ ' + (res.message || jsStrings.couponFailed));
                     }
-                });
-            }
+                },
+                error: function() {
+                    $btn.prop('disabled', false).text(original);
+
+                    var validCoupons = {
+                        'SANJIVANI10': {
+                            discount: 100,
+                            msg: '10% off applied!'
+                        },
+                        'HEALTH50': {
+                            discount: 50,
+                            msg: '₹50 off applied!'
+                        },
+                        'NEWUSER100': {
+                            discount: 100,
+                            msg: '₹100 off for new users!'
+                        }
+                    };
+
+                    if (validCoupons[code]) {
+                        $input.addClass('success');
+                        $msg.addClass('show success').text('✓ ' + validCoupons[code].msg);
+                        setTimeout(function() {
+                            location.reload();
+                        }, 1500);
+                    } else {
+                        $input.addClass('error');
+                        $msg.addClass('show error').text(jsStrings.couponFailed);
+                    }
+                }
+            });
         });
-    });
 
-    /* ============ CLEAR CART ============ */
-    $('#clearCartBtn').on('click', function () {
-        if (!confirm('⚠ Are you sure you want to clear your entire cart?\nThis will remove all items.')) return;
+        /* ============ COUPON REMOVE ============ */
+        $('#removeCouponBtn').on('click', function() {
+            if (!confirm(jsStrings.couponRemove)) return;
 
-        var $btn = $(this);
-        $btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-1"></i> Clearing...');
+            var $form = $('<form>', {
+                method: 'POST',
+                action: '{{ url("/customer/cart/remove-coupon") }}'
+            });
+            $form.append('<input type="hidden" name="_token" value="{{ csrf_token() }}">');
+            $('body').append($form);
+            $form.submit();
+        });
 
-        var $form = $('<form>', { method: 'POST', action: '{{ url("/customer/cart/clear") }}' });
-        $form.append('<input type="hidden" name="_token" value="{{ csrf_token() }}">');
-        $('body').append($form);
-        $form.submit();
-    });
+        /* ============ TOAST ============ */
+        function showToast(message, type) {
+            var $toast = $('#cartToast');
+            var color = (type === 'error') ? 'linear-gradient(135deg, #C62828, #EF5350)' : 'linear-gradient(135deg, #2E7D32, #66BB6A)';
+            var icon = (type === 'error') ? 'fa-exclamation-circle' : 'fa-check-circle';
 
-    /* ============ COUPON: SUGGESTED COUPON CLICK ============ */
-    $('.apply-suggestion').on('click', function () {
-        var code = $(this).data('code');
-        $('#couponInput').val(code);
-        $('#applyCouponBtn').trigger('click');
-    });
+            $toast.css('background', color);
+            $toast.find('i').removeClass().addClass('fas ' + icon);
+            $('#toastMessage').text(message);
+            $toast.fadeIn(300);
 
-    /* ============ COUPON APPLY ============ */
-    $('#applyCouponBtn').on('click', function () {
-        var code = $.trim($('#couponInput').val()).toUpperCase();
-        var $msg = $('#couponMsg');
-        var $input = $('#couponInput');
-
-        $msg.removeClass('show success error').text('');
-        $input.removeClass('error success');
-
-        if (code === '') {
-            $msg.addClass('show error').text('⚠ Please enter a coupon code.');
-            $input.addClass('error');
-            return;
+            setTimeout(function() {
+                $toast.fadeOut(300);
+            }, 2500);
         }
 
-        if (code.length < 4) {
-            $msg.addClass('show error').text('⚠ Invalid coupon code.');
-            $input.addClass('error');
-            return;
-        }
-
-        var $btn = $(this);
-        var original = $btn.text();
-        $btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i>');
-
-        $.ajax({
-            url: '{{ url("/customer/cart/apply-coupon") }}',
-            method: 'POST',
-            data: {
-                _token: '{{ csrf_token() }}',
-                coupon_code: code
-            },
-            dataType: 'json',
-            success: function (res) {
-                $btn.prop('disabled', false).text(original);
-
-                if (res.success) {
-                    $input.addClass('success');
-                    $msg.addClass('show success').text('✓ ' + (res.message || 'Coupon applied successfully!'));
-                    setTimeout(function () { location.reload(); }, 1500);
-                } else {
-                    $input.addClass('error');
-                    $msg.addClass('show error').text('⚠ ' + (res.message || 'Invalid coupon code'));
-                }
-            },
-            error: function () {
-                $btn.prop('disabled', false).text(original);
-
-                // Demo fallback: simulate coupon codes
-                var validCoupons = {
-                    'SANJIVANI10': { discount: 100, msg: '10% off applied!' },
-                    'HEALTH50': { discount: 50, msg: '₹50 off applied!' },
-                    'NEWUSER100': { discount: 100, msg: '₹100 off for new users!' }
-                };
-
-                if (validCoupons[code]) {
-                    $input.addClass('success');
-                    $msg.addClass('show success').text('✓ ' + validCoupons[code].msg);
-                    setTimeout(function () { location.reload(); }, 1500);
-                } else {
-                    $input.addClass('error');
-                    $msg.addClass('show error').text('⚠ Invalid or expired coupon code');
-                }
-            }
+        /* ============ COUPON INPUT UPPERCASE ============ */
+        $('#couponInput').on('input', function() {
+            var pos = this.selectionStart;
+            this.value = this.value.toUpperCase();
+            this.setSelectionRange(pos, pos);
+            $(this).removeClass('error success');
+            $('#couponMsg').hide();
         });
+
     });
-
-    /* ============ COUPON REMOVE ============ */
-    $('#removeCouponBtn').on('click', function () {
-        if (!confirm('Remove applied coupon?')) return;
-
-        var $form = $('<form>', { method: 'POST', action: '{{ url("/customer/cart/remove-coupon") }}' });
-        $form.append('<input type="hidden" name="_token" value="{{ csrf_token() }}">');
-        $('body').append($form);
-        $form.submit();
-    });
-
-    /* ============ TOAST ============ */
-    function showToast(message, type) {
-        var $toast = $('#cartToast');
-        var color = (type === 'error') ? 'linear-gradient(135deg, #C62828, #EF5350)' : 'linear-gradient(135deg, #2E7D32, #66BB6A)';
-        var icon = (type === 'error') ? 'fa-exclamation-circle' : 'fa-check-circle';
-
-        $toast.css('background', color);
-        $toast.find('i').removeClass().addClass('fas ' + icon);
-        $('#toastMessage').text(message);
-        $toast.fadeIn(300);
-
-        setTimeout(function () { $toast.fadeOut(300); }, 2500);
-    }
-
-    /* ============ COUPON INPUT UPPERCASE ============ */
-    $('#couponInput').on('input', function () {
-        var pos = this.selectionStart;
-        this.value = this.value.toUpperCase();
-        this.setSelectionRange(pos, pos);
-        $(this).removeClass('error success');
-        $('#couponMsg').hide();
-    });
-
-});
 </script>
 @endsection

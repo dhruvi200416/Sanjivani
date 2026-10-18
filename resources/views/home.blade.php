@@ -1370,45 +1370,98 @@
 
         <div class="row g-4">
             @php
+            // Fallback categories (shown when there are no DB categories)
             $defaultCategories = [
-            ['name' => __('messages.cat_fever'), 'icon' => 'fa-temperature-high'],
-            ['name' => __('messages.cat_cold'), 'icon' => 'fa-head-side-cough'],
             ['name' => __('messages.cat_diabetes'), 'icon' => 'fa-droplet'],
+            ['name' => __('messages.cat_fever'), 'icon' => 'fa-temperature-high'],
             ['name' => __('messages.cat_heart'), 'icon' => 'fa-heart-pulse'],
             ['name' => __('messages.cat_vitamins'), 'icon' => 'fa-apple-whole'],
-            ['name' => __('messages.cat_skin'), 'icon' => 'fa-hand-sparkles'],
-            ['name' => __('messages.cat_baby'), 'icon' => 'fa-baby'],
-            ['name' => __('messages.cat_firstaid'), 'icon' => 'fa-kit-medical'],
+            ['name' => __('messages.cat_antibiotic'), 'icon' => 'fa-capsules'],
             ['name' => __('messages.cat_ayurvedic'), 'icon' => 'fa-leaf'],
-            ['name' => __('messages.cat_digestive'), 'icon' => 'fa-stomach'],
+            ['name' => __('messages.cat_baby'), 'icon' => 'fa-baby'],
+            ['name' => __('messages.cat_cold'), 'icon' => 'fa-head-side-cough'],
+            ['name' => __('messages.cat_digestive'), 'icon' => 'fa-pills'],
+            ['name' => __('messages.cat_firstaid'), 'icon' => 'fa-briefcase-medical'],
+            ['name' => __('messages.cat_skin'), 'icon' => 'fa-hands-bubbles'],
             ['name' => __('messages.cat_eye'), 'icon' => 'fa-eye'],
             ['name' => __('messages.cat_devices'), 'icon' => 'fa-stethoscope'],
             ];
+
+            // Map DB English name → translation key
+            $categoryKeyMap = [
+            'diabetes' => 'cat_diabetes',
+            'diabetes care' => 'cat_diabetes',
+            'fever' => 'cat_fever',
+            'fever & pain' => 'cat_fever',
+            'pain' => 'cat_fever',
+            'heart' => 'cat_heart',
+            'heart care' => 'cat_heart',
+            'vitamins' => 'cat_vitamins',
+            'vitamin' => 'cat_vitamins',
+            'antibiotic' => 'cat_antibiotic',
+            'antibiotics' => 'cat_antibiotic',
+            'ayurvedic' => 'cat_ayurvedic',
+            'ayurveda' => 'cat_ayurvedic',
+            'baby' => 'cat_baby',
+            'baby care' => 'cat_baby',
+            'cold' => 'cat_cold',
+            'cold & cough' => 'cat_cold',
+            'cough' => 'cat_cold',
+            'digestive' => 'cat_digestive',
+            'digestion' => 'cat_digestive',
+            'first aid' => 'cat_firstaid',
+            'firstaid' => 'cat_firstaid',
+            'skin' => 'cat_skin',
+            'skin care' => 'cat_skin',
+            'eye' => 'cat_eye',
+            'eye care' => 'cat_eye',
+            'devices' => 'cat_devices',
+            ];
+
+            // Map DB English name → Font Awesome icon (only free icons)
             $iconMap = [
-            'fever' => 'fa-temperature-high', 'pain' => 'fa-temperature-high',
-            'cold' => 'fa-head-side-cough', 'cough' => 'fa-head-side-cough',
-            'diabet' => 'fa-droplet', 'heart' => 'fa-heart-pulse',
-            'vitamin' => 'fa-apple-whole', 'skin' => 'fa-hand-sparkles',
-            'baby' => 'fa-baby', 'aid' => 'fa-kit-medical',
-            'ayur' => 'fa-leaf', 'digest' => 'fa-pills',
-            'eye' => 'fa-eye', 'device' => 'fa-stethoscope',
+            'diabetes' => 'fa-droplet',
+            'fever' => 'fa-temperature-high',
+            'pain' => 'fa-temperature-high',
+            'cold' => 'fa-head-side-cough',
+            'cough' => 'fa-head-side-cough',
+            'heart' => 'fa-heart-pulse',
+            'vitamin' => 'fa-apple-whole',
+            'antibiotic' => 'fa-capsules',
+            'skin' => 'fa-hands-bubbles',
+            'baby' => 'fa-baby',
+            'first aid' => 'fa-briefcase-medical',
+            'firstaid' => 'fa-briefcase-medical',
+            'ayurvedic' => 'fa-leaf',
+            'ayurveda' => 'fa-leaf',
+            'digestive' => 'fa-pills',
+            'digestion' => 'fa-pills',
+            'eye' => 'fa-eye',
+            'device' => 'fa-stethoscope',
             ];
             @endphp
 
             @if(!empty($categories) && count($categories) > 0)
             @foreach($categories as $index => $cat)
             @php
-            $catName = is_object($cat) ? $cat->category : $cat;
+            $rawName = is_object($cat) ? $cat->category : $cat;
             $catCount = is_object($cat) ? ($cat->total ?? 0) : 0;
+            $lowerName = strtolower(trim($rawName));
+
+            // Translate the label
+            $transKey = $categoryKeyMap[$lowerName] ?? null;
+            $label = $transKey ? __('messages.' . $transKey) : ucwords($rawName);
+
+            // Pick an icon
             $icon = 'fa-capsules';
             foreach($iconMap as $key => $ic) {
-            if(str_contains(strtolower($catName), $key)) { $icon = $ic; break; }
+            if(str_contains($lowerName, $key)) { $icon = $ic; break; }
             }
             @endphp
             <div class="col-lg-2 col-md-3 col-sm-4 col-6" data-aos="zoom-in" data-aos-delay="{{ $index * 50 }}">
-                <a href="{{ url('/customer/medicines?category='.urlencode($catName)) }}" class="category-card">
+                <a href="{{ url('/customer/medicines?category='.urlencode($rawName)) }}" class="category-card">
                     <div class="cat-icon"><i class="fas {{ $icon }}"></i></div>
-                    <h6>{{ $catName }}</h6>
+                    <h6>{{ $label }}</h6>
                     <span>{{ $catCount }} {{ __('messages.cat_explore') }}</span>
                 </a>
             </div>
@@ -1439,7 +1492,20 @@
 
         <div class="row g-4">
             @if(!empty($featuredMedicines) && count($featuredMedicines) > 0)
-            @foreach($featuredMedicines as $index => $med)
+            @php
+            // ---- Batch auto-translate the featured medicines content via Google ----
+            $featuredSlice = $featuredMedicines->take(4);
+
+            $rawNames = $featuredSlice->pluck('name')->toArray();
+            $rawCats = $featuredSlice->pluck('category')->toArray();
+            $rawPharms = $featuredSlice->map(fn($m) => $m->pharmacy->pharmacy_name ?? ($m->brand ?? 'Sanjivani Store'))->toArray();
+
+            $tNames = \App\Services\GoogleTranslator::translateBatch($rawNames);
+            $tCats = \App\Services\GoogleTranslator::translateBatch($rawCats);
+            $tPharms = \App\Services\GoogleTranslator::translateBatch($rawPharms);
+            @endphp
+
+            @foreach($featuredSlice as $index => $med)
             <div class="col-lg-3 col-md-4 col-sm-6" data-aos="fade-up" data-aos-delay="{{ ($index % 4) * 100 }}">
                 <div class="medicine-card">
                     <div class="med-img-wrap">
@@ -1463,11 +1529,11 @@
                     </div>
 
                     <div class="med-body">
-                        <div class="med-cat">{{ $med->category ?? 'General' }}</div>
-                        <h5>{{ $med->name }}</h5>
+                        <div class="med-cat">{{ $tCats[$index] ?? ($med->category ?? 'General') }}</div>
+                        <h5>{{ $tNames[$index] ?? $med->name }}</h5>
                         <div class="med-brand">
                             <i class="fas fa-store me-1"></i>
-                            {{ $med->pharmacy->pharmacy_name ?? ($med->brand ?? 'Sanjivani Store') }}
+                            {{ $tPharms[$index] ?? 'Sanjivani Store' }}
                         </div>
 
                         <div class="med-rating">
@@ -1696,9 +1762,24 @@
         <div class="row g-4">
             @php
             $testimonials = [
-            ['name'=>'Ramesh Patil','loc'=>'Nashik, Maharashtra','text'=>'Living in a small village, getting medicines was always a struggle. Sanjivani delivers right to my home within hours. Truly a life saver for my elderly parents.','rating'=>5],
-            ['name'=>'Sunita Sharma','loc'=>'Jaipur, Rajasthan','text'=>'I uploaded my prescription at night and got all medicines the next morning. The pharmacist even called me to confirm the dosage. Excellent service!','rating'=>5],
-            ['name'=>'Arjun Verma','loc'=>'Pune, Maharashtra','text'=>'Prices are much better than local shops and the app is very easy to use. Order tracking keeps me updated at every step. Highly recommended.','rating'=>4],
+            [
+            'name' => __('messages.test_1_name'),
+            'loc' => __('messages.test_1_location'),
+            'text' => __('messages.test_1_text'),
+            'rating' => 5
+            ],
+            [
+            'name' => __('messages.test_2_name'),
+            'loc' => __('messages.test_2_location'),
+            'text' => __('messages.test_2_text'),
+            'rating' => 5
+            ],
+            [
+            'name' => __('messages.test_3_name'),
+            'loc' => __('messages.test_3_location'),
+            'text' => __('messages.test_3_text'),
+            'rating' => 4
+            ],
             ];
             @endphp
 

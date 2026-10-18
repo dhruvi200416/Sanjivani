@@ -9,7 +9,9 @@ use App\Models\Pharmacy;
 use App\Models\DeliveryPartner;
 use App\Models\Medicine;
 use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\Village;
+use Stichoza\GoogleTranslate\GoogleTranslate;
 
 class AdminController extends Controller
 {
@@ -41,7 +43,8 @@ class AdminController extends Controller
     /* ============ ORDERS ============ */
     public function orders(Request $request)
     {
-        $query = Order::with(['customer.village']);
+        // Using withCount to get the count of items for the main table
+        $query = Order::with(['customer.village'])->withCount('orderItems');
 
         if ($request->search) {
             $query->where(function ($q) use ($request) {
@@ -89,11 +92,20 @@ class AdminController extends Controller
 
     public function orderDetails($id)
     {
+        // Eager load the relationships
         $order = Order::with(['customer.village', 'orderItems.medicine', 'pharmacy', 'deliveryPartner'])->findOrFail($id);
+
         $customer = $order->customer;
-        $items = $order->orderItems;
         $pharmacy = $order->pharmacy;
         $deliveryPartner = $order->deliveryPartner;
+
+        // Fetch items via relationship
+        $items = $order->orderItems;
+
+        // Fail-safe: If items are empty for some reason, query directly
+        if ($items->isEmpty()) {
+            $items = OrderItem::where('order_id', $order->id)->get();
+        }
 
         return view('admin.ad_order-details', compact('order', 'customer', 'items', 'pharmacy', 'deliveryPartner'));
     }
@@ -130,7 +142,8 @@ class AdminController extends Controller
     public function deleteOrder($id)
     {
         $order = Order::findOrFail($id);
-        $order->orderItems()->delete();
+        // Delete items first to prevent foreign key constraints errors
+        OrderItem::where('order_id', $order->id)->delete();
         $order->delete();
 
         return back()->with('success', 'Order deleted successfully.');
@@ -198,7 +211,6 @@ class AdminController extends Controller
         $data['prescription_required'] = $request->has('prescription_required') ? 1 : 0;
         $data['status'] = 'active';
 
-        // Image upload to public/images/
         if ($request->hasFile('image')) {
             $filename = 'medicine_' . time() . '_' . uniqid() . '.' . $request->image->getClientOriginalExtension();
             $request->image->move(public_path('images'), $filename);
@@ -266,7 +278,7 @@ class AdminController extends Controller
         $data = $request->except('password');
 
         if ($request->filled('password')) {
-            $data['password'] = $request->password; // Plain text
+            $data['password'] = $request->password;
         }
 
         if ($request->pharmacy_id) {
@@ -278,7 +290,7 @@ class AdminController extends Controller
             $msg = 'Pharmacy updated successfully.';
         } else {
             $request->validate(['password' => 'required|min:6']);
-            $data['password'] = $request->password; // Plain text
+            $data['password'] = $request->password;
             $data['status'] = $request->status ?? 'active';
             Pharmacy::create($data);
             $msg = 'Pharmacy added successfully.';
@@ -345,7 +357,7 @@ class AdminController extends Controller
         $data['vehicle_number'] = strtoupper($data['vehicle_number']);
 
         if ($request->filled('password')) {
-            $data['password'] = $request->password; // Plain text
+            $data['password'] = $request->password;
         }
 
         if ($request->partner_id) {
@@ -357,7 +369,7 @@ class AdminController extends Controller
             $msg = 'Delivery partner updated.';
         } else {
             $request->validate(['password' => 'required|min:6']);
-            $data['password'] = $request->password; // Plain text
+            $data['password'] = $request->password;
             $data['status'] = $request->status ?? 'active';
             DeliveryPartner::create($data);
             $msg = 'Delivery partner added.';
@@ -499,8 +511,11 @@ class AdminController extends Controller
         $admin = Admin::findOrFail(session('user_id'));
         $data = $request->except('avatar');
 
-        // Avatar upload to public/images/
         if ($request->hasFile('avatar')) {
+            if ($admin->avatar && file_exists(public_path('images/' . $admin->avatar))) {
+                unlink(public_path('images/' . $admin->avatar));
+            }
+
             $filename = 'admin_' . time() . '.' . $request->avatar->getClientOriginalExtension();
             $request->avatar->move(public_path('images'), $filename);
             $data['avatar'] = $filename;
@@ -509,7 +524,7 @@ class AdminController extends Controller
         $admin->update($data);
         session(['admin_name' => $admin->name]);
 
-        return back()->with('profile_success', 'Profile updated successfully.');
+        return redirect('/admin/profile')->with('success', 'Profile updated successfully.');
     }
 
     public function changePassword(Request $request)
@@ -521,12 +536,11 @@ class AdminController extends Controller
 
         $admin = Admin::findOrFail(session('user_id'));
 
-        // Plain text comparison
         if ($admin->password !== $request->current_password) {
             return back()->with('password_error', 'Current password is incorrect.');
         }
 
-        $admin->password = $request->new_password; // Plain text
+        $admin->password = $request->new_password;
         $admin->save();
 
         return back()->with('password_success', 'Password changed successfully.');

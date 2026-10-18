@@ -21,7 +21,7 @@
         right: -100px;
         width: 400px;
         height: 400px;
-        background: radial-gradient(circle, rgba(255,255,255,0.12) 0%, transparent 70%);
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.12) 0%, transparent 70%);
         border-radius: 50%;
     }
 
@@ -32,7 +32,7 @@
         left: -100px;
         width: 350px;
         height: 350px;
-        background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
         border-radius: 50%;
     }
 
@@ -92,7 +92,7 @@
         color: #A5D6A7;
     }
 
-    .breadcrumb-custom .breadcrumb-item + .breadcrumb-item::before {
+    .breadcrumb-custom .breadcrumb-item+.breadcrumb-item::before {
         color: rgba(255, 255, 255, 0.6);
         content: '›';
         font-size: 1.1rem;
@@ -104,7 +104,9 @@
     }
 
     /* ============ SECTION COMMON ============ */
-    .section-padding { padding: 90px 0; }
+    .section-padding {
+        padding: 90px 0;
+    }
 
     .section-header {
         text-align: center;
@@ -487,8 +489,8 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background-image: radial-gradient(circle at 25% 30%, rgba(255,255,255,0.08) 0%, transparent 40%),
-                          radial-gradient(circle at 75% 70%, rgba(255,255,255,0.06) 0%, transparent 40%);
+        background-image: radial-gradient(circle at 25% 30%, rgba(255, 255, 255, 0.08) 0%, transparent 40%),
+            radial-gradient(circle at 75% 70%, rgba(255, 255, 255, 0.06) 0%, transparent 40%);
     }
 
     .achievement-section .section-header {
@@ -726,8 +728,13 @@
         box-shadow: 0 0 0 6px rgba(76, 175, 80, 0.15);
     }
 
-    .timeline-item:nth-child(odd) .tl-dot { right: -11px; }
-    .timeline-item:nth-child(even) .tl-dot { left: -11px; }
+    .timeline-item:nth-child(odd) .tl-dot {
+        right: -11px;
+    }
+
+    .timeline-item:nth-child(even) .tl-dot {
+        left: -11px;
+    }
 
     .timeline-item .tl-content {
         background: var(--white);
@@ -794,54 +801,267 @@
 
     /* ============ RESPONSIVE ============ */
     @media (max-width: 991px) {
-        .page-banner { padding: 140px 0 80px; }
-        .page-banner h1 { font-size: 2.4rem; }
-        .section-title { font-size: 2rem; }
-        .story-content h2 { font-size: 1.7rem; }
-        .story-img-wrap { margin-bottom: 70px; }
-        .mv-card { padding: 35px 25px; margin-bottom: 25px; }
-        .achievement-box .ach-number { font-size: 2.2rem; }
+        .page-banner {
+            padding: 140px 0 80px;
+        }
 
-        .timeline-wrap::before { left: 22px; }
-        .timeline-item { width: 100%; left: 0 !important; padding: 0 0 0 55px; text-align: left !important; margin-bottom: 30px; }
-        .timeline-item .tl-dot { left: 11px !important; right: auto !important; }
+        .page-banner h1 {
+            font-size: 2.4rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+        }
+
+        .story-content h2 {
+            font-size: 1.7rem;
+        }
+
+        .story-img-wrap {
+            margin-bottom: 70px;
+        }
+
+        .mv-card {
+            padding: 35px 25px;
+            margin-bottom: 25px;
+        }
+
+        .achievement-box .ach-number {
+            font-size: 2.2rem;
+        }
+
+        .timeline-wrap::before {
+            left: 22px;
+        }
+
+        .timeline-item {
+            width: 100%;
+            left: 0 !important;
+            padding: 0 0 0 55px;
+            text-align: left !important;
+            margin-bottom: 30px;
+        }
+
+        .timeline-item .tl-dot {
+            left: 11px !important;
+            right: auto !important;
+        }
     }
 
     @media (max-width: 767px) {
-        .page-banner h1 { font-size: 1.9rem; }
-        .page-banner p { font-size: 0.95rem; }
-        .section-title { font-size: 1.7rem; }
-        .story-content h2 { font-size: 1.5rem; }
-        .story-highlights { grid-template-columns: 1fr; }
-        .story-img-wrap .sub-img { display: none; }
-        .story-exp-badge { left: 15px; padding: 15px 20px; }
-        .story-exp-badge strong { font-size: 1.7rem; }
-        .mv-card { padding: 30px 22px; }
-        .mv-card h3 { font-size: 1.35rem; }
-        .value-card { padding: 28px 20px; }
-        .achievement-box .ach-number { font-size: 1.9rem; }
-        .team-img-wrap { height: 240px; }
-        .about-cta h3 { font-size: 1.6rem; }
+        .page-banner h1 {
+            font-size: 1.9rem;
+        }
+
+        .page-banner p {
+            font-size: 0.95rem;
+        }
+
+        .section-title {
+            font-size: 1.7rem;
+        }
+
+        .story-content h2 {
+            font-size: 1.5rem;
+        }
+
+        .story-highlights {
+            grid-template-columns: 1fr;
+        }
+
+        .story-img-wrap .sub-img {
+            display: none;
+        }
+
+        .story-exp-badge {
+            left: 15px;
+            padding: 15px 20px;
+        }
+
+        .story-exp-badge strong {
+            font-size: 1.7rem;
+        }
+
+        .mv-card {
+            padding: 30px 22px;
+        }
+
+        .mv-card h3 {
+            font-size: 1.35rem;
+        }
+
+        .value-card {
+            padding: 28px 20px;
+        }
+
+        .achievement-box .ach-number {
+            font-size: 1.9rem;
+        }
+
+        .team-img-wrap {
+            height: 240px;
+        }
+
+        .about-cta h3 {
+            font-size: 1.6rem;
+        }
     }
 </style>
 @endsection
 
 @section('content')
 
+{{-- Shared batch translation for the entire About page --}}
+@php
+use App\Services\GoogleTranslator;
+
+// ---------------------------------------------------------
+// 1. Values — 6 items
+// ---------------------------------------------------------
+$values = [
+['icon' => 'fa-hand-holding-heart', 'title' => 'Compassion', 'desc' => 'We care deeply about our customers and treat every order as if it were for our own family.'],
+['icon' => 'fa-shield-halved', 'title' => 'Trust', 'desc' => 'Transparent pricing, genuine medicines and honest service — trust is our foundation.'],
+['icon' => 'fa-bolt', 'title' => 'Efficiency', 'desc' => 'Fast, seamless and reliable — we value your time and health above everything else.'],
+['icon' => 'fa-lightbulb', 'title' => 'Innovation', 'desc' => 'Constantly improving our technology to make healthcare simpler and better for all.'],
+['icon' => 'fa-users', 'title' => 'Community', 'desc' => 'Building strong relationships with pharmacies, delivery partners and communities we serve.'],
+['icon' => 'fa-leaf', 'title' => 'Sustainability', 'desc' => 'Eco-friendly packaging and responsible practices for a healthier planet tomorrow.'],
+];
+$valuesTitles = GoogleTranslator::translateBatch(array_column($values, 'title'));
+$valuesDescs = GoogleTranslator::translateBatch(array_column($values, 'desc'));
+foreach ($values as $i => &$v) {
+$v['title'] = $valuesTitles[$i] ?? $v['title'];
+$v['desc'] = $valuesDescs[$i] ?? $v['desc'];
+}
+unset($v);
+
+// ---------------------------------------------------------
+// 2. Team — 4 members
+// ---------------------------------------------------------
+$team = [
+['name' => 'Dr. Rajesh Kumar', 'role' => 'Founder & CEO', 'desc' => '20+ years of experience in healthcare and pharmacy industry.', 'img' => 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=400&q=80'],
+['name' => 'Priya Sharma', 'role' => 'Chief Operating Officer', 'desc' => 'Expert in operations and supply chain management.', 'img' => 'https://images.unsplash.com/photo-1594824476967-48c8b964273f?w=400&q=80'],
+['name' => 'Amit Patel', 'role' => 'Head of Technology', 'desc' => 'Building innovative platforms for seamless healthcare delivery.', 'img' => 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&q=80'],
+['name' => 'Dr. Sunita Verma', 'role' => 'Chief Pharmacist', 'desc' => 'Ensures quality and authenticity of every medicine delivered.', 'img' => 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&q=80'],
+];
+$teamNames = GoogleTranslator::translateBatch(array_column($team, 'name'));
+$teamRoles = GoogleTranslator::translateBatch(array_column($team, 'role'));
+$teamDescs = GoogleTranslator::translateBatch(array_column($team, 'desc'));
+foreach ($team as $i => &$m) {
+$m['name'] = $teamNames[$i] ?? $m['name'];
+$m['role'] = $teamRoles[$i] ?? $m['role'];
+$m['desc'] = $teamDescs[$i] ?? $m['desc'];
+}
+unset($m);
+
+// ---------------------------------------------------------
+// 3. Milestones — 6 items
+// ---------------------------------------------------------
+$milestones = [
+['year'=>'2015', 'title'=>'The Beginning', 'desc'=>'Sanjivani was founded with a mission to deliver medicines to underserved rural areas of Maharashtra.'],
+['year'=>'2017', 'title'=>'First 100 Pharmacies', 'desc'=>'Reached a milestone of 100 verified partner pharmacies across 3 states.'],
+['year'=>'2019', 'title'=>'Launched Mobile App', 'desc'=>'Introduced our user-friendly mobile application making ordering easier than ever.'],
+['year'=>'2021', 'title'=>'Rural Expansion', 'desc'=>'Extended services to 300+ villages, bringing medicines to previously unreached communities.'],
+['year'=>'2023', 'title'=>'Award Recognition', 'desc'=>'Honored with the "Best Healthcare Startup" award by the Ministry of Health.'],
+['year'=>'2025', 'title'=>'Nationwide Network', 'desc'=>'Serving thousands of families daily across India with same-day delivery in most locations.'],
+];
+$msTitles = GoogleTranslator::translateBatch(array_column($milestones, 'title'));
+$msDescs = GoogleTranslator::translateBatch(array_column($milestones, 'desc'));
+foreach ($milestones as $i => &$ms) {
+$ms['title'] = $msTitles[$i] ?? $ms['title'];
+$ms['desc'] = $msDescs[$i] ?? $ms['desc'];
+}
+unset($ms);
+
+// ---------------------------------------------------------
+// 4. Section headings, badges, descriptions
+// ---------------------------------------------------------
+$aboutStrings = GoogleTranslator::translateBatch([
+'banner_badge' => 'About Sanjivani',
+'banner_title' => 'Our Story',
+'banner_desc' => 'Discover how Sanjivani is transforming healthcare accessibility in India by connecting patients with verified pharmacies and delivering medicines to every doorstep — even in the remotest villages.',
+'bc_home' => 'Home',
+'bc_current' => 'About Us',
+
+'story_badge' => 'Our Journey',
+'story_years' => 'Years',
+'story_hl_iso' => 'ISO Certified',
+'story_hl_lic' => 'Licensed Partners',
+'story_hl_del' => 'Same Day Delivery',
+'story_hl_trust' => 'Trusted by Millions',
+
+'mv_badge' => 'Purpose',
+'mv_title' => 'Our Mission & Vision',
+'mv_desc' => 'We are driven by a clear purpose — to make quality healthcare accessible, affordable and reliable for every Indian household.',
+'mission_title' => 'Our Mission',
+'vision_title' => 'Our Vision',
+'mission_li1' => 'Bridge the urban-rural healthcare gap',
+'mission_li2' => 'Deliver 100% authentic medicines',
+'mission_li3' => 'Empower local pharmacies to grow',
+'mission_li4' => 'Create employment through delivery network',
+'vision_li1' => 'Reach 10,000+ villages by 2030',
+'vision_li2' => 'Serve 10 million happy customers',
+'vision_li3' => 'Partner with 5,000+ pharmacies',
+'vision_li4' => 'Set new standards in healthcare delivery',
+
+'values_badge' => 'What Drives Us',
+'values_title' => 'Our Core Values',
+'values_desc' => 'These principles guide every decision we make and every action we take at Sanjivani.',
+
+'ach_badge' => 'Milestones',
+'ach_title' => 'Our Achievements In Numbers',
+'ach_desc' => 'A decade of dedication reflected in numbers that continue to grow every day.',
+'ach_customers' => 'Happy Customers',
+'ach_pharmacies' => 'Verified Pharmacies',
+'ach_villages' => 'Villages Served',
+'ach_awards' => 'Awards Won',
+
+'team_badge' => 'Leadership',
+'team_title' => 'Meet Our Expert Team',
+'team_desc' => 'Passionate professionals dedicated to transforming healthcare accessibility across India.',
+
+'tl_badge' => 'Our Journey',
+'tl_title' => 'From Idea to Impact',
+'tl_desc' => 'A timeline of milestones that shaped Sanjivani into what it is today.',
+
+'cta_title' => 'Ready to Experience Better Healthcare?',
+'cta_desc' => 'Join thousands of families who trust Sanjivani for safe, timely and affordable medicine delivery. Your health, our priority.',
+'cta_start' => 'Get Started Today',
+'cta_contact' => 'Contact Us',
+]);
+
+// ---------------------------------------------------------
+// 5. DB-driven fields (banner text, story, mission, vision, founder)
+// ---------------------------------------------------------
+$dbStrings = GoogleTranslator::translateBatch([
+'banner_text' => $about->banner_text ?? 'Discover how Sanjivani is transforming healthcare accessibility in India by connecting patients with verified pharmacies and delivering medicines to every doorstep — even in the remotest villages.',
+'story_lead' => $about->story_lead ?? 'Sanjivani was born from a simple yet powerful idea — nobody should struggle to get essential medicines, no matter where they live.',
+'story_para1' => $about->story_para1 ?? 'Founded in 2015, we started with a mission to eliminate the healthcare gap between urban and rural India.',
+'story_para2' => $about->story_para2 ?? 'Our technology-driven platform ensures 100% genuine medicines, transparent pricing and lightning-fast delivery.',
+'founder_name' => $about->founder_name ?? 'Dr. Rajesh Kumar',
+'founder_designation' => $about->founder_designation ?? 'Founder & CEO, Sanjivani',
+'mission_text' => $about->mission_text ?? 'To revolutionize medicine delivery in India by leveraging technology to connect patients with verified pharmacies, ensuring timely access to essential medicines at fair prices.',
+'vision_text' => $about->vision_text ?? 'To become India\'s most trusted digital healthcare partner, ensuring that no family has to worry about accessing essential medicines when they need them the most.',
+]);
+
+// story_heading contains HTML — translate it separately using translateMarkup()
+$rawStoryHeading = $about->story_heading ?? 'Bringing <span class="highlight">Healthcare</span> Closer to You';
+$translatedStoryHeading = GoogleTranslator::translate($rawStoryHeading);
+@endphp
+
 <!-- ============ PAGE BANNER ============ -->
 <section class="page-banner">
     <div class="container">
         <div class="page-banner-content" data-aos="fade-up">
             <span class="banner-badge">
-                <i class="fas fa-leaf me-1"></i> About Sanjivani
+                <i class="fas fa-leaf me-1"></i> {{ $aboutStrings['banner_badge'] }}
             </span>
-            <h1>Our Story</h1>
-            <p>{{ $about->banner_text ?? 'Discover how Sanjivani is transforming healthcare accessibility in India by connecting patients with verified pharmacies and delivering medicines to every doorstep — even in the remotest villages.' }}</p>
+            <h1>{{ $aboutStrings['banner_title'] }}</h1>
+            <p>{{ $dbStrings['banner_text'] }}</p>
 
             <nav>
                 <ol class="breadcrumb breadcrumb-custom">
-                    <li class="breadcrumb-item"><a href="{{ url('/') }}"><i class="fas fa-home me-1"></i>Home</a></li>
-                    <li class="breadcrumb-item active">About Us</li>
+                    <li class="breadcrumb-item"><a href="{{ url('/') }}"><i class="fas fa-home me-1"></i>{{ $aboutStrings['bc_home'] }}</a></li>
+                    <li class="breadcrumb-item active">{{ $aboutStrings['bc_current'] }}</li>
                 </ol>
             </nav>
         </div>
@@ -855,56 +1075,56 @@
             <div class="col-lg-6" data-aos="fade-right">
                 <div class="story-img-wrap">
                     <img src="{{ !empty($about->main_image) && file_exists(public_path('uploads/about/'.$about->main_image)) ? asset('uploads/about/'.$about->main_image) : 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&q=80' }}"
-                         alt="Sanjivani Story" class="main-img">
+                        alt="Sanjivani Story" class="main-img">
                     <img src="{{ !empty($about->sub_image) && file_exists(public_path('uploads/about/'.$about->sub_image)) ? asset('uploads/about/'.$about->sub_image) : 'https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=500&q=80' }}"
-                         alt="Sanjivani Team" class="sub-img d-none d-md-block">
+                        alt="Sanjivani Team" class="sub-img d-none d-md-block">
                     <div class="story-exp-badge">
                         <strong>10+</strong>
-                        <span>Years</span>
+                        <span>{{ $aboutStrings['story_years'] }}</span>
                     </div>
                 </div>
             </div>
 
             <div class="col-lg-6" data-aos="fade-left">
                 <div class="story-content">
-                    <span class="section-badge">Our Journey</span>
-                    <h2>{!! $about->story_heading ?? 'Bringing <span class="highlight">Healthcare</span> Closer to You' !!}</h2>
+                    <span class="section-badge">{{ $aboutStrings['story_badge'] }}</span>
+                    <h2>{!! $translatedStoryHeading !!}</h2>
                     <p class="lead-text">
-                        {{ $about->story_lead ?? 'Sanjivani was born from a simple yet powerful idea — nobody should struggle to get essential medicines, no matter where they live.' }}
+                        {{ $dbStrings['story_lead'] }}
                     </p>
                     <p>
-                        {{ $about->story_para1 ?? 'Founded in 2015, we started with a mission to eliminate the healthcare gap between urban and rural India. Today, we proudly serve thousands of families across the country through our network of verified pharmacies and dedicated delivery partners.' }}
+                        {{ $dbStrings['story_para1'] }}
                     </p>
                     <p>
-                        {{ $about->story_para2 ?? 'Our technology-driven platform ensures 100% genuine medicines, transparent pricing and lightning-fast delivery — bringing peace of mind to families and saving countless lives every single day.' }}
+                        {{ $dbStrings['story_para2'] }}
                     </p>
 
                     <div class="story-highlights">
                         <div class="hl-item">
                             <i class="fas fa-check-circle"></i>
-                            <span>ISO Certified</span>
+                            <span>{{ $aboutStrings['story_hl_iso'] }}</span>
                         </div>
                         <div class="hl-item">
                             <i class="fas fa-shield-halved"></i>
-                            <span>Licensed Partners</span>
+                            <span>{{ $aboutStrings['story_hl_lic'] }}</span>
                         </div>
                         <div class="hl-item">
                             <i class="fas fa-truck-fast"></i>
-                            <span>Same Day Delivery</span>
+                            <span>{{ $aboutStrings['story_hl_del'] }}</span>
                         </div>
                         <div class="hl-item">
                             <i class="fas fa-hand-holding-heart"></i>
-                            <span>Trusted by Millions</span>
+                            <span>{{ $aboutStrings['story_hl_trust'] }}</span>
                         </div>
                     </div>
 
                     <div class="signature-wrap">
                         <div class="founder-img">
-                            {{ substr($about->founder_name ?? 'Dr. Rajesh Kumar', 0, 1) }}
+                            {{ substr($dbStrings['founder_name'], 0, 1) }}
                         </div>
                         <div class="founder-info">
-                            <strong>{{ $about->founder_name ?? 'Dr. Rajesh Kumar' }}</strong>
-                            <span>{{ $about->founder_designation ?? 'Founder & CEO, Sanjivani' }}</span>
+                            <strong>{{ $dbStrings['founder_name'] }}</strong>
+                            <span>{{ $dbStrings['founder_designation'] }}</span>
                         </div>
                     </div>
                 </div>
@@ -917,24 +1137,24 @@
 <section class="mission-section">
     <div class="container">
         <div class="section-header" data-aos="fade-up">
-            <span class="section-badge">Purpose</span>
-            <h2 class="section-title">Our Mission & <span class="highlight">Vision</span></h2>
-            <p class="section-desc">We are driven by a clear purpose — to make quality healthcare accessible, affordable and reliable for every Indian household.</p>
+            <span class="section-badge">{{ $aboutStrings['mv_badge'] }}</span>
+            <h2 class="section-title">{{ $aboutStrings['mv_title'] }}</h2>
+            <p class="section-desc">{{ $aboutStrings['mv_desc'] }}</p>
         </div>
 
         <div class="row g-4">
             <div class="col-lg-6" data-aos="fade-right">
                 <div class="mv-card">
                     <div class="mv-icon"><i class="fas fa-bullseye"></i></div>
-                    <h3>Our Mission</h3>
+                    <h3>{{ $aboutStrings['mission_title'] }}</h3>
                     <p>
-                        {{ $about->mission_text ?? 'To revolutionize medicine delivery in India by leveraging technology to connect patients with verified pharmacies, ensuring timely access to genuine medicines at fair prices — from bustling cities to the most remote villages.' }}
+                        {{ $dbStrings['mission_text'] }}
                     </p>
                     <ul class="mv-list">
-                        <li><i class="fas fa-check-circle"></i> Bridge the urban-rural healthcare gap</li>
-                        <li><i class="fas fa-check-circle"></i> Deliver 100% authentic medicines</li>
-                        <li><i class="fas fa-check-circle"></i> Empower local pharmacies to grow</li>
-                        <li><i class="fas fa-check-circle"></i> Create employment through delivery network</li>
+                        <li><i class="fas fa-check-circle"></i> {{ $aboutStrings['mission_li1'] }}</li>
+                        <li><i class="fas fa-check-circle"></i> {{ $aboutStrings['mission_li2'] }}</li>
+                        <li><i class="fas fa-check-circle"></i> {{ $aboutStrings['mission_li3'] }}</li>
+                        <li><i class="fas fa-check-circle"></i> {{ $aboutStrings['mission_li4'] }}</li>
                     </ul>
                 </div>
             </div>
@@ -942,15 +1162,15 @@
             <div class="col-lg-6" data-aos="fade-left">
                 <div class="mv-card">
                     <div class="mv-icon"><i class="fas fa-eye"></i></div>
-                    <h3>Our Vision</h3>
+                    <h3>{{ $aboutStrings['vision_title'] }}</h3>
                     <p>
-                        {{ $about->vision_text ?? 'To become India\'s most trusted digital healthcare partner, ensuring that no family — regardless of their location or income — has to worry about accessing essential medicines when they need them the most.' }}
+                        {{ $dbStrings['vision_text'] }}
                     </p>
                     <ul class="mv-list">
-                        <li><i class="fas fa-check-circle"></i> Reach 10,000+ villages by 2030</li>
-                        <li><i class="fas fa-check-circle"></i> Serve 10 million happy customers</li>
-                        <li><i class="fas fa-check-circle"></i> Partner with 5,000+ pharmacies</li>
-                        <li><i class="fas fa-check-circle"></i> Set new standards in healthcare delivery</li>
+                        <li><i class="fas fa-check-circle"></i> {{ $aboutStrings['vision_li1'] }}</li>
+                        <li><i class="fas fa-check-circle"></i> {{ $aboutStrings['vision_li2'] }}</li>
+                        <li><i class="fas fa-check-circle"></i> {{ $aboutStrings['vision_li3'] }}</li>
+                        <li><i class="fas fa-check-circle"></i> {{ $aboutStrings['vision_li4'] }}</li>
                     </ul>
                 </div>
             </div>
@@ -962,31 +1182,20 @@
 <section class="values-section">
     <div class="container">
         <div class="section-header" data-aos="fade-up">
-            <span class="section-badge">What Drives Us</span>
-            <h2 class="section-title">Our Core <span class="highlight">Values</span></h2>
-            <p class="section-desc">These principles guide every decision we make and every action we take at Sanjivani.</p>
+            <span class="section-badge">{{ $aboutStrings['values_badge'] }}</span>
+            <h2 class="section-title">{{ $aboutStrings['values_title'] }}</h2>
+            <p class="section-desc">{{ $aboutStrings['values_desc'] }}</p>
         </div>
 
         <div class="row g-4">
-            @php
-                $values = [
-                    ['icon'=>'fa-hand-holding-heart', 'title'=>'Compassion', 'desc'=>'We care deeply about our customers and treat every order as if it were for our own family.'],
-                    ['icon'=>'fa-shield-halved', 'title'=>'Trust', 'desc'=>'Transparent pricing, genuine medicines and honest service — trust is our foundation.'],
-                    ['icon'=>'fa-bolt', 'title'=>'Efficiency', 'desc'=>'Fast, seamless and reliable — we value your time and health above everything else.'],
-                    ['icon'=>'fa-lightbulb', 'title'=>'Innovation', 'desc'=>'Constantly improving our technology to make healthcare simpler and better for all.'],
-                    ['icon'=>'fa-users', 'title'=>'Community', 'desc'=>'Building strong relationships with pharmacies, delivery partners and communities we serve.'],
-                    ['icon'=>'fa-leaf', 'title'=>'Sustainability', 'desc'=>'Eco-friendly packaging and responsible practices for a healthier planet tomorrow.'],
-                ];
-            @endphp
-
             @foreach($values as $i => $val)
-                <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="{{ $i * 80 }}">
-                    <div class="value-card">
-                        <div class="val-icon"><i class="fas {{ $val['icon'] }}"></i></div>
-                        <h5>{{ $val['title'] }}</h5>
-                        <p>{{ $val['desc'] }}</p>
-                    </div>
+            <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="{{ $i * 80 }}">
+                <div class="value-card">
+                    <div class="val-icon"><i class="fas {{ $val['icon'] }}"></i></div>
+                    <h5>{{ $val['title'] }}</h5>
+                    <p>{{ $val['desc'] }}</p>
                 </div>
+            </div>
             @endforeach
         </div>
     </div>
@@ -996,9 +1205,9 @@
 <section class="achievement-section">
     <div class="container">
         <div class="section-header" data-aos="fade-up">
-            <span class="section-badge">Milestones</span>
-            <h2 class="section-title">Our Achievements <span style="color:#A5D6A7;">In Numbers</span></h2>
-            <p class="section-desc">A decade of dedication reflected in numbers that continue to grow every day.</p>
+            <span class="section-badge">{{ $aboutStrings['ach_badge'] }}</span>
+            <h2 class="section-title">{{ $aboutStrings['ach_title'] }}</h2>
+            <p class="section-desc">{{ $aboutStrings['ach_desc'] }}</p>
         </div>
 
         <div class="row g-4">
@@ -1006,28 +1215,28 @@
                 <div class="achievement-box">
                     <div class="ach-icon"><i class="fas fa-users"></i></div>
                     <div class="ach-number about-counter" data-target="{{ $totalCustomers ?? 5240 }}">0</div>
-                    <div class="ach-label">Happy Customers</div>
+                    <div class="ach-label">{{ $aboutStrings['ach_customers'] }}</div>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6 col-6" data-aos="zoom-in" data-aos-delay="100">
                 <div class="achievement-box">
                     <div class="ach-icon"><i class="fas fa-store"></i></div>
                     <div class="ach-number about-counter" data-target="{{ $totalPharmacies ?? 152 }}">0</div>
-                    <div class="ach-label">Verified Pharmacies</div>
+                    <div class="ach-label">{{ $aboutStrings['ach_pharmacies'] }}</div>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6 col-6" data-aos="zoom-in" data-aos-delay="200">
                 <div class="achievement-box">
                     <div class="ach-icon"><i class="fas fa-map-location-dot"></i></div>
                     <div class="ach-number about-counter" data-target="{{ $totalVillages ?? 480 }}">0</div>
-                    <div class="ach-label">Villages Served</div>
+                    <div class="ach-label">{{ $aboutStrings['ach_villages'] }}</div>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6 col-6" data-aos="zoom-in" data-aos-delay="300">
                 <div class="achievement-box">
                     <div class="ach-icon"><i class="fas fa-award"></i></div>
                     <div class="ach-number about-counter" data-target="{{ $totalAwards ?? 25 }}">0</div>
-                    <div class="ach-label">Awards Won</div>
+                    <div class="ach-label">{{ $aboutStrings['ach_awards'] }}</div>
                 </div>
             </div>
         </div>
@@ -1038,44 +1247,35 @@
 <section class="team-section">
     <div class="container">
         <div class="section-header" data-aos="fade-up">
-            <span class="section-badge">Leadership</span>
-            <h2 class="section-title">Meet Our <span class="highlight">Expert Team</span></h2>
-            <p class="section-desc">Passionate professionals dedicated to transforming healthcare accessibility across India.</p>
+            <span class="section-badge">{{ $aboutStrings['team_badge'] }}</span>
+            <h2 class="section-title">{{ $aboutStrings['team_title'] }}</h2>
+            <p class="section-desc">{{ $aboutStrings['team_desc'] }}</p>
         </div>
 
         <div class="row g-4">
-            @php
-                $team = [
-                    ['name'=>'Dr. Rajesh Kumar', 'role'=>'Founder & CEO', 'desc'=>'20+ years of experience in healthcare and pharmacy industry.', 'img'=>'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=400&q=80'],
-                    ['name'=>'Priya Sharma', 'role'=>'Chief Operating Officer', 'desc'=>'Expert in operations and supply chain management.', 'img'=>'https://images.unsplash.com/photo-1594824476967-48c8b964273f?w=400&q=80'],
-                    ['name'=>'Amit Patel', 'role'=>'Head of Technology', 'desc'=>'Building innovative platforms for seamless healthcare delivery.', 'img'=>'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&q=80'],
-                    ['name'=>'Dr. Sunita Verma', 'role'=>'Chief Pharmacist', 'desc'=>'Ensures quality and authenticity of every medicine delivered.', 'img'=>'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&q=80'],
-                ];
-            @endphp
-
             @foreach($team as $i => $member)
-                <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="{{ $i * 100 }}">
-                    <div class="team-card">
-                        <div class="team-img-wrap">
-                            @if(!empty($member['img']))
-                                <img src="{{ $member['img'] }}" alt="{{ $member['name'] }}">
-                            @else
-                                <div class="team-avatar-fallback">{{ strtoupper(substr($member['name'], 0, 1)) }}</div>
-                            @endif
-                            <div class="team-social">
-                                <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
-                                <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
-                                <a href="#" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-                                <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
-                            </div>
-                        </div>
-                        <div class="team-info">
-                            <h5>{{ $member['name'] }}</h5>
-                            <div class="team-role">{{ $member['role'] }}</div>
-                            <p>{{ $member['desc'] }}</p>
+            <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="{{ $i * 100 }}">
+                <div class="team-card">
+                    <div class="team-img-wrap">
+                        @if(!empty($member['img']))
+                        <img src="{{ $member['img'] }}" alt="{{ $member['name'] }}">
+                        @else
+                        <div class="team-avatar-fallback">{{ strtoupper(substr($member['name'], 0, 1)) }}</div>
+                        @endif
+                        <div class="team-social">
+                            <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                            <a href="#" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
                         </div>
                     </div>
+                    <div class="team-info">
+                        <h5>{{ $member['name'] }}</h5>
+                        <div class="team-role">{{ $member['role'] }}</div>
+                        <p>{{ $member['desc'] }}</p>
+                    </div>
                 </div>
+            </div>
             @endforeach
         </div>
     </div>
@@ -1085,32 +1285,21 @@
 <section class="timeline-section">
     <div class="container">
         <div class="section-header" data-aos="fade-up">
-            <span class="section-badge">Our Journey</span>
-            <h2 class="section-title">From Idea to <span class="highlight">Impact</span></h2>
-            <p class="section-desc">A timeline of milestones that shaped Sanjivani into what it is today.</p>
+            <span class="section-badge">{{ $aboutStrings['tl_badge'] }}</span>
+            <h2 class="section-title">{{ $aboutStrings['tl_title'] }}</h2>
+            <p class="section-desc">{{ $aboutStrings['tl_desc'] }}</p>
         </div>
 
         <div class="timeline-wrap">
-            @php
-                $milestones = [
-                    ['year'=>'2015', 'title'=>'The Beginning', 'desc'=>'Sanjivani was founded with a mission to deliver medicines to underserved rural areas of Maharashtra.'],
-                    ['year'=>'2017', 'title'=>'First 100 Pharmacies', 'desc'=>'Reached a milestone of 100 verified partner pharmacies across 3 states.'],
-                    ['year'=>'2019', 'title'=>'Launched Mobile App', 'desc'=>'Introduced our user-friendly mobile application making ordering easier than ever.'],
-                    ['year'=>'2021', 'title'=>'Rural Expansion', 'desc'=>'Extended services to 300+ villages, bringing medicines to previously unreached communities.'],
-                    ['year'=>'2023', 'title'=>'Award Recognition', 'desc'=>'Honored with the "Best Healthcare Startup" award by the Ministry of Health.'],
-                    ['year'=>'2025', 'title'=>'Nationwide Network', 'desc'=>'Serving thousands of families daily across India with same-day delivery in most locations.'],
-                ];
-            @endphp
-
             @foreach($milestones as $i => $m)
-                <div class="timeline-item" data-aos="{{ $i % 2 == 0 ? 'fade-right' : 'fade-left' }}">
-                    <div class="tl-dot"></div>
-                    <div class="tl-content">
-                        <span class="tl-year">{{ $m['year'] }}</span>
-                        <h5>{{ $m['title'] }}</h5>
-                        <p>{{ $m['desc'] }}</p>
-                    </div>
+            <div class="timeline-item" data-aos="{{ $i % 2 == 0 ? 'fade-right' : 'fade-left' }}">
+                <div class="tl-dot"></div>
+                <div class="tl-content">
+                    <span class="tl-year">{{ $m['year'] }}</span>
+                    <h5>{{ $m['title'] }}</h5>
+                    <p>{{ $m['desc'] }}</p>
                 </div>
+            </div>
             @endforeach
         </div>
     </div>
@@ -1119,14 +1308,14 @@
 <!-- ============ CTA ============ -->
 <section class="about-cta">
     <div class="container" data-aos="zoom-in">
-        <h3>Ready to Experience Better Healthcare?</h3>
-        <p>Join thousands of families who trust Sanjivani for safe, timely and affordable medicine delivery. Your health, our priority.</p>
+        <h3>{{ $aboutStrings['cta_title'] }}</h3>
+        <p>{{ $aboutStrings['cta_desc'] }}</p>
         <div class="d-flex gap-3 justify-content-center flex-wrap">
             <a href="{{ url('/register') }}" class="btn-sanjivani">
-                <i class="fas fa-user-plus"></i> Get Started Today
+                <i class="fas fa-user-plus"></i> {{ $aboutStrings['cta_start'] }}
             </a>
             <a href="{{ url('/contact') }}" class="btn-sanjivani-outline">
-                <i class="fas fa-headset"></i> Contact Us
+                <i class="fas fa-headset"></i> {{ $aboutStrings['cta_contact'] }}
             </a>
         </div>
     </div>
@@ -1136,62 +1325,66 @@
 
 @section('scripts')
 <script>
-$(document).ready(function () {
+    $(document).ready(function() {
 
-    /* ---------- Animated Counters for Achievements ---------- */
-    var aboutCountersStarted = false;
+        /* ---------- Animated Counters for Achievements ---------- */
+        var aboutCountersStarted = false;
 
-    function animateAboutCounters() {
-        $('.about-counter').each(function () {
-            var $this = $(this);
-            var target = parseInt($this.data('target')) || 0;
+        function animateAboutCounters() {
+            $('.about-counter').each(function() {
+                var $this = $(this);
+                var target = parseInt($this.data('target')) || 0;
 
-            $({ count: 0 }).animate({ count: target }, {
-                duration: 2500,
-                easing: 'swing',
-                step: function () {
-                    $this.text(Math.floor(this.count).toLocaleString());
-                },
-                complete: function () {
-                    $this.text(target.toLocaleString() + '+');
+                $({
+                    count: 0
+                }).animate({
+                    count: target
+                }, {
+                    duration: 2500,
+                    easing: 'swing',
+                    step: function() {
+                        $this.text(Math.floor(this.count).toLocaleString());
+                    },
+                    complete: function() {
+                        $this.text(target.toLocaleString() + '+');
+                    }
+                });
+            });
+        }
+
+        $(window).on('scroll load', function() {
+            var $stats = $('.achievement-section');
+            if ($stats.length && !aboutCountersStarted) {
+                var top = $stats.offset().top;
+                if ($(window).scrollTop() + $(window).height() > top + 100) {
+                    aboutCountersStarted = true;
+                    animateAboutCounters();
                 }
+            }
+        });
+
+        /* ---------- Timeline Item Reveal (extra effect) ---------- */
+        $('.timeline-item').on('mouseenter', function() {
+            $(this).find('.tl-dot').css({
+                'background': 'var(--primary-green)',
+                'border-color': 'var(--white)',
+                'transform': 'scale(1.2)'
+            });
+        }).on('mouseleave', function() {
+            $(this).find('.tl-dot').css({
+                'background': 'var(--white)',
+                'border-color': 'var(--primary-green)',
+                'transform': 'scale(1)'
             });
         });
-    }
 
-    $(window).on('scroll load', function () {
-        var $stats = $('.achievement-section');
-        if ($stats.length && !aboutCountersStarted) {
-            var top = $stats.offset().top;
-            if ($(window).scrollTop() + $(window).height() > top + 100) {
-                aboutCountersStarted = true;
-                animateAboutCounters();
-            }
-        }
-    });
-
-    /* ---------- Timeline Item Reveal (extra effect) ---------- */
-    $('.timeline-item').on('mouseenter', function () {
-        $(this).find('.tl-dot').css({
-            'background': 'var(--primary-green)',
-            'border-color': 'var(--white)',
-            'transform': 'scale(1.2)'
+        /* ---------- Value Card Interactive Hover ---------- */
+        $('.value-card').on('mouseenter', function() {
+            $(this).find('.val-icon i').addClass('animate__animated animate__pulse');
+        }).on('mouseleave', function() {
+            $(this).find('.val-icon i').removeClass('animate__animated animate__pulse');
         });
-    }).on('mouseleave', function () {
-        $(this).find('.tl-dot').css({
-            'background': 'var(--white)',
-            'border-color': 'var(--primary-green)',
-            'transform': 'scale(1)'
-        });
-    });
 
-    /* ---------- Value Card Interactive Hover ---------- */
-    $('.value-card').on('mouseenter', function () {
-        $(this).find('.val-icon i').addClass('animate__animated animate__pulse');
-    }).on('mouseleave', function () {
-        $(this).find('.val-icon i').removeClass('animate__animated animate__pulse');
     });
-
-});
 </script>
 @endsection

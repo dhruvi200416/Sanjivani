@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\DeliveryPartner;
 use App\Models\Order;
 use App\Models\Village;
+use Stichoza\GoogleTranslate\GoogleTranslate;
 
 class DeliveryController extends Controller
 {
@@ -305,7 +306,7 @@ class DeliveryController extends Controller
     }
 
     /* ============================================
-       PROFILE SETTINGS (Plain Text Password)
+       PROFILE SETTINGS
     ============================================ */
     public function profile()
     {
@@ -336,21 +337,41 @@ class DeliveryController extends Controller
             'name'    => 'required|string|min:2|max:50',
             'email'   => 'required|email',
             'phone'   => 'required|digits:10',
-            'address' => 'required|string|min:10|max:200'
+            'address' => 'required|string|min:10|max:200',
+            'avatar'  => 'nullable|image|mimes:jpg,jpeg,png|max:2048' // Added validation for avatar
         ]);
 
         $partner = DeliveryPartner::findOrFail(session('user_id'));
 
-        $partner->update([
+        // Prepare data for update
+        $data = [
             'name'    => $request->name,
             'email'   => $request->email,
             'phone'   => $request->phone,
             'address' => $request->address
-        ]);
+        ];
+
+        // Handle Avatar Upload when "Save Changes" is clicked
+        if ($request->hasFile('avatar')) {
+            // Delete old avatar if it exists
+            if ($partner->avatar && file_exists(public_path('images/' . $partner->avatar))) {
+                unlink(public_path('images/' . $partner->avatar));
+            }
+
+            // Save new avatar to public/images
+            $imageName = 'delivery_' . time() . '_' . uniqid() . '.' . $request->avatar->extension();
+            $request->avatar->move(public_path('images'), $imageName);
+
+            // Add to data array to save in DB
+            $data['avatar'] = $imageName;
+        }
+
+        // Update the database
+        $partner->update($data);
 
         session(['delivery_name' => $partner->name]);
 
-        return back()->with('profile_success', 'Profile information updated.');
+        return back()->with('profile_success', 'Profile information and image updated.');
     }
 
     public function changePassword(Request $request)

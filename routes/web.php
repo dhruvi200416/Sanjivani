@@ -140,6 +140,11 @@ Route::middleware(['login.check', 'customer.check'])->prefix('customer')->group(
 | Delivery Partner Panel Routes (Middleware: LoginCheck + DeliveryMiddleware)
 |--------------------------------------------------------------------------
 */
+/*
+|--------------------------------------------------------------------------
+| Delivery Partner Panel Routes (Middleware: LoginCheck + DeliveryMiddleware)
+|--------------------------------------------------------------------------
+*/
 Route::middleware(['login.check', 'delivery.check'])->prefix('delivery')->group(function () {
     // Dashboard & Online State
     Route::get('/dashboard', [DeliveryController::class, 'dashboard'])->name('delivery.dashboard');
@@ -147,9 +152,12 @@ Route::middleware(['login.check', 'delivery.check'])->prefix('delivery')->group(
 
     // Active Delivery Assignments
     Route::get('/deliveries', [DeliveryController::class, 'deliveries'])->name('delivery.deliveries');
-    Route::get('/details/{id}', [DeliveryController::class, 'deliveryDetails'])->name('delivery.details');
     Route::post('/update-status', [DeliveryController::class, 'updateDeliveryStatus'])->name('delivery.update-status');
     Route::post('/report-issue', [DeliveryController::class, 'reportIssue'])->name('delivery.report-issue');
+
+    // Delivery Details & Avatar Upload (Added correctly here)
+    Route::get('/details/{id}', [DeliveryController::class, 'deliveryDetails'])->name('delivery.details');
+    Route::post('/profile/upload-avatar', [DeliveryController::class, 'uploadAvatar'])->name('delivery.profile.upload-avatar');
 
     // Delivery Earnings & History Records
     Route::get('/history', [DeliveryController::class, 'history'])->name('delivery.history');

@@ -2,135 +2,297 @@
 
 @section('title', 'My Profile - Sanjivani Admin')
 @section('page_title')
-    <i class="fas fa-user-circle"></i> My Profile
+<i class="fas fa-user-circle"></i> My Profile
 @endsection
 
 @section('styles')
 <style>
+    /* ====================================================
+       1. HEADER BACKGROUND & SHAPE
+       ==================================================== */
     .profile-header-card {
-        background: linear-gradient(135deg, var(--dark-green) 0%, var(--primary-green) 60%, var(--light-green) 100%);
-        border-radius: 20px; padding: 40px 30px; color: var(--white);
-        position: relative; overflow: hidden; margin-bottom: 25px;
+        background: linear-gradient(135deg, var(--dark-green) 0%, var(--primary-green) 60%, var(--light-green) 100%) !important;
+        border-radius: 20px;
+        padding: 35px 30px;
+        position: relative;
+        overflow: hidden;
+        margin-bottom: 25px;
     }
+
     .profile-header-card::before {
-        content: ''; position: absolute; top: -100px; right: -100px;
-        width: 300px; height: 300px; background: rgba(255,255,255,0.1); border-radius: 50%;
+        content: '';
+        position: absolute;
+        top: -100px;
+        right: -100px;
+        width: 300px;
+        height: 300px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
     }
+
     .profile-header-card::after {
-        content: '\f508'; font-family: 'Font Awesome 6 Free'; font-weight: 900;
-        position: absolute; right: 20px; bottom: -30px;
-        font-size: 10rem; opacity: 0.08;
+        content: '\f5dc';
+        font-family: 'Font Awesome 6 Free';
+        font-weight: 900;
+        /* truck icon */
+        position: absolute;
+        right: 30px;
+        bottom: -30px;
+        font-size: 10rem;
+        opacity: 0.08;
+        color: #fff !important;
     }
 
     .profile-header-inner {
-        display: flex; align-items: center; gap: 25px;
-        position: relative; z-index: 2;
+        display: flex;
+        align-items: center;
+        gap: 25px;
+        position: relative;
+        z-index: 2;
+        flex-wrap: wrap;
     }
 
+    /* ====================================================
+       2. AVATAR
+       ==================================================== */
     .profile-avatar-big {
-        width: 110px; height: 110px; border-radius: 50%;
-        background: var(--white); color: var(--primary-green);
-        display: flex; align-items: center; justify-content: center;
-        font-size: 3rem; font-weight: 800;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        border: 5px solid rgba(255,255,255,0.3);
+        width: 110px;
+        height: 110px;
+        border-radius: 50%;
+        background: var(--white) !important;
+        color: var(--primary-green) !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        font-weight: 800;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        border: 4px solid #FFFFFF;
+        /* FIXED: Pure white border */
+        overflow: hidden;
+        flex-shrink: 0;
     }
 
-    .profile-header-info h2 { font-size: 2rem; font-weight: 800; margin: 0 0 5px; }
+    .profile-avatar-big img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    /* ====================================================
+       3. INFO & TEXT
+       ==================================================== */
+    .profile-header-info {
+        flex: 1;
+    }
+
+    .profile-header-info .name-row {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 8px;
+        flex-wrap: wrap;
+    }
+
+    .profile-header-info h2 {
+        font-size: 2rem;
+        font-weight: 800;
+        margin: 0;
+        color: #FFFFFF !important;
+    }
+
+    .profile-header-info .rating-badge {
+        background: #FFC107;
+        color: #333 !important;
+        padding: 3px 10px;
+        border-radius: 15px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+
     .profile-header-info .role {
-        background: rgba(255,255,255,0.2); padding: 4px 15px;
-        border-radius: 20px; font-size: 0.8rem; font-weight: 600;
-        display: inline-block; margin-bottom: 10px;
+        background: rgba(255, 255, 255, 0.2);
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        display: inline-block;
+        margin-bottom: 15px;
+        color: #FFFFFF !important;
     }
-    .profile-header-info .meta { display: flex; gap: 20px; flex-wrap: wrap; }
-    .profile-header-info .meta span { font-size: 0.88rem; opacity: 0.9; }
-    .profile-header-info .meta span i { margin-right: 5px; }
 
-    .edit-profile-btn {
-        margin-left: auto; background: var(--white); color: var(--primary-green);
-        padding: 12px 25px; border-radius: 25px; font-weight: 700;
-        font-size: 0.9rem; text-decoration: none;
-        display: inline-flex; align-items: center; gap: 8px;
-        transition: var(--transition); border: none;
+    .profile-header-info .meta {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
     }
-    .edit-profile-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.25); color: var(--dark-green); }
 
+    .profile-header-info .meta span {
+        font-size: 0.9rem;
+        opacity: 0.95;
+        color: #FFFFFF !important;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .profile-header-info .meta span i {
+        color: #FFFFFF !important;
+        font-size: 0.95rem;
+    }
+
+    /* ====================================================
+       4. REST OF PAGE STYLES (Untouched)
+       ==================================================== */
     .info-block {
-        background: var(--white); border-radius: 16px; padding: 25px;
-        box-shadow: var(--shadow); margin-bottom: 20px;
+        background: var(--white);
+        border-radius: 16px;
+        padding: 25px;
+        box-shadow: var(--shadow);
+        margin-bottom: 20px;
     }
 
     .info-block h6 {
-        font-size: 1rem; font-weight: 700; color: var(--dark-text);
-        margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px dashed var(--pale-green);
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--dark-text);
+        margin-bottom: 20px;
+        padding-bottom: 12px;
+        border-bottom: 2px dashed var(--pale-green);
     }
-    .info-block h6 i { color: var(--primary-green); margin-right: 8px; }
+
+    .info-block h6 i {
+        color: var(--primary-green);
+        margin-right: 8px;
+    }
 
     .info-item {
-        display: flex; gap: 15px; align-items: flex-start;
-        padding: 12px 0; border-bottom: 1px solid #F5F5F5;
+        display: flex;
+        gap: 15px;
+        align-items: flex-start;
+        padding: 12px 0;
+        border-bottom: 1px solid #F5F5F5;
     }
-    .info-item:last-child { border-bottom: none; }
+
+    .info-item:last-child {
+        border-bottom: none;
+    }
 
     .info-item .info-ico {
-        width: 40px; height: 40px; min-width: 40px; border-radius: 10px;
-        background: var(--pale-green); color: var(--primary-green);
-        display: flex; align-items: center; justify-content: center; font-size: 0.9rem;
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+        border-radius: 10px;
+        background: var(--pale-green);
+        color: var(--primary-green);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.9rem;
     }
 
-    .info-item .info-txt { flex: 1; }
-    .info-item .info-txt .lbl {
-        font-size: 0.72rem; color: var(--gray-text); text-transform: uppercase;
-        font-weight: 600; letter-spacing: 0.5px; margin-bottom: 3px;
+    .info-item .info-txt {
+        flex: 1;
     }
+
+    .info-item .info-txt .lbl {
+        font-size: 0.72rem;
+        color: var(--gray-text);
+        text-transform: uppercase;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        margin-bottom: 3px;
+    }
+
     .info-item .info-txt .val {
-        font-size: 0.95rem; color: var(--dark-text); font-weight: 500;
+        font-size: 0.95rem;
+        color: var(--dark-text);
+        font-weight: 500;
     }
 
     .activity-stat {
-        background: var(--white); border-radius: 14px; padding: 20px;
-        box-shadow: var(--shadow); text-align: center; transition: var(--transition);
+        background: var(--white);
+        border-radius: 14px;
+        padding: 20px;
+        box-shadow: var(--shadow);
+        text-align: center;
+        transition: var(--transition);
     }
-    .activity-stat:hover { transform: translateY(-3px); }
+
+    .activity-stat:hover {
+        transform: translateY(-3px);
+    }
+
     .activity-stat .ast-icon {
-        width: 55px; height: 55px; border-radius: 14px;
-        display: flex; align-items: center; justify-content: center;
-        color: var(--white); font-size: 1.3rem; margin: 0 auto 12px;
+        width: 55px;
+        height: 55px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--white);
+        font-size: 1.3rem;
+        margin: 0 auto 12px;
         background: linear-gradient(135deg, var(--primary-green), var(--light-green));
     }
-    .activity-stat .ast-val { font-size: 1.6rem; font-weight: 800; color: var(--dark-text); }
-    .activity-stat .ast-lbl { font-size: 0.8rem; color: var(--gray-text); }
+
+    .activity-stat .ast-val {
+        font-size: 1.6rem;
+        font-weight: 800;
+        color: var(--dark-text);
+    }
+
+    .activity-stat .ast-lbl {
+        font-size: 0.8rem;
+        color: var(--gray-text);
+    }
 </style>
 @endsection
 
 @section('content')
 
 @php
-    $admin = $admin ?? (object)[
-        'name' => session('admin_name') ?? 'Admin User',
-        'email' => 'admin@sanjivani.com',
-        'phone' => '9876543210',
-        'address' => '123 Health Street, Medical Plaza, Mumbai',
-        'created_at' => now()->subYears(3),
-        'last_login' => now()->subHours(2),
-    ];
+$admin = $admin ?? (object)[
+'name' => session('admin_name') ?? 'Dhara Desai',
+'email' => 'dhara@gmail.com',
+'phone' => '9830011223',
+'address' => '123 Health Street, Medical Plaza, Mumbai',
+'created_at' => now()->subYears(3),
+'last_login' => now()->subHours(2),
+'avatar' => null,
+'rating' => 4.7
+];
 @endphp
 
 <div class="profile-header-card" data-aos="fade-down">
     <div class="profile-header-inner">
-        <div class="profile-avatar-big">{{ strtoupper(substr($admin->name, 0, 1)) }}</div>
+
+        <!-- Avatar -->
+        <div class="profile-avatar-big">
+            @if(!empty($admin->avatar) && file_exists(public_path('images/'.$admin->avatar)))
+            <img src="{{ asset('images/'.$admin->avatar) }}" alt="{{ $admin->name }}">
+            @else
+            {{ strtoupper(substr($admin->name, 0, 1)) }}
+            @endif
+        </div>
+
+        <!-- Info -->
         <div class="profile-header-info">
-            <h2>{{ $admin->name }}</h2>
+            <div class="name-row">
+                <h2>{{ $admin->name }}</h2>
+                <span class="rating-badge"><i class="fas fa-star"></i> {{ $admin->rating }}</span>
+            </div>
             <span class="role"><i class="fas fa-shield-halved me-1"></i> Administrator</span>
             <div class="meta">
-                <span><i class="fas fa-envelope"></i> {{ $admin->email }}</span>
                 <span><i class="fas fa-phone"></i> {{ $admin->phone }}</span>
-                <span><i class="fas fa-calendar"></i> Joined {{ date('M Y', strtotime($admin->created_at)) }}</span>
+                <span><i class="fas fa-envelope"></i> {{ $admin->email }}</span>
+                <span><i class="fas fa-calendar"></i> Since {{ date('M Y', strtotime($admin->created_at)) }}</span>
             </div>
         </div>
-        <a href="{{ url('/admin/edit-profile') }}" class="edit-profile-btn">
-            <i class="fas fa-edit"></i> Edit Profile
-        </a>
+
     </div>
 </div>
 

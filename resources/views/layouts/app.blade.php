@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ __('messages.brand_name') }} - @yield('title', 'Online Medicine Delivery')</title>
+    <title>{{ $appStrings['brand_name'] ?? 'Sanjivani' }} - @yield('title', 'Online Medicine Delivery')</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -14,7 +14,6 @@
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
     <style>
-        /* --- ALL YOUR EXISTING CSS STAYS THE SAME --- */
         :root {
             --primary-green: #2E7D32;
             --dark-green: #1B5E20;
@@ -243,7 +242,6 @@
             color: var(--dark-green);
         }
 
-        /* ==== LANGUAGE SWITCH BUTTON (new) ==== */
         .btn-lang-switch {
             background: rgba(255, 255, 255, 0.15);
             border: 2px solid rgba(255, 255, 255, 0.6);
@@ -620,10 +618,6 @@
         }
 
         @media (max-width: 576px) {
-            .newsletter-form {
-                flex-direction: column;
-            }
-
             .back-to-top {
                 bottom: 20px;
                 right: 20px;
@@ -684,10 +678,54 @@
 
 <body>
 
+    {{-- ========================================================
+         GOOGLE TRANSLATOR BATCH FOR LAYOUT
+         ======================================================== --}}
+    @php
+    use App\Services\GoogleTranslator;
+
+    $appStrings = GoogleTranslator::translateBatch([
+    'brand_name' => 'Sanjivani',
+    'brand_tagline' => 'Your Health Priority',
+    'topbar_delivery' => 'Free Delivery on orders above ₹500',
+    'topbar_genuine' => '100% Genuine Medicines',
+    'nav_home' => 'Home',
+    'nav_about' => 'About',
+    'nav_contact' => 'Contact',
+    'nav_dashboard' => 'Dashboard',
+    'nav_logout' => 'Logout',
+    'nav_login' => 'Login',
+    'nav_register' => 'Register',
+    'lang_gujarati' => 'ગુજરાતી',
+    'lang_english' => 'English',
+
+    'footer_desc' => 'Your trusted online pharmacy delivering genuine medicines right to your doorstep. We connect you with verified local pharmacies for safe and reliable healthcare.',
+    'footer_quick_links' => 'Quick Links',
+    'footer_about_us' => 'About Us',
+    'footer_services' => 'Services',
+    'footer_medicine_delivery'=> 'Medicine Delivery',
+    'footer_prescription' => 'Prescription',
+    'footer_health_checkup' => 'Health Checkup',
+    'footer_lab_tests' => 'Lab Tests',
+    'footer_health_tips' => 'Health Tips',
+    'footer_contact_us' => 'Contact Us',
+    'footer_address' => 'Address',
+    'footer_address_value' => '123 Health Street, Medical Plaza, India - 400001',
+    'footer_phone' => 'Phone',
+    'footer_phone_value' => '+91 98765 43210 / +91 12345 67890',
+    'footer_email' => 'Email',
+    'footer_working_hours' => 'Working Hours',
+    'footer_working_hours_value'=> 'Mon - Sat: 8:00 AM - 10:00 PM',
+    'footer_rights' => 'All Rights Reserved.',
+    'footer_made_with' => 'Made with',
+    'footer_for_healthcare' => 'for better healthcare.'
+    ]);
+    @endphp
+
     <div class="page-loader" id="pageLoader">
         <div class="loader-content">
             <div class="spinner"></div>
-            <p><i class="fas fa-leaf"></i> {{ __('messages.brand_name') }}</p>
+            <p><i class="fas fa-leaf"></i> {{ $appStrings['brand_name'] }}</p>
         </div>
     </div>
 
@@ -701,9 +739,9 @@
                         <a href="tel:+919876543210"><i class="fas fa-phone me-1"></i> +91 98765 43210</a>
                     </div>
                     <div>
-                        <a href="#"><i class="fas fa-truck me-1"></i> {{ __('messages.topbar_delivery') }}</a>
+                        <a href="#"><i class="fas fa-truck me-1"></i> {{ $appStrings['topbar_delivery'] }}</a>
                         <span class="separator">|</span>
-                        <a href="#"><i class="fas fa-shield-halved me-1"></i> {{ __('messages.topbar_genuine') }}</a>
+                        <a href="#"><i class="fas fa-shield-halved me-1"></i> {{ $appStrings['topbar_genuine'] }}</a>
                     </div>
                 </div>
             </div>
@@ -721,8 +759,8 @@
                             @endif
                         </div>
                         <div class="brand-text">
-                            <span class="brand-name">{{ __('messages.brand_name') }}</span>
-                            <span class="brand-tagline">{{ __('messages.brand_tagline') }}</span>
+                            <span class="brand-name">{{ $appStrings['brand_name'] }}</span>
+                            <span class="brand-tagline">{{ $appStrings['brand_tagline'] }}</span>
                         </div>
                     </a>
 
@@ -732,25 +770,25 @@
 
                     <div class="d-none d-lg-flex align-items-center gap-1" id="desktopNav">
                         <a href="{{ url('/') }}" class="nav-link-custom {{ request()->is('/') ? 'active' : '' }}">
-                            <i class="fas fa-home me-1"></i> {{ __('messages.nav_home') }}
+                            <i class="fas fa-home me-1"></i> {{ $appStrings['nav_home'] }}
                         </a>
                         <a href="{{ url('/about') }}" class="nav-link-custom {{ request()->is('about') ? 'active' : '' }}">
-                            <i class="fas fa-info-circle me-1"></i> {{ __('messages.nav_about') }}
+                            <i class="fas fa-info-circle me-1"></i> {{ $appStrings['nav_about'] }}
                         </a>
                         <a href="{{ url('/contact') }}" class="nav-link-custom {{ request()->is('contact') ? 'active' : '' }}">
-                            <i class="fas fa-envelope me-1"></i> {{ __('messages.nav_contact') }}
+                            <i class="fas fa-envelope me-1"></i> {{ $appStrings['nav_contact'] }}
                         </a>
                     </div>
 
                     <div class="navbar-auth-btns d-none d-lg-flex">
-                        {{-- ========== LANGUAGE SWITCHER BUTTON ========== --}}
+                        {{-- LANGUAGE SWITCHER BUTTON --}}
                         @if(app()->getLocale() == 'gu')
                         <a href="{{ route('locale.switch', 'en') }}" class="btn-lang-switch" title="Switch to English">
-                            <i class="fas fa-globe"></i> {{ __('messages.lang_english') }}
+                            <i class="fas fa-globe"></i> {{ $appStrings['lang_english'] }}
                         </a>
                         @else
                         <a href="{{ route('locale.switch', 'gu') }}" class="btn-lang-switch" title="ગુજરાતીમાં બદલો">
-                            <i class="fas fa-globe"></i> {{ __('messages.lang_gujarati') }}
+                            <i class="fas fa-globe"></i> {{ $appStrings['lang_gujarati'] }}
                         </a>
                         @endif
 
@@ -764,17 +802,17 @@
                         elseif($role == 'delivery') $dashboardUrl = url('/delivery/dashboard');
                         @endphp
                         <a href="{{ $dashboardUrl }}" class="btn-nav-login">
-                            <i class="fas fa-tachometer-alt me-1"></i> {{ __('messages.nav_dashboard') }}
+                            <i class="fas fa-tachometer-alt me-1"></i> {{ $appStrings['nav_dashboard'] }}
                         </a>
                         <a href="{{ url('/logout') }}" class="btn-nav-register">
-                            <i class="fas fa-sign-out-alt me-1"></i> {{ __('messages.nav_logout') }}
+                            <i class="fas fa-sign-out-alt me-1"></i> {{ $appStrings['nav_logout'] }}
                         </a>
                         @else
                         <a href="{{ url('/login') }}" class="btn-nav-login">
-                            <i class="fas fa-sign-in-alt me-1"></i> {{ __('messages.nav_login') }}
+                            <i class="fas fa-sign-in-alt me-1"></i> {{ $appStrings['nav_login'] }}
                         </a>
                         <a href="{{ url('/register') }}" class="btn-nav-register">
-                            <i class="fas fa-user-plus me-1"></i> {{ __('messages.nav_register') }}
+                            <i class="fas fa-user-plus me-1"></i> {{ $appStrings['nav_register'] }}
                         </a>
                         @endif
                     </div>
@@ -783,39 +821,39 @@
                 <div class="d-lg-none" id="mobileMenu" style="display: none;">
                     <div class="navbar-collapse mt-3">
                         <a href="{{ url('/') }}" class="nav-link-custom d-block {{ request()->is('/') ? 'active' : '' }}">
-                            <i class="fas fa-home me-2"></i> {{ __('messages.nav_home') }}
+                            <i class="fas fa-home me-2"></i> {{ $appStrings['nav_home'] }}
                         </a>
                         <a href="{{ url('/about') }}" class="nav-link-custom d-block {{ request()->is('about') ? 'active' : '' }}">
-                            <i class="fas fa-info-circle me-2"></i> {{ __('messages.nav_about') }}
+                            <i class="fas fa-info-circle me-2"></i> {{ $appStrings['nav_about'] }}
                         </a>
                         <a href="{{ url('/contact') }}" class="nav-link-custom d-block {{ request()->is('contact') ? 'active' : '' }}">
-                            <i class="fas fa-envelope me-2"></i> {{ __('messages.nav_contact') }}
+                            <i class="fas fa-envelope me-2"></i> {{ $appStrings['nav_contact'] }}
                         </a>
                         <div class="navbar-auth-btns">
                             {{-- Language Switcher (mobile) --}}
                             @if(app()->getLocale() == 'gu')
                             <a href="{{ route('locale.switch', 'en') }}" class="btn-lang-switch">
-                                <i class="fas fa-globe"></i> {{ __('messages.lang_english') }}
+                                <i class="fas fa-globe"></i> {{ $appStrings['lang_english'] }}
                             </a>
                             @else
                             <a href="{{ route('locale.switch', 'gu') }}" class="btn-lang-switch">
-                                <i class="fas fa-globe"></i> {{ __('messages.lang_gujarati') }}
+                                <i class="fas fa-globe"></i> {{ $appStrings['lang_gujarati'] }}
                             </a>
                             @endif
 
                             @if(session('user_id'))
                             <a href="{{ $dashboardUrl ?? '#' }}" class="btn-nav-login">
-                                <i class="fas fa-tachometer-alt me-1"></i> {{ __('messages.nav_dashboard') }}
+                                <i class="fas fa-tachometer-alt me-1"></i> {{ $appStrings['nav_dashboard'] }}
                             </a>
                             <a href="{{ url('/logout') }}" class="btn-nav-register">
-                                <i class="fas fa-sign-out-alt me-1"></i> {{ __('messages.nav_logout') }}
+                                <i class="fas fa-sign-out-alt me-1"></i> {{ $appStrings['nav_logout'] }}
                             </a>
                             @else
                             <a href="{{ url('/login') }}" class="btn-nav-login">
-                                <i class="fas fa-sign-in-alt me-1"></i> {{ __('messages.nav_login') }}
+                                <i class="fas fa-sign-in-alt me-1"></i> {{ $appStrings['nav_login'] }}
                             </a>
                             <a href="{{ url('/register') }}" class="btn-nav-register">
-                                <i class="fas fa-user-plus me-1"></i> {{ __('messages.nav_register') }}
+                                <i class="fas fa-user-plus me-1"></i> {{ $appStrings['nav_register'] }}
                             </a>
                             @endif
                         </div>
@@ -853,9 +891,9 @@
                     <div class="col-lg-4 col-md-6">
                         <div class="footer-brand">
                             <div class="brand-icon"><i class="fas fa-leaf"></i></div>
-                            <h3>{{ __('messages.brand_name') }}</h3>
+                            <h3>{{ $appStrings['brand_name'] }}</h3>
                         </div>
-                        <p class="footer-desc">{{ __('messages.footer_desc') }}</p>
+                        <p class="footer-desc">{{ $appStrings['footer_desc'] }}</p>
                         <div class="footer-social">
                             <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
                             <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
@@ -866,55 +904,55 @@
                     </div>
 
                     <div class="col-lg-2 col-md-6">
-                        <h5 class="footer-heading">{{ __('messages.footer_quick_links') }}</h5>
+                        <h5 class="footer-heading">{{ $appStrings['footer_quick_links'] }}</h5>
                         <ul class="footer-links">
-                            <li><a href="{{ url('/') }}"><i class="fas fa-chevron-right"></i> {{ __('messages.nav_home') }}</a></li>
-                            <li><a href="{{ url('/about') }}"><i class="fas fa-chevron-right"></i> {{ __('messages.footer_about_us') }}</a></li>
-                            <li><a href="{{ url('/contact') }}"><i class="fas fa-chevron-right"></i> {{ __('messages.nav_contact') }}</a></li>
-                            <li><a href="{{ url('/login') }}"><i class="fas fa-chevron-right"></i> {{ __('messages.nav_login') }}</a></li>
-                            <li><a href="{{ url('/register') }}"><i class="fas fa-chevron-right"></i> {{ __('messages.nav_register') }}</a></li>
+                            <li><a href="{{ url('/') }}"><i class="fas fa-chevron-right"></i> {{ $appStrings['nav_home'] }}</a></li>
+                            <li><a href="{{ url('/about') }}"><i class="fas fa-chevron-right"></i> {{ $appStrings['footer_about_us'] }}</a></li>
+                            <li><a href="{{ url('/contact') }}"><i class="fas fa-chevron-right"></i> {{ $appStrings['nav_contact'] }}</a></li>
+                            <li><a href="{{ url('/login') }}"><i class="fas fa-chevron-right"></i> {{ $appStrings['nav_login'] }}</a></li>
+                            <li><a href="{{ url('/register') }}"><i class="fas fa-chevron-right"></i> {{ $appStrings['nav_register'] }}</a></li>
                         </ul>
                     </div>
 
                     <div class="col-lg-2 col-md-6">
-                        <h5 class="footer-heading">{{ __('messages.footer_services') }}</h5>
+                        <h5 class="footer-heading">{{ $appStrings['footer_services'] }}</h5>
                         <ul class="footer-links">
-                            <li><a href="#"><i class="fas fa-chevron-right"></i> {{ __('messages.footer_medicine_delivery') }}</a></li>
-                            <li><a href="#"><i class="fas fa-chevron-right"></i> {{ __('messages.footer_prescription') }}</a></li>
-                            <li><a href="#"><i class="fas fa-chevron-right"></i> {{ __('messages.footer_health_checkup') }}</a></li>
-                            <li><a href="#"><i class="fas fa-chevron-right"></i> {{ __('messages.footer_lab_tests') }}</a></li>
-                            <li><a href="#"><i class="fas fa-chevron-right"></i> {{ __('messages.footer_health_tips') }}</a></li>
+                            <li><a href="#"><i class="fas fa-chevron-right"></i> {{ $appStrings['footer_medicine_delivery'] }}</a></li>
+                            <li><a href="#"><i class="fas fa-chevron-right"></i> {{ $appStrings['footer_prescription'] }}</a></li>
+                            <li><a href="#"><i class="fas fa-chevron-right"></i> {{ $appStrings['footer_health_checkup'] }}</a></li>
+                            <li><a href="#"><i class="fas fa-chevron-right"></i> {{ $appStrings['footer_lab_tests'] }}</a></li>
+                            <li><a href="#"><i class="fas fa-chevron-right"></i> {{ $appStrings['footer_health_tips'] }}</a></li>
                         </ul>
                     </div>
 
                     <div class="col-lg-4 col-md-6">
-                        <h5 class="footer-heading">{{ __('messages.footer_contact_us') }}</h5>
+                        <h5 class="footer-heading">{{ $appStrings['footer_contact_us'] }}</h5>
                         <div class="footer-contact-item">
                             <div class="icon-box"><i class="fas fa-map-marker-alt"></i></div>
                             <div class="contact-text">
-                                <strong>{{ __('messages.footer_address') }}</strong>
-                                {{ __('messages.footer_address_value') }}
+                                <strong>{{ $appStrings['footer_address'] }}</strong>
+                                {{ $appStrings['footer_address_value'] }}
                             </div>
                         </div>
                         <div class="footer-contact-item">
                             <div class="icon-box"><i class="fas fa-phone-alt"></i></div>
                             <div class="contact-text">
-                                <strong>{{ __('messages.footer_phone') }}</strong>
-                                {{ __('messages.footer_phone_value') }}
+                                <strong>{{ $appStrings['footer_phone'] }}</strong>
+                                {{ $appStrings['footer_phone_value'] }}
                             </div>
                         </div>
                         <div class="footer-contact-item">
                             <div class="icon-box"><i class="fas fa-envelope"></i></div>
                             <div class="contact-text">
-                                <strong>{{ __('messages.footer_email') }}</strong>
+                                <strong>{{ $appStrings['footer_email'] }}</strong>
                                 support@sanjivani.com
                             </div>
                         </div>
                         <div class="footer-contact-item">
                             <div class="icon-box"><i class="fas fa-clock"></i></div>
                             <div class="contact-text">
-                                <strong>{{ __('messages.footer_working_hours') }}</strong>
-                                {{ __('messages.footer_working_hours_value') }}
+                                <strong>{{ $appStrings['footer_working_hours'] }}</strong>
+                                {{ $appStrings['footer_working_hours_value'] }}
                             </div>
                         </div>
                     </div>
@@ -925,8 +963,8 @@
         <div class="footer-bottom">
             <div class="container">
                 <p>
-                    &copy; {{ date('Y') }} <a href="{{ url('/') }}">Sanjivani</a>. {{ __('messages.footer_rights') }}
-                    {{ __('messages.footer_made_with') }} <i class="fas fa-heart text-danger"></i> {{ __('messages.footer_for_healthcare') }}
+                    &copy; {{ date('Y') }} <a href="{{ url('/') }}">Sanjivani</a>. {{ $appStrings['footer_rights'] }}
+                    {{ $appStrings['footer_made_with'] }} <i class="fas fa-heart text-danger"></i> {{ $appStrings['footer_for_healthcare'] }}
                 </p>
             </div>
         </div>
@@ -971,6 +1009,7 @@
                 scrollTop: 0
             }, 600);
         }
+
         setTimeout(function() {
             $('.sanjivani-alert').fadeOut(500, function() {
                 $(this).remove();

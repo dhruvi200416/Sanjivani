@@ -2,7 +2,7 @@
 
 @section('title', 'Order Details')
 @section('page_title')
-<i class="fas fa-file-invoice"></i> Order Details
+<i class="fas fa-file-invoice"></i> {{ app(\App\Services\GoogleTranslator::class)->translate('Order Details') }}
 @endsection
 
 @section('styles')
@@ -231,23 +231,52 @@
 @section('content')
 
 @php
-$order = $order ?? (object)[
-'id'=>101, 'created_at'=>now()->subHours(2), 'status'=>'pending',
-'payment_method'=>'cod', 'payment_status'=>'pending',
-'total_amount'=>780, 'subtotal'=>730, 'delivery_fee'=>50, 'tax'=>0,
-'delivery_address'=>'House 45, Gandhi Road, Nashik - 422001',
-'notes'=>'Deliver after 6 PM',
-];
-$customer = $customer ?? (object)['name'=>'Ramesh Patil','phone'=>'9876543210','email'=>'ramesh@example.com','village'=>(object)['name'=>'Nashik']];
-$items = $items ?? [
-(object)['name'=>'Paracetamol 500mg','brand'=>'Crocin','price'=>25,'quantity'=>4,'total'=>100],
-(object)['name'=>'Vitamin C 500mg','brand'=>'Limcee','price'=>180,'quantity'=>2,'total'=>360],
-(object)['name'=>'Cough Syrup 100ml','brand'=>'Benadryl','price'=>145,'quantity'=>2,'total'=>290],
-];
+use App\Services\GoogleTranslator;
+
+// The controller is now properly providing $order, $customer, and $items.
 $st = $order->status;
+
+// Safely get the village name (fixes the null error)
+$villageName = $customer->village->name ?? 'N/A';
+$translatedVillage = GoogleTranslator::translate($villageName);
+$translatedAddress = GoogleTranslator::translate($order->delivery_address);
+$translatedNotes = !empty($order->notes) ? GoogleTranslator::translate($order->notes) : '';
+
+$strings = GoogleTranslator::translateBatch([
+'back_orders' => 'Back to Orders',
+'cust_details' => 'Customer Details',
+'lbl_name' => 'Name',
+'lbl_phone' => 'Phone',
+'lbl_email' => 'Email',
+'lbl_village' => 'Village',
+'lbl_address' => 'Delivery Address',
+'lbl_notes' => 'Notes',
+'order_items' => 'Order Items',
+'th_med' => 'Medicine',
+'th_brand' => 'Brand',
+'th_qty' => 'Qty',
+'th_price' => 'Price',
+'th_total' => 'Total',
+'lbl_subtotal' => 'Subtotal',
+'lbl_delivery' => 'Delivery',
+'lbl_total' => 'Total',
+'actions' => 'Actions',
+'btn_confirm' => 'Confirm Order',
+'btn_process' => 'Start Processing',
+'btn_ship' => 'Hand to Delivery',
+'btn_print' => 'Print Invoice',
+'btn_cancel' => 'Cancel Order',
+'payment' => 'Payment',
+'lbl_method' => 'Method',
+'lbl_status' => 'Status',
+'lbl_amount' => 'Amount',
+'js_update_status' => 'Update order status to ":status"?',
+'js_updating' => 'Updating...',
+'js_cancel_confirm' => '⚠ Cancel this order? This cannot be undone.'
+]);
 @endphp
 
-<a href="{{ url('/pharmacy/orders') }}" class="back-btn-ph"><i class="fas fa-arrow-left"></i> Back to Orders</a>
+<a href="{{ url('/pharmacy/orders') }}" class="back-btn-ph"><i class="fas fa-arrow-left"></i> {{ $strings['back_orders'] }}</a>
 
 <div class="ord-header-ph">
     <div class="row align-items-center">
@@ -257,7 +286,7 @@ $st = $order->status;
         </div>
         <div class="col-md-4 text-md-end">
             <span class="st-badge-ph stb-{{ $st }}" style="font-size:0.9rem;padding:8px 18px;">
-                {{ ucfirst(str_replace('_',' ',$st)) }}
+                {{ app(\App\Services\GoogleTranslator::class)->translate(ucfirst(str_replace('_',' ',$st))) }}
             </span>
         </div>
     </div>
@@ -267,14 +296,14 @@ $st = $order->status;
     <div class="col-lg-8">
         <!-- Customer -->
         <div class="info-block-ph">
-            <h6><i class="fas fa-user"></i> Customer Details</h6>
+            <h6><i class="fas fa-user"></i> {{ $strings['cust_details'] }}</h6>
             <div class="row">
                 <div class="col-md-6">
                     <div class="info-row-ph">
                         <div class="info-ico-ph"><i class="fas fa-user"></i></div>
                         <div class="info-txt-ph">
-                            <div class="lbl">Name</div>
-                            <div class="val">{{ $customer->name }}</div>
+                            <div class="lbl">{{ $strings['lbl_name'] }}</div>
+                            <div class="val">{{ $customer->name ?? 'N/A' }}</div>
                         </div>
                     </div>
                 </div>
@@ -282,8 +311,8 @@ $st = $order->status;
                     <div class="info-row-ph">
                         <div class="info-ico-ph"><i class="fas fa-phone"></i></div>
                         <div class="info-txt-ph">
-                            <div class="lbl">Phone</div>
-                            <div class="val"><a href="tel:{{ $customer->phone }}" style="color:var(--primary-green);">{{ $customer->phone }}</a></div>
+                            <div class="lbl">{{ $strings['lbl_phone'] }}</div>
+                            <div class="val"><a href="tel:{{ $customer->phone ?? '' }}" style="color:var(--primary-green);">{{ $customer->phone ?? 'N/A' }}</a></div>
                         </div>
                     </div>
                 </div>
@@ -291,8 +320,8 @@ $st = $order->status;
                     <div class="info-row-ph">
                         <div class="info-ico-ph"><i class="fas fa-envelope"></i></div>
                         <div class="info-txt-ph">
-                            <div class="lbl">Email</div>
-                            <div class="val">{{ $customer->email }}</div>
+                            <div class="lbl">{{ $strings['lbl_email'] }}</div>
+                            <div class="val">{{ $customer->email ?? 'N/A' }}</div>
                         </div>
                     </div>
                 </div>
@@ -300,8 +329,8 @@ $st = $order->status;
                     <div class="info-row-ph">
                         <div class="info-ico-ph"><i class="fas fa-map-marker-alt"></i></div>
                         <div class="info-txt-ph">
-                            <div class="lbl">Village</div>
-                            <div class="val">{{ $customer->village->name }}</div>
+                            <div class="lbl">{{ $strings['lbl_village'] }}</div>
+                            <div class="val">{{ $translatedVillage }}</div>
                         </div>
                     </div>
                 </div>
@@ -309,8 +338,8 @@ $st = $order->status;
                     <div class="info-row-ph">
                         <div class="info-ico-ph"><i class="fas fa-home"></i></div>
                         <div class="info-txt-ph">
-                            <div class="lbl">Delivery Address</div>
-                            <div class="val">{{ $order->delivery_address }}</div>
+                            <div class="lbl">{{ $strings['lbl_address'] }}</div>
+                            <div class="val">{{ $translatedAddress }}</div>
                         </div>
                     </div>
                 </div>
@@ -319,8 +348,8 @@ $st = $order->status;
                     <div class="info-row-ph">
                         <div class="info-ico-ph" style="background:#FFF3E0;color:#FB8C00;"><i class="fas fa-sticky-note"></i></div>
                         <div class="info-txt-ph">
-                            <div class="lbl">Notes</div>
-                            <div class="val">{{ $order->notes }}</div>
+                            <div class="lbl">{{ $strings['lbl_notes'] }}</div>
+                            <div class="val">{{ $translatedNotes }}</div>
                         </div>
                     </div>
                 </div>
@@ -330,26 +359,26 @@ $st = $order->status;
 
         <!-- Items -->
         <div class="info-block-ph">
-            <h6><i class="fas fa-shopping-bag"></i> Order Items ({{ count($items) }})</h6>
+            <h6><i class="fas fa-shopping-bag"></i> {{ $strings['order_items'] }} ({{ count($items) }})</h6>
             <div class="table-responsive">
                 <table class="items-table-ph">
                     <thead>
                         <tr>
-                            <th>Medicine</th>
-                            <th>Brand</th>
-                            <th class="text-center">Qty</th>
-                            <th class="text-end">Price</th>
-                            <th class="text-end">Total</th>
+                            <th>{{ $strings['th_med'] }}</th>
+                            <th>{{ $strings['th_brand'] }}</th>
+                            <th class="text-center">{{ $strings['th_qty'] }}</th>
+                            <th class="text-end">{{ $strings['th_price'] }}</th>
+                            <th class="text-end">{{ $strings['th_total'] }}</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($items as $item)
                         <tr>
-                            <td style="font-weight:600;">{{ $item->name }}</td>
-                            <td style="color:var(--gray-text);">{{ $item->brand }}</td>
+                            <td style="font-weight:600;">{{ GoogleTranslator::translate($item->medicine->name ?? $item->name ?? 'N/A') }}</td>
+                            <td style="color:var(--gray-text);">{{ GoogleTranslator::translate($item->medicine->brand ?? $item->brand ?? 'N/A') }}</td>
                             <td class="text-center"><span style="background:var(--pale-green);color:var(--primary-green);padding:3px 10px;border-radius:12px;font-weight:600;">×{{ $item->quantity }}</span></td>
                             <td class="text-end">₹{{ number_format($item->price) }}</td>
-                            <td class="text-end" style="font-weight:700;color:var(--primary-green);">₹{{ number_format($item->total) }}</td>
+                            <td class="text-end" style="font-weight:700;color:var(--primary-green);">₹{{ number_format($item->total ?? ($item->price * $item->quantity)) }}</td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -358,9 +387,9 @@ $st = $order->status;
             <div style="padding:15px 0 0;border-top:2px dashed var(--pale-green);margin-top:10px;">
                 <div class="row justify-content-end">
                     <div class="col-md-5">
-                        <div class="summary-row-ph"><span>Subtotal</span><span>₹{{ number_format($order->subtotal) }}</span></div>
-                        <div class="summary-row-ph"><span>Delivery</span><span>₹{{ number_format($order->delivery_fee) }}</span></div>
-                        <div class="summary-row-ph total"><span>Total</span><span>₹{{ number_format($order->total_amount) }}</span></div>
+                        <div class="summary-row-ph"><span>{{ $strings['lbl_subtotal'] }}</span><span>₹{{ number_format($order->subtotal ?? 0) }}</span></div>
+                        <div class="summary-row-ph"><span>{{ $strings['lbl_delivery'] }}</span><span>₹{{ number_format($order->delivery_fee ?? 0) }}</span></div>
+                        <div class="summary-row-ph total"><span>{{ $strings['lbl_total'] }}</span><span>₹{{ number_format($order->total_amount ?? 0) }}</span></div>
                     </div>
                 </div>
             </div>
@@ -370,46 +399,48 @@ $st = $order->status;
     <div class="col-lg-4">
         <!-- Actions -->
         <div class="info-block-ph">
-            <h6><i class="fas fa-bolt"></i> Actions</h6>
+            <h6><i class="fas fa-bolt"></i> {{ $strings['actions'] }}</h6>
             <div class="action-btns-ph">
                 @if($st == 'pending')
-                <button type="button" class="act-btn-ph act-confirm btn-status-ph" data-status="confirmed"><i class="fas fa-check"></i> Confirm Order</button>
+                <button type="button" class="act-btn-ph act-confirm btn-status-ph" data-status="confirmed"><i class="fas fa-check"></i> {{ $strings['btn_confirm'] }}</button>
                 @endif
                 @if($st == 'confirmed')
-                <button type="button" class="act-btn-ph act-process btn-status-ph" data-status="processing"><i class="fas fa-cogs"></i> Start Processing</button>
+                <button type="button" class="act-btn-ph act-process btn-status-ph" data-status="processing"><i class="fas fa-cogs"></i> {{ $strings['btn_process'] }}</button>
                 @endif
                 @if($st == 'processing')
-                <button type="button" class="act-btn-ph act-ship btn-status-ph" data-status="out_for_delivery"><i class="fas fa-motorcycle"></i> Hand to Delivery</button>
+                <button type="button" class="act-btn-ph act-ship btn-status-ph" data-status="out_for_delivery"><i class="fas fa-motorcycle"></i> {{ $strings['btn_ship'] }}</button>
                 @endif
-                <button type="button" class="act-btn-ph act-print" onclick="window.print()"><i class="fas fa-print"></i> Print Invoice</button>
+                <button type="button" class="act-btn-ph act-print" onclick="window.print()"><i class="fas fa-print"></i> {{ $strings['btn_print'] }}</button>
                 @if(!in_array($st, ['delivered','cancelled']))
-                <button type="button" class="act-btn-ph act-cancel" id="cancelOrdPh"><i class="fas fa-times"></i> Cancel Order</button>
+                <button type="button" class="act-btn-ph act-cancel" id="cancelOrdPh"><i class="fas fa-times"></i> {{ $strings['btn_cancel'] }}</button>
                 @endif
             </div>
         </div>
 
         <!-- Payment -->
         <div class="info-block-ph">
-            <h6><i class="fas fa-money-bill-wave"></i> Payment</h6>
+            <h6><i class="fas fa-money-bill-wave"></i> {{ $strings['payment'] }}</h6>
             <div class="info-row-ph">
                 <div class="info-ico-ph"><i class="fas fa-credit-card"></i></div>
                 <div class="info-txt-ph">
-                    <div class="lbl">Method</div>
-                    <div class="val">{{ strtoupper($order->payment_method) }}</div>
+                    <div class="lbl">{{ $strings['lbl_method'] }}</div>
+                    <div class="val">{{ strtoupper($order->payment_method ?? 'COD') }}</div>
                 </div>
             </div>
             <div class="info-row-ph">
                 <div class="info-ico-ph"><i class="fas fa-check-circle"></i></div>
                 <div class="info-txt-ph">
-                    <div class="lbl">Status</div>
-                    <div class="val" style="color:{{ $order->payment_status=='paid' ? '#2E7D32' : '#FB8C00' }};font-weight:700;">{{ strtoupper($order->payment_status) }}</div>
+                    <div class="lbl">{{ $strings['lbl_status'] }}</div>
+                    <div class="val" style="color:{{ ($order->payment_status ?? '') == 'paid' ? '#2E7D32' : '#FB8C00' }};font-weight:700;">
+                        {{ app(\App\Services\GoogleTranslator::class)->translate(strtoupper($order->payment_status ?? 'PENDING')) }}
+                    </div>
                 </div>
             </div>
             <div class="info-row-ph">
                 <div class="info-ico-ph"><i class="fas fa-rupee-sign"></i></div>
                 <div class="info-txt-ph">
-                    <div class="lbl">Amount</div>
-                    <div class="val" style="font-size:1.15rem;font-weight:800;color:var(--primary-green);">₹{{ number_format($order->total_amount) }}</div>
+                    <div class="lbl">{{ $strings['lbl_amount'] }}</div>
+                    <div class="val" style="font-size:1.15rem;font-weight:800;color:var(--primary-green);">₹{{ number_format($order->total_amount ?? 0) }}</div>
                 </div>
             </div>
         </div>
@@ -421,18 +452,26 @@ $st = $order->status;
 @section('scripts')
 <script>
     $(document).ready(function() {
+
+        var jsStrings = {
+            updateStatus: @json($strings['js_update_status']),
+            updating: @json($strings['js_updating']),
+            cancelConfirm: @json($strings['js_cancel_confirm'])
+        };
+
         $('.btn-status-ph').on('click', function() {
             var status = $(this).data('status');
-            if (!confirm('Update order status to "' + status.replace('_', ' ') + '"?')) return;
+            var displayStatus = status.replace('_', ' ');
+            var msg = jsStrings.updateStatus.replace(':status', displayStatus);
+
+            if (!confirm(msg)) return;
+
             var $btn = $(this);
-            $btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Updating...');
+            $btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> ' + jsStrings.updating);
+
             $.post('{{ url("/pharmacy/order/update-status") }}', {
                 _token: '{{ csrf_token() }}',
-                order_id: {
-                    {
-                        $order - > id
-                    }
-                },
+                order_id: '{{ $order->id }}',
                 status: status
             }).always(function() {
                 location.reload();
@@ -440,7 +479,8 @@ $st = $order->status;
         });
 
         $('#cancelOrdPh').on('click', function() {
-            if (!confirm('⚠ Cancel this order? This cannot be undone.')) return;
+            if (!confirm(jsStrings.cancelConfirm)) return;
+
             var $f = $('<form>', {
                 method: 'POST',
                 action: '{{ url("/pharmacy/order/cancel") }}'

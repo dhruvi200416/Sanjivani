@@ -67,7 +67,7 @@
         right: -80px;
         width: 250px;
         height: 250px;
-        background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
         border-radius: 50%;
     }
 
@@ -351,9 +351,19 @@
     }
 
     @keyframes shake {
-        0%, 100% { transform: translateX(0); }
-        25% { transform: translateX(-5px); }
-        75% { transform: translateX(5px); }
+
+        0%,
+        100% {
+            transform: translateX(0);
+        }
+
+        25% {
+            transform: translateX(-5px);
+        }
+
+        75% {
+            transform: translateX(5px);
+        }
     }
 
     /* Remember + Forgot */
@@ -507,8 +517,15 @@
     }
 
     @keyframes slideDown {
-        from { transform: translateY(-10px); opacity: 0; }
-        to { transform: translateY(0); opacity: 1; }
+        from {
+            transform: translateY(-10px);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
     }
 
     .auth-alert.success {
@@ -529,12 +546,15 @@
             grid-template-columns: 1fr;
             max-width: 550px;
         }
+
         .auth-left {
             padding: 40px 35px;
         }
+
         .auth-welcome h2 {
             font-size: 1.6rem;
         }
+
         .auth-right {
             padding: 40px 35px;
         }
@@ -544,19 +564,25 @@
         .auth-section {
             padding: 100px 15px 40px;
         }
-        .auth-left, .auth-right {
+
+        .auth-left,
+        .auth-right {
             padding: 30px 25px;
         }
+
         .auth-title {
             font-size: 1.5rem;
         }
+
         .role-tabs {
             grid-template-columns: repeat(2, 1fr);
         }
+
         .role-tab {
             padding: 8px 4px;
             font-size: 0.72rem;
         }
+
         .form-options {
             flex-direction: column;
             align-items: flex-start;
@@ -567,6 +593,59 @@
 
 @section('content')
 
+{{-- Shared batch translation for the Login page --}}
+@php
+use App\Services\GoogleTranslator;
+
+$strings = GoogleTranslator::translateBatch([
+// ---- Left side / branding ----
+'brand_tagline' => 'Your Health Priority',
+'welcome_title' => 'Welcome Back!<br>Great to See You Again',
+'welcome_desc' => 'Log in to access your account and manage your medicine orders, prescriptions, or pharmacy dashboard — all in one place.',
+'feature_1' => 'Track your medicine orders in real-time',
+'feature_2' => 'Upload prescriptions easily & securely',
+'feature_3' => 'Fast doorstep delivery in 2-4 hours',
+'feature_4' => '24/7 customer support available',
+'new_here' => 'New here?',
+'create_account' => 'Create an account',
+
+// ---- Right side / form ----
+'sign_in_title' => 'Sign In',
+'sign_in_subtitle' => 'Choose your account type and enter your credentials to continue.',
+
+'role_customer' => 'Customer',
+'role_pharmacy' => 'Pharmacy',
+'role_delivery' => 'Delivery',
+'role_admin' => 'Admin',
+
+'label_email' => 'Email Address',
+'label_password' => 'Password',
+'ph_email_default' => 'you@example.com',
+'ph_email_customer' => 'you@example.com',
+'ph_email_pharmacy' => 'pharmacy@example.com',
+'ph_email_delivery' => 'delivery@example.com',
+'ph_email_admin' => 'admin@example.com',
+'ph_password' => 'Enter your password',
+
+'remember_me' => 'Remember me',
+'forgot_password' => 'Forgot password?',
+'forgot_password_alert' => 'Password reset feature coming soon!',
+'btn_login' => 'Login to Account',
+'btn_logging_in' => 'Logging In...',
+'divider_or' => 'OR',
+'no_account' => "Don't have an account yet?",
+'register_now' => 'Register Now',
+
+// ---- JS validation messages ----
+'js_email_required' => 'Please enter your email address.',
+'js_email_invalid' => 'Please enter a valid email address.',
+'js_email_long' => 'Email address is too long.',
+'js_password_required' => 'Please enter your password.',
+'js_password_short' => 'Password must be at least 6 characters.',
+'js_password_long' => 'Password is too long.',
+]);
+@endphp
+
 <section class="auth-section">
     <div class="container">
         <div class="auth-wrap" data-aos="zoom-in">
@@ -576,83 +655,82 @@
                 <div class="auth-brand">
                     <div class="brand-icon">
                         @if(file_exists(public_path('images/Sanjivani.jpeg')))
-                            <img src="{{ asset('images/Sanjivani.jpeg') }}" alt="Sanjivani">
+                        <img src="{{ asset('images/Sanjivani.jpeg') }}" alt="Sanjivani">
                         @else
-                            <i class="fas fa-leaf"></i>
+                        <i class="fas fa-leaf"></i>
                         @endif
                     </div>
                     <div>
                         <h4>Sanjivani</h4>
-                        <span>Your Health Priority</span>
+                        <span>{{ $strings['brand_tagline'] }}</span>
                     </div>
                 </div>
 
                 <div class="auth-welcome">
-                    <h2>Welcome Back!<br>Great to See You Again</h2>
+                    <h2>{!! $strings['welcome_title'] !!}</h2>
                     <p>
-                        Log in to access your account and manage your medicine orders, prescriptions,
-                        or pharmacy dashboard — all in one place.
+                        {{ $strings['welcome_desc'] }}
                     </p>
 
                     <ul class="auth-features">
                         <li>
                             <div class="icon"><i class="fas fa-check"></i></div>
-                            <span>Track your medicine orders in real-time</span>
+                            <span>{{ $strings['feature_1'] }}</span>
                         </li>
                         <li>
                             <div class="icon"><i class="fas fa-check"></i></div>
-                            <span>Upload prescriptions easily & securely</span>
+                            <span>{{ $strings['feature_2'] }}</span>
                         </li>
                         <li>
                             <div class="icon"><i class="fas fa-check"></i></div>
-                            <span>Fast doorstep delivery in 2-4 hours</span>
+                            <span>{{ $strings['feature_3'] }}</span>
                         </li>
                         <li>
                             <div class="icon"><i class="fas fa-check"></i></div>
-                            <span>24/7 customer support available</span>
+                            <span>{{ $strings['feature_4'] }}</span>
                         </li>
                     </ul>
                 </div>
 
                 <div class="auth-bottom-link">
                     <i class="fas fa-user-plus me-2"></i>
-                    New here? <a href="{{ url('/register') }}">Create an account</a>
+                    {{ $strings['new_here'] }} <a href="{{ url('/register') }}">{{ $strings['create_account'] }}</a>
                 </div>
             </div>
 
             <!-- ============ RIGHT SIDE - LOGIN FORM ============ -->
             <div class="auth-right">
-                <h2 class="auth-title">Sign In</h2>
-                <p class="auth-subtitle">Choose your account type and enter your credentials to continue.</p>
+                <h2 class="auth-title">{{ $strings['sign_in_title'] }}</h2>
+                <p class="auth-subtitle">{{ $strings['sign_in_subtitle'] }}</p>
 
                 <!-- Session Alerts -->
                 @if(session('login_error'))
-                    <div class="auth-alert error">
-                        <i class="fas fa-exclamation-circle"></i>
-                        {{ session('login_error') }}
-                    </div>
+                <div class="auth-alert error">
+                    <i class="fas fa-exclamation-circle"></i>
+                    {{ session('login_error') }}
+                </div>
                 @endif
 
                 @if(session('register_success'))
-                    <div class="auth-alert success">
-                        <i class="fas fa-check-circle"></i>
-                        {{ session('register_success') }}
-                    </div>
+                <div class="auth-alert success">
+                    <i class="fas fa-check-circle"></i>
+                    {{ session('register_success') }}
+                </div>
                 @endif
 
                 <!-- Role Tabs -->
                 <div class="role-tabs">
                     <button type="button" class="role-tab active" data-role="customer">
-                        <i class="fas fa-user"></i> Customer
+                        <i class="fas fa-user"></i> {{ $strings['role_customer'] }}
                     </button>
                     <button type="button" class="role-tab" data-role="pharmacy">
-                        <i class="fas fa-store"></i> Pharmacy
+                        <i class="fas fa-store"></i> {{ $strings['role_pharmacy'] }}
                     </button>
                     <button type="button" class="role-tab" data-role="delivery">
-                        <i class="fas fa-motorcycle"></i> Delivery
+                        <i class="fas fa-motorcycle"></i> {{ $strings['role_delivery'] }}
                     </button>
                     <button type="button" class="role-tab" data-role="admin">
-                        <i class="fas fa-user-shield"></i> Admin
+                        <i class="fas fa-user-shield"></i> {{ $strings['role_admin'] }}
                     </button>
                 </div>
 
@@ -662,26 +740,26 @@
                     <input type="hidden" name="role" id="roleInput" value="customer">
 
                     <div class="form-group-auth">
-                        <label class="form-label-auth">Email Address <span class="required">*</span></label>
+                        <label class="form-label-auth">{{ $strings['label_email'] }} <span class="required">*</span></label>
                         <div class="input-wrap">
                             <i class="fas fa-envelope input-icon-left"></i>
                             <input type="email" name="email" id="email"
-                                   class="form-control-auth"
-                                   placeholder="you@example.com"
-                                   value="{{ old('email') }}"
-                                   autocomplete="email">
+                                class="form-control-auth"
+                                placeholder="{{ $strings['ph_email_default'] }}"
+                                value="{{ old('email') }}"
+                                autocomplete="email">
                         </div>
                         <span class="error-message" id="emailError"></span>
                     </div>
 
                     <div class="form-group-auth">
-                        <label class="form-label-auth">Password <span class="required">*</span></label>
+                        <label class="form-label-auth">{{ $strings['label_password'] }} <span class="required">*</span></label>
                         <div class="input-wrap">
                             <i class="fas fa-lock input-icon-left"></i>
                             <input type="password" name="password" id="password"
-                                   class="form-control-auth"
-                                   placeholder="Enter your password"
-                                   autocomplete="current-password">
+                                class="form-control-auth"
+                                placeholder="{{ $strings['ph_password'] }}"
+                                autocomplete="current-password">
                             <i class="fas fa-eye input-icon-right" id="togglePassword"></i>
                         </div>
                         <span class="error-message" id="passwordError"></span>
@@ -690,25 +768,25 @@
                     <div class="form-options">
                         <div class="remember-check">
                             <input type="checkbox" name="remember" id="remember">
-                            <label for="remember">Remember me</label>
+                            <label for="remember">{{ $strings['remember_me'] }}</label>
                         </div>
-                        <a href="#" class="forgot-link" onclick="alert('Password reset feature coming soon!'); return false;">
-                            Forgot password?
+                        <a href="#" class="forgot-link" onclick="alert(@json($strings['forgot_password_alert'])); return false;">
+                            {{ $strings['forgot_password'] }}
                         </a>
                     </div>
 
                     <button type="submit" class="btn-auth-submit" id="submitBtn">
                         <i class="fas fa-sign-in-alt"></i>
-                        <span>Login to Account</span>
+                        <span>{{ $strings['btn_login'] }}</span>
                     </button>
 
                     <div class="auth-divider">
-                        <span>OR</span>
+                        <span>{{ $strings['divider_or'] }}</span>
                     </div>
 
                     <div class="auth-register-link">
-                        Don't have an account yet?
-                        <a href="{{ url('/register') }}">Register Now</a>
+                        {{ $strings['no_account'] }}
+                        <a href="{{ url('/register') }}">{{ $strings['register_now'] }}</a>
                     </div>
                 </form>
             </div>
@@ -721,159 +799,159 @@
 
 @section('scripts')
 <script>
-$(document).ready(function () {
+    $(document).ready(function() {
 
-    /* =============================================
-       ROLE TAB SWITCHING
-    ============================================= */
-    $('.role-tab').on('click', function () {
-        $('.role-tab').removeClass('active');
-        $(this).addClass('active');
-        var role = $(this).data('role');
-        $('#roleInput').val(role);
-
-        // Update placeholder based on role
-        var placeholders = {
-            'customer': 'you@example.com',
-            'pharmacy': 'pharmacy@example.com',
-            'delivery': 'delivery@example.com',
-            'admin':    'admin@example.com'
+        /* =============================================
+           ROLE TAB SWITCHING
+        ============================================= */
+        var emailPlaceholders = {
+            'customer': @json($strings['ph_email_customer']),
+            'pharmacy': @json($strings['ph_email_pharmacy']),
+            'delivery': @json($strings['ph_email_delivery']),
+            'admin': @json($strings['ph_email_admin'])
         };
-        $('#email').attr('placeholder', placeholders[role]);
-    });
 
-    // Auto-select role if passed via URL (?role=pharmacy)
-    var urlParams = new URLSearchParams(window.location.search);
-    var roleParam = urlParams.get('role');
-    if (roleParam) {
-        var $tab = $('.role-tab[data-role="' + roleParam + '"]');
-        if ($tab.length) $tab.trigger('click');
-    }
+        $('.role-tab').on('click', function() {
+            $('.role-tab').removeClass('active');
+            $(this).addClass('active');
+            var role = $(this).data('role');
+            $('#roleInput').val(role);
 
-    /* =============================================
-       PASSWORD SHOW / HIDE
-    ============================================= */
-    $('#togglePassword').on('click', function () {
-        var $pwd = $('#password');
-        var type = $pwd.attr('type') === 'password' ? 'text' : 'password';
-        $pwd.attr('type', type);
-        $(this).toggleClass('fa-eye fa-eye-slash');
-    });
+            $('#email').attr('placeholder', emailPlaceholders[role]);
+        });
 
-    /* =============================================
-       VALIDATION HELPERS
-    ============================================= */
-    function showError($input, message) {
-        $input.addClass('error').removeClass('success');
-        $input.closest('.form-group-auth').find('.error-message')
-              .text(message).addClass('show');
-    }
-
-    function showSuccess($input) {
-        $input.addClass('success').removeClass('error');
-        $input.closest('.form-group-auth').find('.error-message')
-              .text('').removeClass('show');
-    }
-
-    function clearField($input) {
-        $input.removeClass('error success');
-        $input.closest('.form-group-auth').find('.error-message')
-              .text('').removeClass('show');
-    }
-
-    /* -------- Email Validation -------- */
-    function validateEmail() {
-        var $el = $('#email');
-        var value = $.trim($el.val());
-        var regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
-        if (value === '') {
-            showError($el, '⚠ Please enter your email address.');
-            return false;
+        // Auto-select role if passed via URL (?role=pharmacy)
+        var urlParams = new URLSearchParams(window.location.search);
+        var roleParam = urlParams.get('role');
+        if (roleParam) {
+            var $tab = $('.role-tab[data-role="' + roleParam + '"]');
+            if ($tab.length) $tab.trigger('click');
         }
-        if (!regex.test(value)) {
-            showError($el, '⚠ Please enter a valid email address.');
-            return false;
+
+        /* =============================================
+           PASSWORD SHOW / HIDE
+        ============================================= */
+        $('#togglePassword').on('click', function() {
+            var $pwd = $('#password');
+            var type = $pwd.attr('type') === 'password' ? 'text' : 'password';
+            $pwd.attr('type', type);
+            $(this).toggleClass('fa-eye fa-eye-slash');
+        });
+
+        /* =============================================
+           VALIDATION HELPERS
+        ============================================= */
+        function showError($input, message) {
+            $input.addClass('error').removeClass('success');
+            $input.closest('.form-group-auth').find('.error-message')
+                .text(message).addClass('show');
         }
-        if (value.length > 100) {
-            showError($el, '⚠ Email address is too long.');
-            return false;
+
+        function showSuccess($input) {
+            $input.addClass('success').removeClass('error');
+            $input.closest('.form-group-auth').find('.error-message')
+                .text('').removeClass('show');
         }
-        showSuccess($el);
-        return true;
-    }
 
-    /* -------- Password Validation -------- */
-    function validatePassword() {
-        var $el = $('#password');
-        var value = $el.val();
-
-        if (value === '') {
-            showError($el, '⚠ Please enter your password.');
-            return false;
+        function clearField($input) {
+            $input.removeClass('error success');
+            $input.closest('.form-group-auth').find('.error-message')
+                .text('').removeClass('show');
         }
-        if (value.length < 6) {
-            showError($el, '⚠ Password must be at least 6 characters.');
-            return false;
-        }
-        if (value.length > 50) {
-            showError($el, '⚠ Password is too long.');
-            return false;
-        }
-        showSuccess($el);
-        return true;
-    }
 
-    /* =============================================
-       REAL-TIME VALIDATION
-    ============================================= */
-    $('#email').on('blur', validateEmail);
-    $('#password').on('blur', validatePassword);
+        /* -------- Email Validation -------- */
+        function validateEmail() {
+            var $el = $('#email');
+            var value = $.trim($el.val());
+            var regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-    $('#email, #password').on('input', function () {
-        if ($(this).hasClass('error') && $.trim($(this).val()) !== '') {
-            clearField($(this));
-        }
-    });
-
-    /* =============================================
-       FORM SUBMIT
-    ============================================= */
-    $('#loginForm').on('submit', function (e) {
-        e.preventDefault();
-
-        var isValid = true;
-        if (!validateEmail())    isValid = false;
-        if (!validatePassword()) isValid = false;
-
-        if (!isValid) {
-            var $firstError = $('.form-control-auth.error').first();
-            if ($firstError.length) {
-                $('html, body').animate({
-                    scrollTop: $firstError.offset().top - 150
-                }, 400);
-                $firstError.focus();
+            if (value === '') {
+                showError($el, '⚠ ' + @json($strings['js_email_required']));
+                return false;
             }
-            return false;
+            if (!regex.test(value)) {
+                showError($el, '⚠ ' + @json($strings['js_email_invalid']));
+                return false;
+            }
+            if (value.length > 100) {
+                showError($el, '⚠ ' + @json($strings['js_email_long']));
+                return false;
+            }
+            showSuccess($el);
+            return true;
         }
 
-        // Loading state
-        var $btn = $('#submitBtn');
-        var original = $btn.html();
-        $btn.prop('disabled', true).html(
-            '<i class="fas fa-spinner fa-spin"></i> <span>Logging In...</span>'
-        );
+        /* -------- Password Validation -------- */
+        function validatePassword() {
+            var $el = $('#password');
+            var value = $el.val();
 
-        this.submit();
+            if (value === '') {
+                showError($el, '⚠ ' + @json($strings['js_password_required']));
+                return false;
+            }
+            if (value.length < 6) {
+                showError($el, '⚠ ' + @json($strings['js_password_short']));
+                return false;
+            }
+            if (value.length > 50) {
+                showError($el, '⚠ ' + @json($strings['js_password_long']));
+                return false;
+            }
+            showSuccess($el);
+            return true;
+        }
+
+        /* =============================================
+           REAL-TIME VALIDATION
+        ============================================= */
+        $('#email').on('blur', validateEmail);
+        $('#password').on('blur', validatePassword);
+
+        $('#email, #password').on('input', function() {
+            if ($(this).hasClass('error') && $.trim($(this).val()) !== '') {
+                clearField($(this));
+            }
+        });
+
+        /* =============================================
+           FORM SUBMIT
+        ============================================= */
+        $('#loginForm').on('submit', function(e) {
+            e.preventDefault();
+
+            var isValid = true;
+            if (!validateEmail()) isValid = false;
+            if (!validatePassword()) isValid = false;
+
+            if (!isValid) {
+                var $firstError = $('.form-control-auth.error').first();
+                if ($firstError.length) {
+                    $('html, body').animate({
+                        scrollTop: $firstError.offset().top - 150
+                    }, 400);
+                    $firstError.focus();
+                }
+                return false;
+            }
+
+            // Loading state
+            var $btn = $('#submitBtn');
+            var original = $btn.html();
+            $btn.prop('disabled', true).html(
+                '<i class="fas fa-spinner fa-spin"></i> <span>' + @json($strings['btn_logging_in']) + '</span>'
+            );
+
+            this.submit();
+        });
+
+        /* =============================================
+           AUTO-HIDE ALERTS
+        ============================================= */
+        setTimeout(function() {
+            $('.auth-alert').fadeOut(500);
+        }, 6000);
+
     });
-
-    /* =============================================
-       AUTO-HIDE ALERTS
-    ============================================= */
-    setTimeout(function () {
-        $('.auth-alert').fadeOut(500);
-    }, 6000);
-
-});
 </script>
 @endsection

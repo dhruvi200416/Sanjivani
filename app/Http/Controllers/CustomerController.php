@@ -15,6 +15,9 @@ use App\Models\AboutContent;
 use App\Models\ContactMessage;
 use App\Models\Village;
 use App\Models\Pharmacy;
+use App\Services\GoogleTranslator;
+use Stichoza\GoogleTranslate\GoogleTranslate;
+
 
 class CustomerController extends Controller
 {
@@ -127,11 +130,35 @@ class CustomerController extends Controller
             ->take(5)
             ->get();
 
+        // Fetch featured medicines from DB (uses your real medicines table)
         $featuredMedicines = Medicine::active()
             ->where('featured', true)
             ->latest()
             ->take(4)
             ->get();
+
+        // If no featured medicines, fall back to newest 4 active medicines
+        if ($featuredMedicines->count() == 0) {
+            $featuredMedicines = Medicine::active()
+                ->latest()
+                ->take(4)
+                ->get();
+        }
+
+        // Pre-translate medicine names and brands to the current locale
+        // (this also warms the cache so the blade just reads from it)
+        if ($featuredMedicines->count() > 0) {
+            $rawNames  = $featuredMedicines->pluck('name')->toArray();
+            $rawBrands = $featuredMedicines->pluck('brand')->toArray();
+
+            $tNames  = GoogleTranslator::translateBatch($rawNames);
+            $tBrands = GoogleTranslator::translateBatch($rawBrands);
+
+            foreach ($featuredMedicines as $i => $med) {
+                $med->name  = $tNames[$i]  ?? $med->name;
+                $med->brand = $tBrands[$i] ?? ($med->brand ?? '');
+            }
+        }
 
         return view('customer.dashboard', compact(
             'totalOrders',
@@ -638,31 +665,31 @@ class CustomerController extends Controller
     }
 
     public function uploadPrescription(Request $request)
-{
-    $request->validate([
-        'prescription_file' => 'required|file|mimes:jpg,jpeg,png,pdf|max:5120',
-        'doctor_name'       => 'required|string|min:3',
-        'village_id'        => 'required|exists:villages,id',
-    ]);
+    {
+        $request->validate([
+            'prescription_file' => 'required|file|mimes:jpg,jpeg,png,pdf|max:5120',
+            'doctor_name'       => 'required|string|min:3',
+            'village_id'        => 'required|exists:villages,id',
+        ]);
 
-    $file = $request->file('prescription_file');
-    $fileName = time() . '_' . $file->getClientOriginalName();
-    $filePath = $file->storeAs('prescriptions', $fileName, 'public');
+        $file = $request->file('prescription_file');
+        $fileName = time() . '_' . $file->getClientOriginalName();
+        $filePath = $file->storeAs('prescriptions', $fileName, 'public');
 
-    Prescription::create([
-        'customer_id'   => session('user_id'),
-        'file_name'     => $fileName,
-        'file_path'     => $filePath,
-        'doctor_name'   => $request->doctor_name,
-        'patient_name'  => $request->patient_name ?? null, // if you have this field
-        'village_id'    => $request->village_id,
-        'notes'         => $request->notes ?? null,
-        'status'        => 'active',
-        'review_status' => 'pending',
-    ]);
+        Prescription::create([
+            'customer_id'   => session('user_id'),
+            'file_name'     => $fileName,
+            'file_path'     => $filePath,
+            'doctor_name'   => $request->doctor_name,
+            'patient_name'  => $request->patient_name ?? null,
+            'village_id'    => $request->village_id,
+            'notes'         => $request->notes ?? null,
+            'status'        => 'active',
+            'review_status' => 'pending',
+        ]);
 
-    return redirect()->back()->with('success', 'Prescription uploaded successfully.');
-}
+        return redirect()->back()->with('success', 'Prescription uploaded successfully.');
+    }
 
     public function deletePrescription(Request $request)
     {
@@ -671,7 +698,6 @@ class CustomerController extends Controller
         $rx = Prescription::where('customer_id', session('user_id'))
             ->findOrFail($request->prescription_id);
 
-        // Delete file from public/images/
         if ($rx->file_name && file_exists(public_path('images/' . $rx->file_name))) {
             unlink(public_path('images/' . $rx->file_name));
         }
@@ -735,7 +761,6 @@ class CustomerController extends Controller
         $totalSaved      = Order::where('customer_id', $customer->id)
             ->sum('discount');
 
-        // Addresses (simplified — stored in customer table)
         $addresses = collect();
         if ($customer->address) {
             $addresses->push((object)[
@@ -805,7 +830,6 @@ class CustomerController extends Controller
         $avatarName = 'cust_' . $customer->id . '_' . time() . '.' . $request->avatar->extension();
         $request->avatar->move(public_path('images'), $avatarName);
 
-        // Delete old avatar from public/images/
         if ($customer->avatar && file_exists(public_path('images/' . $customer->avatar))) {
             unlink(public_path('images/' . $customer->avatar));
         }
@@ -824,7 +848,6 @@ class CustomerController extends Controller
 
         $customer = Customer::findOrFail(session('user_id'));
 
-        // Plain text comparison
         if ($customer->password !== $request->current_password) {
             return back()->with('password_error', 'Current password is incorrect.');
         }
@@ -833,7 +856,7 @@ class CustomerController extends Controller
             return back()->with('password_error', 'New password must be different.');
         }
 
-        $customer->update(['password' => $request->new_password]); // Plain text
+        $customer->update(['password' => $request->new_password]);
 
         return back()->with('password_success', 'Password changed successfully.');
     }
@@ -878,7 +901,6 @@ class CustomerController extends Controller
             'type'         => 'required|in:home,work,other',
         ]);
 
-        // Simplified: update customer's main address
         $customer = Customer::findOrFail(session('user_id'));
         $fullAddress = $request->address_line . ', ' . $request->city . ', ' . $request->state . ' - ' . $request->pincode;
         $customer->update([

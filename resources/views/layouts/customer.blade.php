@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="{{ app()->getLocale() }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -474,6 +474,56 @@
 </head>
 <body>
 
+@php
+    use App\Services\GoogleTranslator;
+
+    $custLayoutStrings = GoogleTranslator::translateBatch([
+        // ---- Sidebar brand ----
+        'brand_name'      => 'Sanjivani',
+        'portal_name'     => 'Customer Portal',
+
+        // ---- Sidebar sections ----
+        'menu_main'       => 'Main Menu',
+        'menu_account'    => 'Account',
+
+        // ---- Sidebar links ----
+        'link_dashboard'  => 'Dashboard',
+        'link_medicines'  => 'Browse Medicines',
+        'link_cart'       => 'My Cart',
+        'link_orders'     => 'My Orders',
+        'link_prescriptions' => 'Prescriptions',
+        'link_profile'    => 'My Profile',
+        'link_home'       => 'Back to Home',
+        'link_logout'     => 'Logout',
+
+        // ---- Topbar ----
+        'search_placeholder' => 'Search medicines...',
+        'cart_title'      => 'Cart',
+        'role_customer'   => 'Customer',
+
+        // ---- Dropdown ----
+        'dd_profile'      => 'My Profile',
+        'dd_orders'       => 'My Orders',
+        'dd_cart'         => 'My Cart',
+        'dd_logout'       => 'Logout',
+
+        // ---- Page title default ----
+        'page_dashboard'  => 'Dashboard',
+    ]);
+
+    /* ============================================================
+       Resolve the currently logged-in customer's name.
+       Prefer the fresh DB lookup via session('user_id') so the
+       top-right corner always shows the correct person,
+       even if session('customer_name') is stale.
+       ============================================================ */
+    $authCustomer = null;
+    if (session('user_id')) {
+        $authCustomer = \App\Models\Customer::find(session('user_id'));
+    }
+    $displayName = $authCustomer->name  ?? session('customer_name') ?? 'Customer';
+@endphp
+
     <div id="sidebarOverlay"></div>
 
     <!-- ============ SIDEBAR ============ -->
@@ -487,54 +537,54 @@
                 @endif
             </div>
             <div class="brand-info">
-                <h5>Sanjivani</h5>
-                <span>Customer Portal</span>
+                <h5>{{ $custLayoutStrings['brand_name'] }}</h5>
+                <span>{{ $custLayoutStrings['portal_name'] }}</span>
             </div>
         </div>
 
         <nav class="sidebar-nav">
-            <div class="nav-section-title">Main Menu</div>
+            <div class="nav-section-title">{{ $custLayoutStrings['menu_main'] }}</div>
 
             <a href="{{ url('/customer/dashboard') }}" class="sidebar-link {{ request()->is('customer/dashboard') ? 'active' : '' }}">
                 <i class="fas fa-tachometer-alt"></i>
-                <span class="link-title">Dashboard</span>
+                <span class="link-title">{{ $custLayoutStrings['link_dashboard'] }}</span>
             </a>
             <a href="{{ url('/customer/medicines') }}" class="sidebar-link {{ request()->is('customer/medicines*') && !request()->is('customer/medicine/*') ? 'active' : '' }}">
                 <i class="fas fa-pills"></i>
-                <span class="link-title">Browse Medicines</span>
+                <span class="link-title">{{ $custLayoutStrings['link_medicines'] }}</span>
             </a>
             <a href="{{ url('/customer/cart') }}" class="sidebar-link {{ request()->is('customer/cart') ? 'active' : '' }}">
                 <i class="fas fa-shopping-cart"></i>
-                <span class="link-title">My Cart</span>
+                <span class="link-title">{{ $custLayoutStrings['link_cart'] }}</span>
                 @if(session('cart_count') && session('cart_count') > 0)
                     <span class="cart-count">{{ session('cart_count') }}</span>
                 @endif
             </a>
             <a href="{{ url('/customer/orders') }}" class="sidebar-link {{ request()->is('customer/orders*') ? 'active' : '' }}">
                 <i class="fas fa-box"></i>
-                <span class="link-title">My Orders</span>
+                <span class="link-title">{{ $custLayoutStrings['link_orders'] }}</span>
             </a>
             <a href="{{ url('/customer/prescription') }}" class="sidebar-link {{ request()->is('customer/prescription*') ? 'active' : '' }}">
                 <i class="fas fa-file-prescription"></i>
-                <span class="link-title">Prescriptions</span>
+                <span class="link-title">{{ $custLayoutStrings['link_prescriptions'] }}</span>
             </a>
 
-            <div class="nav-section-title">Account</div>
+            <div class="nav-section-title">{{ $custLayoutStrings['menu_account'] }}</div>
 
             <a href="{{ url('/customer/profile') }}" class="sidebar-link {{ request()->is('customer/profile*') ? 'active' : '' }}">
                 <i class="fas fa-user-circle"></i>
-                <span class="link-title">My Profile</span>
+                <span class="link-title">{{ $custLayoutStrings['link_profile'] }}</span>
             </a>
             <a href="{{ url('/') }}" class="sidebar-link">
                 <i class="fas fa-home"></i>
-                <span class="link-title">Back to Home</span>
+                <span class="link-title">{{ $custLayoutStrings['link_home'] }}</span>
             </a>
         </nav>
 
         <div class="sidebar-footer">
             <a href="{{ url('/logout') }}" class="logout-btn">
                 <i class="fas fa-sign-out-alt"></i>
-                <span>Logout</span>
+                <span>{{ $custLayoutStrings['link_logout'] }}</span>
             </a>
         </div>
     </aside>
@@ -551,17 +601,17 @@
                 <button class="sidebar-toggle d-none d-lg-block" id="sidebarToggleDesktop">
                     <i class="fas fa-bars"></i>
                 </button>
-                <h5 class="page-title">@yield('page_title', 'Dashboard')</h5>
+                <h5 class="page-title">@yield('page_title', $custLayoutStrings['page_dashboard'])</h5>
             </div>
 
             <div class="topbar-right">
                 <form action="{{ url('/customer/medicines') }}" method="GET" class="topbar-search d-none d-md-block">
                     <i class="fas fa-search"></i>
-                    <input type="text" name="search" placeholder="Search medicines..." value="{{ request('search') }}">
+                    <input type="text" name="search" placeholder="{{ $custLayoutStrings['search_placeholder'] }}" value="{{ request('search') }}">
                 </form>
 
                 <!-- Cart Icon -->
-                <a href="{{ url('/customer/cart') }}" class="topbar-icon" title="Cart">
+                <a href="{{ url('/customer/cart') }}" class="topbar-icon" title="{{ $custLayoutStrings['cart_title'] }}">
                     <i class="fas fa-shopping-cart"></i>
                     @if(session('cart_count') && session('cart_count') > 0)
                         <span class="cart-badge">{{ session('cart_count') }}</span>
@@ -572,20 +622,20 @@
                 <div class="dropdown">
                     <button class="user-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
                         <div class="user-avatar">
-                            {{ strtoupper(substr(session('customer_name') ?? 'C', 0, 1)) }}
+                            {{ strtoupper(substr($displayName, 0, 1)) }}
                         </div>
                         <div class="user-info d-none d-md-block">
-                            <strong>{{ session('customer_name') ?? 'Customer' }}</strong>
-                            <span>Customer</span>
+                            <strong>{{ $displayName }}</strong>
+                            <span>{{ $custLayoutStrings['role_customer'] }}</span>
                         </div>
                         <i class="fas fa-chevron-down d-none d-md-block" style="font-size:0.75rem;color:var(--gray-text);"></i>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end dropdown-menu-custom">
-                        <li><a class="dropdown-item" href="{{ url('/customer/profile') }}"><i class="fas fa-user me-2"></i> My Profile</a></li>
-                        <li><a class="dropdown-item" href="{{ url('/customer/orders') }}"><i class="fas fa-box me-2"></i> My Orders</a></li>
-                        <li><a class="dropdown-item" href="{{ url('/customer/cart') }}"><i class="fas fa-shopping-cart me-2"></i> My Cart</a></li>
+                        <li><a class="dropdown-item" href="{{ url('/customer/profile') }}"><i class="fas fa-user me-2"></i> {{ $custLayoutStrings['dd_profile'] }}</a></li>
+                        <li><a class="dropdown-item" href="{{ url('/customer/orders') }}"><i class="fas fa-box me-2"></i> {{ $custLayoutStrings['dd_orders'] }}</a></li>
+                        <li><a class="dropdown-item" href="{{ url('/customer/cart') }}"><i class="fas fa-shopping-cart me-2"></i> {{ $custLayoutStrings['dd_cart'] }}</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item text-danger" href="{{ url('/logout') }}"><i class="fas fa-sign-out-alt me-2"></i> Logout</a></li>
+                        <li><a class="dropdown-item text-danger" href="{{ url('/logout') }}"><i class="fas fa-sign-out-alt me-2"></i> {{ $custLayoutStrings['dd_logout'] }}</a></li>
                     </ul>
                 </div>
             </div>

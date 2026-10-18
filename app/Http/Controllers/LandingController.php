@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\ContactMessage;
+use Stichoza\GoogleTranslate\GoogleTranslate;
 
 class LandingController extends Controller
 {

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use Stichoza\GoogleTranslate\GoogleTranslate;
 
 class LocaleController extends Controller
 {

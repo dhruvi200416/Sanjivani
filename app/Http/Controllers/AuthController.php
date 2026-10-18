@@ -8,6 +8,8 @@ use App\Models\Customer;
 use App\Models\Pharmacy;
 use App\Models\DeliveryPartner;
 use App\Models\Village;
+use Stichoza\GoogleTranslate\GoogleTranslate;
+
 
 class AuthController extends Controller
 {
@@ -62,6 +64,8 @@ class AuthController extends Controller
                 return redirect('/admin/dashboard');
 
             case 'customer':
+                // Refresh the customer's session data on EVERY login
+                // so the top-right corner shows the correct name.
                 session([
                     'customer_name'  => $user->name,
                     'customer_email' => $user->email,

@@ -2,7 +2,7 @@
 
 @section('title', 'Manage Orders - Sanjivani Admin')
 @section('page_title')
-    <i class="fas fa-shopping-cart"></i> Manage Orders
+<i class="fas fa-shopping-cart"></i> {{ app(\App\Services\GoogleTranslator::class)->translate('Manage Orders') }}
 @endsection
 
 @section('styles')
@@ -23,7 +23,7 @@
 
     .order-stat:hover {
         transform: translateY(-3px);
-        box-shadow: 0 8px 25px rgba(46,125,50,0.15);
+        box-shadow: 0 8px 25px rgba(46, 125, 50, 0.15);
     }
 
     .order-stat.active {
@@ -43,11 +43,25 @@
         color: var(--white);
     }
 
-    .os-icon.total   { background: linear-gradient(135deg, #2E7D32, #66BB6A); }
-    .os-icon.pending { background: linear-gradient(135deg, #E65100, #FFA726); }
-    .os-icon.progress{ background: linear-gradient(135deg, #1565C0, #42A5F5); }
-    .os-icon.delivered { background: linear-gradient(135deg, #6A1B9A, #AB47BC); }
-    .os-icon.cancelled { background: linear-gradient(135deg, #B71C1C, #EF5350); }
+    .os-icon.total {
+        background: linear-gradient(135deg, #2E7D32, #66BB6A);
+    }
+
+    .os-icon.pending {
+        background: linear-gradient(135deg, #E65100, #FFA726);
+    }
+
+    .os-icon.progress {
+        background: linear-gradient(135deg, #1565C0, #42A5F5);
+    }
+
+    .os-icon.delivered {
+        background: linear-gradient(135deg, #6A1B9A, #AB47BC);
+    }
+
+    .os-icon.cancelled {
+        background: linear-gradient(135deg, #B71C1C, #EF5350);
+    }
 
     .order-stat .os-info {
         flex: 1;
@@ -85,22 +99,7 @@
         letter-spacing: 0.5px;
     }
 
-    .filter-input {
-        width: 100%;
-        padding: 10px 14px;
-        border: 2px solid #E8E8E8;
-        border-radius: 10px;
-        font-size: 0.88rem;
-        font-family: 'Poppins', sans-serif;
-        outline: none;
-        transition: var(--transition);
-    }
-
-    .filter-input:focus {
-        border-color: var(--primary-green);
-        box-shadow: 0 0 0 3px rgba(76,175,80,0.1);
-    }
-
+    .filter-input,
     .filter-select {
         width: 100%;
         padding: 10px 14px;
@@ -109,19 +108,24 @@
         font-size: 0.88rem;
         font-family: 'Poppins', sans-serif;
         outline: none;
-        background: var(--white);
-        cursor: pointer;
         transition: var(--transition);
+        background: var(--white);
+    }
+
+    .filter-input:focus,
+    .filter-select:focus {
+        border-color: var(--primary-green);
+        box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+    }
+
+    .filter-select {
+        cursor: pointer;
         appearance: none;
         background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%232E7D32' viewBox='0 0 16 16'%3e%3cpath d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3e%3c/svg%3e");
         background-repeat: no-repeat;
         background-position: right 12px center;
         background-size: 12px;
         padding-right: 35px;
-    }
-
-    .filter-select:focus {
-        border-color: var(--primary-green);
     }
 
     .search-wrap {
@@ -160,7 +164,7 @@
 
     .btn-filter:hover {
         transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(46,125,50,0.3);
+        box-shadow: 0 5px 15px rgba(46, 125, 50, 0.3);
     }
 
     .btn-reset {
@@ -346,9 +350,20 @@
         text-transform: uppercase;
     }
 
-    .payment-cod    { background: #FFF3E0; color: #E65100; }
-    .payment-online { background: #E3F2FD; color: #1565C0; }
-    .payment-upi    { background: #F3E5F5; color: #6A1B9A; }
+    .payment-cod {
+        background: #FFF3E0;
+        color: #E65100;
+    }
+
+    .payment-online {
+        background: #E3F2FD;
+        color: #1565C0;
+    }
+
+    .payment-upi {
+        background: #F3E5F5;
+        color: #6A1B9A;
+    }
 
     .status-badge-tbl {
         display: inline-block;
@@ -360,12 +375,35 @@
         letter-spacing: 0.5px;
     }
 
-    .st-pending          { background: #FFF3E0; color: #FB8C00; }
-    .st-confirmed        { background: #E3F2FD; color: #1976D2; }
-    .st-processing       { background: #F3E5F5; color: #7B1FA2; }
-    .st-out_for_delivery { background: #FCE4EC; color: #C2185B; }
-    .st-delivered        { background: #E8F5E9; color: #2E7D32; }
-    .st-cancelled        { background: #FFEBEE; color: #C62828; }
+    .st-pending {
+        background: #FFF3E0;
+        color: #FB8C00;
+    }
+
+    .st-confirmed {
+        background: #E3F2FD;
+        color: #1976D2;
+    }
+
+    .st-processing {
+        background: #F3E5F5;
+        color: #7B1FA2;
+    }
+
+    .st-out_for_delivery {
+        background: #FCE4EC;
+        color: #C2185B;
+    }
+
+    .st-delivered {
+        background: #E8F5E9;
+        color: #2E7D32;
+    }
+
+    .st-cancelled {
+        background: #FFEBEE;
+        color: #C62828;
+    }
 
     .action-btns {
         display: flex;
@@ -387,36 +425,22 @@
         text-decoration: none;
     }
 
-    .btn-action.view   { background: linear-gradient(135deg, #1565C0, #42A5F5); }
-    .btn-action.edit   { background: linear-gradient(135deg, #2E7D32, #66BB6A); }
-    .btn-action.delete { background: linear-gradient(135deg, #C62828, #EF5350); }
+    .btn-action.view {
+        background: linear-gradient(135deg, #1565C0, #42A5F5);
+    }
+
+    .btn-action.edit {
+        background: linear-gradient(135deg, #2E7D32, #66BB6A);
+    }
+
+    .btn-action.delete {
+        background: linear-gradient(135deg, #C62828, #EF5350);
+    }
 
     .btn-action:hover {
         transform: translateY(-2px);
-        box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
         color: var(--white);
-    }
-
-    /* Empty State */
-    .empty-state {
-        text-align: center;
-        padding: 60px 20px;
-    }
-
-    .empty-state i {
-        font-size: 4rem;
-        color: var(--mint-green);
-        margin-bottom: 15px;
-    }
-
-    .empty-state h5 {
-        color: var(--gray-text);
-        font-weight: 600;
-    }
-
-    .empty-state p {
-        color: #999;
-        font-size: 0.9rem;
     }
 
     /* Pagination */
@@ -474,7 +498,7 @@
         cursor: not-allowed;
     }
 
-    /* Status Update Modal */
+    /* Modals & Popups */
     .modal-content-custom {
         border: none;
         border-radius: 18px;
@@ -548,14 +572,155 @@
         color: var(--gray-text);
     }
 
+    /* Custom Alert Popup */
+    #customAlertModal .modal-content {
+        border: none;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        padding: 35px 25px;
+        max-width: 420px;
+        margin: 0 auto;
+    }
+
+    #customAlertModal .alert-icon-wrap {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 20px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.4rem;
+        animation: scaleIn 0.3s ease-out;
+    }
+
+    @keyframes scaleIn {
+        0% {
+            transform: scale(0.5);
+            opacity: 0;
+        }
+
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    #customAlertModal .alert-icon-wrap.warning {
+        background: #FFF3E0;
+        color: #FB8C00;
+    }
+
+    #customAlertModal .alert-icon-wrap.danger {
+        background: #FFEBEE;
+        color: #C62828;
+    }
+
+    #customAlertModal .alert-icon-wrap.success {
+        background: #E8F5E9;
+        color: #2E7D32;
+    }
+
+    #customAlertModal .alert-title {
+        font-size: 1.25rem;
+        font-weight: 800;
+        color: var(--dark-text);
+        margin-bottom: 10px;
+    }
+
+    #customAlertModal .alert-message {
+        font-size: 0.95rem;
+        color: var(--gray-text);
+        margin-bottom: 30px;
+        line-height: 1.5;
+    }
+
+    .alert-btn-cancel {
+        background: var(--white);
+        color: var(--gray-text);
+        border: 2px solid #E0E0E0;
+        padding: 10px 22px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 0.88rem;
+        transition: var(--transition);
+    }
+
+    .alert-btn-cancel:hover {
+        background: var(--pale-green);
+        color: var(--primary-green);
+        border-color: var(--primary-green);
+    }
+
+    .alert-btn-confirm {
+        background: linear-gradient(135deg, #C62828, #EF5350);
+        color: var(--white);
+        border: none;
+        padding: 10px 22px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 0.88rem;
+        transition: var(--transition);
+    }
+
+    .alert-btn-confirm:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(198, 40, 40, 0.3);
+        color: var(--white);
+    }
+
+    .alert-btn-ok {
+        background: linear-gradient(135deg, var(--primary-green), var(--light-green));
+        color: var(--white);
+        border: none;
+        padding: 10px 35px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 0.88rem;
+        transition: var(--transition);
+    }
+
+    .alert-btn-ok:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(46, 125, 50, 0.3);
+        color: var(--white);
+    }
+
     @media (max-width: 767px) {
-        .orders-table thead { display: none; }
-        .orders-table tbody td { padding: 10px 15px; font-size: 0.85rem; }
+        .orders-table thead {
+            display: none;
+        }
+
+        .orders-table tbody td {
+            padding: 10px 15px;
+            font-size: 0.85rem;
+        }
     }
 </style>
 @endsection
 
 @section('content')
+
+@php
+use App\Services\GoogleTranslator;
+
+$strings = GoogleTranslator::translateBatch([
+'stat_total' => 'Total Orders', 'stat_pending' => 'Pending', 'stat_processing' => 'Processing', 'stat_delivered' => 'Delivered', 'stat_cancelled' => 'Cancelled',
+'filter_search' => 'Search', 'search_placeholder' => 'Order ID, customer name, phone...', 'filter_status' => 'Status', 'filter_all_status' => 'All Status',
+'filter_payment' => 'Payment', 'filter_all_payments' => 'All Payments', 'pay_cod' => 'Cash on Delivery', 'pay_online' => 'Online', 'pay_upi' => 'UPI',
+'filter_from' => 'From', 'filter_to' => 'To', 'btn_reset' => 'Reset', 'btn_apply' => 'Apply Filters',
+'table_all_orders' => 'All Orders', 'btn_export' => 'Export CSV', 'th_order_id' => 'Order ID', 'th_customer' => 'Customer', 'th_village' => 'Village',
+'th_items' => 'Items', 'th_total' => 'Total', 'th_payment' => 'Payment', 'th_status' => 'Status', 'th_date' => 'Date', 'th_action' => 'Action',
+'lbl_items' => 'items', 'pg_showing' => 'Showing', 'pg_to' => 'to', 'pg_of' => 'of', 'pg_orders' => 'orders',
+'modal_title' => 'Update Order Status', 'modal_desc' => 'Update status for order', 'st_pending_title' => 'Pending', 'st_pending_desc' => 'Order received, awaiting confirmation',
+'st_confirmed_title' => 'Confirmed', 'st_confirmed_desc' => 'Order confirmed by pharmacy', 'st_processing_title' => 'Processing', 'st_processing_desc' => 'Being prepared for shipment',
+'st_out_title' => 'Out for Delivery', 'st_out_desc' => 'Assigned to delivery partner', 'st_delivered_title' => 'Delivered', 'st_delivered_desc' => 'Successfully delivered to customer',
+'st_cancelled_title' => 'Cancelled', 'st_cancelled_desc' => 'Order was cancelled', 'btn_cancel' => 'Cancel', 'btn_update' => 'Update Status',
+'err_select_status' => '⚠ Please select a status.', 'js_del_confirm' => 'Are you sure you want to delete order :num? This action cannot be undone.',
+'js_date_err_1' => '"To Date" cannot be earlier than "From Date".', 'js_date_err_2' => '"From Date" cannot be later than "To Date".', 'js_updating' => 'Updating...'
+]);
+@endphp
 
 <!-- ============ ORDER STATS ============ -->
 <div class="row g-3 mb-4">
@@ -564,7 +729,7 @@
             <div class="os-icon total"><i class="fas fa-list"></i></div>
             <div class="os-info">
                 <div class="os-value">{{ $totalOrders ?? 128 }}</div>
-                <div class="os-label">Total Orders</div>
+                <div class="os-label">{{ $strings['stat_total'] }}</div>
             </div>
         </div>
     </div>
@@ -573,7 +738,7 @@
             <div class="os-icon pending"><i class="fas fa-clock"></i></div>
             <div class="os-info">
                 <div class="os-value">{{ $pendingCount ?? 12 }}</div>
-                <div class="os-label">Pending</div>
+                <div class="os-label">{{ $strings['stat_pending'] }}</div>
             </div>
         </div>
     </div>
@@ -582,7 +747,7 @@
             <div class="os-icon progress"><i class="fas fa-cogs"></i></div>
             <div class="os-info">
                 <div class="os-value">{{ $processingCount ?? 8 }}</div>
-                <div class="os-label">Processing</div>
+                <div class="os-label">{{ $strings['stat_processing'] }}</div>
             </div>
         </div>
     </div>
@@ -591,7 +756,7 @@
             <div class="os-icon delivered"><i class="fas fa-check-circle"></i></div>
             <div class="os-info">
                 <div class="os-value">{{ $deliveredCount ?? 98 }}</div>
-                <div class="os-label">Delivered</div>
+                <div class="os-label">{{ $strings['stat_delivered'] }}</div>
             </div>
         </div>
     </div>
@@ -600,7 +765,7 @@
             <div class="os-icon cancelled"><i class="fas fa-times-circle"></i></div>
             <div class="os-info">
                 <div class="os-value">{{ $cancelledCount ?? 10 }}</div>
-                <div class="os-label">Cancelled</div>
+                <div class="os-label">{{ $strings['stat_cancelled'] }}</div>
             </div>
         </div>
     </div>
@@ -611,55 +776,49 @@
     <form id="filterForm" method="GET" action="{{ url('/admin/orders') }}">
         <div class="row g-3 align-items-end">
             <div class="col-lg-4 col-md-6">
-                <label class="form-label"><i class="fas fa-search me-1"></i> Search</label>
+                <label class="form-label"><i class="fas fa-search me-1"></i> {{ $strings['filter_search'] }}</label>
                 <div class="search-wrap">
                     <i class="fas fa-search"></i>
-                    <input type="text" name="search" class="filter-input"
-                           placeholder="Order ID, customer name, phone..."
-                           value="{{ request('search') }}">
+                    <input type="text" name="search" class="filter-input" placeholder="{{ $strings['search_placeholder'] }}" value="{{ request('search') }}">
                 </div>
             </div>
             <div class="col-lg-2 col-md-6">
-                <label class="form-label"><i class="fas fa-filter me-1"></i> Status</label>
+                <label class="form-label"><i class="fas fa-filter me-1"></i> {{ $strings['filter_status'] }}</label>
                 <select name="status" id="statusFilter" class="filter-select">
-                    <option value="">All Status</option>
-                    <option value="pending" {{ request('status')=='pending' ? 'selected' : '' }}>Pending</option>
-                    <option value="confirmed" {{ request('status')=='confirmed' ? 'selected' : '' }}>Confirmed</option>
-                    <option value="processing" {{ request('status')=='processing' ? 'selected' : '' }}>Processing</option>
-                    <option value="out_for_delivery" {{ request('status')=='out_for_delivery' ? 'selected' : '' }}>Out for Delivery</option>
-                    <option value="delivered" {{ request('status')=='delivered' ? 'selected' : '' }}>Delivered</option>
-                    <option value="cancelled" {{ request('status')=='cancelled' ? 'selected' : '' }}>Cancelled</option>
+                    <option value="">{{ $strings['filter_all_status'] }}</option>
+                    <option value="pending" {{ request('status')=='pending' ? 'selected' : '' }}>{{ $strings['stat_pending'] }}</option>
+                    <option value="confirmed" {{ request('status')=='confirmed' ? 'selected' : '' }}>{{ $strings['st_confirmed_title'] }}</option>
+                    <option value="processing" {{ request('status')=='processing' ? 'selected' : '' }}>{{ $strings['stat_processing'] }}</option>
+                    <option value="out_for_delivery" {{ request('status')=='out_for_delivery' ? 'selected' : '' }}>{{ $strings['st_out_title'] }}</option>
+                    <option value="delivered" {{ request('status')=='delivered' ? 'selected' : '' }}>{{ $strings['stat_delivered'] }}</option>
+                    <option value="cancelled" {{ request('status')=='cancelled' ? 'selected' : '' }}>{{ $strings['stat_cancelled'] }}</option>
                 </select>
             </div>
             <div class="col-lg-2 col-md-6">
-                <label class="form-label"><i class="fas fa-money-check me-1"></i> Payment</label>
+                <label class="form-label"><i class="fas fa-money-check me-1"></i> {{ $strings['filter_payment'] }}</label>
                 <select name="payment" class="filter-select">
-                    <option value="">All Payments</option>
-                    <option value="cod"    {{ request('payment')=='cod' ? 'selected' : '' }}>Cash on Delivery</option>
-                    <option value="online" {{ request('payment')=='online' ? 'selected' : '' }}>Online</option>
-                    <option value="upi"    {{ request('payment')=='upi' ? 'selected' : '' }}>UPI</option>
+                    <option value="">{{ $strings['filter_all_payments'] }}</option>
+                    <option value="cod" {{ request('payment')=='cod' ? 'selected' : '' }}>{{ $strings['pay_cod'] }}</option>
+                    <option value="online" {{ request('payment')=='online' ? 'selected' : '' }}>{{ $strings['pay_online'] }}</option>
+                    <option value="upi" {{ request('payment')=='upi' ? 'selected' : '' }}>{{ $strings['pay_upi'] }}</option>
                 </select>
             </div>
             <div class="col-lg-2 col-md-6">
-                <label class="form-label"><i class="fas fa-calendar me-1"></i> From</label>
+                <label class="form-label"><i class="fas fa-calendar me-1"></i> {{ $strings['filter_from'] }}</label>
                 <input type="date" name="from_date" class="filter-input" value="{{ request('from_date') }}">
             </div>
             <div class="col-lg-2 col-md-6">
-                <label class="form-label"><i class="fas fa-calendar-check me-1"></i> To</label>
+                <label class="form-label"><i class="fas fa-calendar-check me-1"></i> {{ $strings['filter_to'] }}</label>
                 <input type="date" name="to_date" class="filter-input" value="{{ request('to_date') }}">
             </div>
         </div>
 
         <div class="row g-3 mt-2">
             <div class="col-md-2 offset-md-8">
-                <a href="{{ url('/admin/orders') }}" class="btn-reset">
-                    <i class="fas fa-undo"></i> Reset
-                </a>
+                <a href="{{ url('/admin/orders') }}" class="btn-reset"><i class="fas fa-undo"></i> {{ $strings['btn_reset'] }}</a>
             </div>
             <div class="col-md-2">
-                <button type="submit" class="btn-filter">
-                    <i class="fas fa-filter"></i> Apply Filters
-                </button>
+                <button type="submit" class="btn-filter"><i class="fas fa-filter"></i> {{ $strings['btn_apply'] }}</button>
             </div>
         </div>
     </form>
@@ -670,11 +829,11 @@
     <div class="orders-header">
         <h6>
             <i class="fas fa-shopping-cart me-2" style="color:var(--primary-green);"></i>
-            All Orders
+            {{ $strings['table_all_orders'] }}
             <span>{{ isset($orders) ? (method_exists($orders,'total') ? $orders->total() : count($orders)) : 128 }}</span>
         </h6>
         <a href="{{ url('/admin/orders/export?'.http_build_query(request()->all())) }}" class="export-btn">
-            <i class="fas fa-file-excel me-1"></i> Export CSV
+            <i class="fas fa-file-excel me-1"></i> {{ $strings['btn_export'] }}
         </a>
     </div>
 
@@ -683,192 +842,110 @@
             <thead>
                 <tr>
                     <th><input type="checkbox" id="selectAll" style="accent-color:var(--primary-green);"></th>
-                    <th>Order ID</th>
-                    <th>Customer</th>
-                    <th>Village</th>
-                    <th>Items</th>
-                    <th>Total</th>
-                    <th>Payment</th>
-                    <th>Status</th>
-                    <th>Date</th>
-                    <th>Action</th>
+                    <th>{{ $strings['th_order_id'] }}</th>
+                    <th>{{ $strings['th_customer'] }}</th>
+                    <th>{{ $strings['th_village'] }}</th>
+                    <th>{{ $strings['th_items'] }}</th>
+                    <th>{{ $strings['th_total'] }}</th>
+                    <th>{{ $strings['th_payment'] }}</th>
+                    <th>{{ $strings['th_status'] }}</th>
+                    <th>{{ $strings['th_date'] }}</th>
+                    <th>{{ $strings['th_action'] }}</th>
                 </tr>
             </thead>
             <tbody>
                 @if(!empty($orders) && count($orders) > 0)
-                    @foreach($orders as $order)
-                        <tr>
-                            <td><input type="checkbox" class="row-check" value="{{ $order->id }}" style="accent-color:var(--primary-green);"></td>
-                            <td>
-                                <a href="{{ url('/admin/order/'.$order->id) }}" class="order-id-link">
-                                    #ORD-{{ str_pad($order->id, 4, '0', STR_PAD_LEFT) }}
-                                </a>
-                            </td>
-                            <td>
-                                <div class="customer-cell">
-                                    <div class="customer-avatar-sm">
-                                        {{ strtoupper(substr($order->customer->name ?? 'C', 0, 1)) }}
-                                    </div>
-                                    <div>
-                                        <span class="cname">{{ $order->customer->name ?? 'Unknown' }}</span>
-                                        <span class="cphone"><i class="fas fa-phone me-1"></i>{{ $order->customer->phone ?? 'N/A' }}</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <span style="font-size:0.85rem;">
-                                    <i class="fas fa-map-marker-alt me-1" style="color:#E53935;font-size:0.75rem;"></i>
-                                    {{ $order->customer->village->name ?? 'N/A' }}
-                                </span>
-                            </td>
-                            <td>
-                                <span class="items-badge">{{ $order->items_count ?? $order->orderItems->count() ?? 0 }} items</span>
-                            </td>
-                            <td class="order-price">₹{{ number_format($order->total_amount ?? 0, 2) }}</td>
-                            <td>
-                                @php
-                                    $pay = strtolower($order->payment_method ?? 'cod');
-                                    $payClass = 'payment-'.$pay;
-                                    if(!in_array($pay, ['cod','online','upi'])) $payClass = 'payment-cod';
-                                @endphp
-                                <span class="payment-badge {{ $payClass }}">{{ strtoupper($order->payment_method ?? 'COD') }}</span>
-                            </td>
-                            <td>
-                                @php
-                                    $status = strtolower(str_replace(' ', '_', $order->status ?? 'pending'));
-                                    $stClass = 'st-'.$status;
-                                    if(!in_array($status, ['pending','confirmed','processing','out_for_delivery','delivered','cancelled'])) $stClass = 'st-pending';
-                                @endphp
-                                <span class="status-badge-tbl {{ $stClass }}">{{ ucfirst(str_replace('_', ' ', $order->status ?? 'pending')) }}</span>
-                            </td>
-                            <td>
-                                <div style="font-size:0.82rem;">{{ date('d M Y', strtotime($order->created_at ?? now())) }}</div>
-                                <div style="font-size:0.72rem;color:var(--gray-text);">{{ date('h:i A', strtotime($order->created_at ?? now())) }}</div>
-                            </td>
-                            <td>
-                                <div class="action-btns">
-                                    <a href="{{ url('/admin/order/'.$order->id) }}" class="btn-action view" title="View Details">
-                                        <i class="fas fa-eye"></i>
-                                    </a>
-                                    <button type="button" class="btn-action edit btn-update-status"
-                                            data-order-id="{{ $order->id }}"
-                                            data-order-num="#ORD-{{ str_pad($order->id, 4, '0', STR_PAD_LEFT) }}"
-                                            data-current-status="{{ $order->status ?? 'pending' }}"
-                                            title="Update Status">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button type="button" class="btn-action delete btn-delete-order"
-                                            data-order-id="{{ $order->id }}"
-                                            data-order-num="#ORD-{{ str_pad($order->id, 4, '0', STR_PAD_LEFT) }}"
-                                            title="Delete Order">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                    @endforeach
+                @foreach($orders as $order)
+                <tr>
+                    <td><input type="checkbox" class="row-check" value="{{ $order->id }}" style="accent-color:var(--primary-green);"></td>
+                    <td>
+                        <a href="{{ url('/admin/order/'.$order->id) }}" class="order-id-link">
+                            #ORD-{{ str_pad($order->id, 4, '0', STR_PAD_LEFT) }}
+                        </a>
+                    </td>
+                    <td>
+                        <div class="customer-cell">
+                            <div class="customer-avatar-sm">{{ strtoupper(substr($order->customer->name ?? 'C', 0, 1)) }}</div>
+                            <div>
+                                <span class="cname">{{ GoogleTranslator::translate($order->customer->name ?? 'Unknown') }}</span>
+                                <span class="cphone"><i class="fas fa-phone me-1"></i>{{ $order->customer->phone ?? 'N/A' }}</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <span style="font-size:0.85rem;">
+                            <i class="fas fa-map-marker-alt me-1" style="color:#E53935;font-size:0.75rem;"></i>
+                            {{ GoogleTranslator::translate($order->customer->village->name ?? 'N/A') }}
+                        </span>
+                    </td>
+                    <td>
+                        {{-- Laravel automatically appends _count to the relationship name --}}
+                        <span class="items-badge">{{ $order->order_items_count ?? 0 }} {{ $strings['lbl_items'] }}</span>
+                    </td>
+                    <td class="order-price">₹{{ number_format($order->total_amount ?? 0, 2) }}</td>
+                    <td>
+                        @php
+                        $pay = strtolower($order->payment_method ?? 'cod');
+                        $payClass = 'payment-'.$pay;
+                        if(!in_array($pay, ['cod','online','upi'])) $payClass = 'payment-cod';
+                        @endphp
+                        <span class="payment-badge {{ $payClass }}">{{ strtoupper($order->payment_method ?? 'COD') }}</span>
+                    </td>
+                    <td>
+                        @php
+                        $status = strtolower(str_replace(' ', '_', $order->order_status ?? 'pending'));
+                        $stClass = 'st-'.$status;
+                        if(!in_array($status, ['pending','confirmed','processing','out_for_delivery','delivered','cancelled'])) $stClass = 'st-pending';
+                        $displayStatus = ucfirst(str_replace('_', ' ', $order->order_status ?? 'pending'));
+                        $translatedStatus = $strings['stat_' . ($status == 'out_for_delivery' ? 'out' : $status)] ?? $strings['st_out_title'] ?? $displayStatus;
+                        @endphp
+                        <span class="status-badge-tbl {{ $stClass }}">{{ $translatedStatus }}</span>
+                    </td>
+                    <td>
+                        <div style="font-size:0.82rem;">{{ date('d M Y', strtotime($order->created_at ?? now())) }}</div>
+                        <div style="font-size:0.72rem;color:var(--gray-text);">{{ date('h:i A', strtotime($order->created_at ?? now())) }}</div>
+                    </td>
+                    <td>
+                        <div class="action-btns">
+                            <a href="{{ url('/admin/order/'.$order->id) }}" class="btn-action view" title="View Details">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            <button type="button" class="btn-action edit btn-update-status"
+                                data-order-id="{{ $order->id }}"
+                                data-order-num="#ORD-{{ str_pad($order->id, 4, '0', STR_PAD_LEFT) }}"
+                                data-current-status="{{ $order->order_status ?? 'pending' }}"
+                                title="Update Status">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button type="button" class="btn-action delete btn-delete-order"
+                                data-order-id="{{ $order->id }}"
+                                data-order-num="#ORD-{{ str_pad($order->id, 4, '0', STR_PAD_LEFT) }}"
+                                title="Delete Order">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                @endforeach
                 @else
-                    @php
-                        // Demo data if no orders passed
-                        $demoOrders = [
-                            ['id'=>1, 'name'=>'Ramesh Patil',  'phone'=>'9876543210', 'village'=>'Nashik',   'items'=>3, 'total'=>780,  'pay'=>'cod',    'status'=>'pending',          'time'=>'2 hours ago'],
-                            ['id'=>2, 'name'=>'Sunita Sharma', 'phone'=>'9812345678', 'village'=>'Pune',     'items'=>5, 'total'=>1250, 'pay'=>'online', 'status'=>'confirmed',        'time'=>'4 hours ago'],
-                            ['id'=>3, 'name'=>'Arjun Verma',   'phone'=>'9998887771', 'village'=>'Jaipur',   'items'=>2, 'total'=>450,  'pay'=>'upi',    'status'=>'processing',       'time'=>'Yesterday'],
-                            ['id'=>4, 'name'=>'Priya Deshmukh','phone'=>'9765432109', 'village'=>'Aurangabad','items'=>4,'total'=>920, 'pay'=>'cod',    'status'=>'out_for_delivery', 'time'=>'Yesterday'],
-                            ['id'=>5, 'name'=>'Amit Kulkarni', 'phone'=>'9871122334', 'village'=>'Kolhapur', 'items'=>1, 'total'=>180,  'pay'=>'online', 'status'=>'delivered',        'time'=>'2 days ago'],
-                            ['id'=>6, 'name'=>'Neha Joshi',    'phone'=>'9822334455', 'village'=>'Nagpur',   'items'=>6, 'total'=>1580, 'pay'=>'upi',    'status'=>'delivered',        'time'=>'3 days ago'],
-                            ['id'=>7, 'name'=>'Suresh Rao',    'phone'=>'9776655443', 'village'=>'Solapur',  'items'=>2, 'total'=>340,  'pay'=>'cod',    'status'=>'cancelled',        'time'=>'4 days ago'],
-                            ['id'=>8, 'name'=>'Kavita Menon',  'phone'=>'9665544332', 'village'=>'Satara',   'items'=>3, 'total'=>720,  'pay'=>'online', 'status'=>'delivered',        'time'=>'5 days ago'],
-                        ];
-                    @endphp
-
-                    @foreach($demoOrders as $od)
-                        <tr>
-                            <td><input type="checkbox" class="row-check" value="{{ $od['id'] }}" style="accent-color:var(--primary-green);"></td>
-                            <td>
-                                <a href="{{ url('/admin/order/'.$od['id']) }}" class="order-id-link">
-                                    #ORD-{{ str_pad($od['id'], 4, '0', STR_PAD_LEFT) }}
-                                </a>
-                            </td>
-                            <td>
-                                <div class="customer-cell">
-                                    <div class="customer-avatar-sm">{{ strtoupper(substr($od['name'], 0, 1)) }}</div>
-                                    <div>
-                                        <span class="cname">{{ $od['name'] }}</span>
-                                        <span class="cphone"><i class="fas fa-phone me-1"></i>{{ $od['phone'] }}</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <span style="font-size:0.85rem;">
-                                    <i class="fas fa-map-marker-alt me-1" style="color:#E53935;font-size:0.75rem;"></i>
-                                    {{ $od['village'] }}
-                                </span>
-                            </td>
-                            <td><span class="items-badge">{{ $od['items'] }} items</span></td>
-                            <td class="order-price">₹{{ number_format($od['total'], 2) }}</td>
-                            <td>
-                                @php $payClass = 'payment-'.$od['pay']; @endphp
-                                <span class="payment-badge {{ $payClass }}">{{ strtoupper($od['pay']) }}</span>
-                            </td>
-                            <td>
-                                <span class="status-badge-tbl st-{{ $od['status'] }}">
-                                    {{ ucfirst(str_replace('_', ' ', $od['status'])) }}
-                                </span>
-                            </td>
-                            <td>
-                                <div style="font-size:0.82rem;">{{ $od['time'] }}</div>
-                            </td>
-                            <td>
-                                <div class="action-btns">
-                                    <a href="{{ url('/admin/order/'.$od['id']) }}" class="btn-action view" title="View">
-                                        <i class="fas fa-eye"></i>
-                                    </a>
-                                    <button type="button" class="btn-action edit btn-update-status"
-                                            data-order-id="{{ $od['id'] }}"
-                                            data-order-num="#ORD-{{ str_pad($od['id'], 4, '0', STR_PAD_LEFT) }}"
-                                            data-current-status="{{ $od['status'] }}"
-                                            title="Update Status">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button type="button" class="btn-action delete btn-delete-order"
-                                            data-order-id="{{ $od['id'] }}"
-                                            data-order-num="#ORD-{{ str_pad($od['id'], 4, '0', STR_PAD_LEFT) }}"
-                                            title="Delete">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                    @endforeach
+                <tr>
+                    <td colspan="10" class="text-center py-5 text-muted">
+                        <i class="fas fa-inbox" style="font-size: 3rem; color: #E0E0E0; margin-bottom: 15px; display: block;"></i>
+                        No orders found.
+                    </td>
+                </tr>
                 @endif
             </tbody>
         </table>
     </div>
 
-    @if(empty($orders) || (isset($orders) && count($orders) == 0))
-        {{-- Empty state disabled since demo shows --}}
-    @endif
-
     <!-- Pagination -->
     <div class="pagination-wrap">
         <div class="pagination-info">
-            Showing <strong>1 to 8</strong> of <strong>{{ $totalOrders ?? 128 }}</strong> orders
+            {{ $strings['pg_showing'] }} <strong>{{ $orders->firstItem() ?? 0 }} {{ $strings['pg_to'] }} {{ $orders->lastItem() ?? 0 }}</strong> {{ $strings['pg_of'] }} <strong>{{ $orders->total() ?? 0 }}</strong> {{ $strings['pg_orders'] }}
         </div>
         @if(isset($orders) && method_exists($orders, 'links'))
-            <div>{{ $orders->appends(request()->all())->links() }}</div>
-        @else
-            <nav>
-                <ul class="pagination-custom">
-                    <li><a href="#" class="page-btn" title="Previous"><i class="fas fa-chevron-left"></i></a></li>
-                    <li><a href="#" class="page-btn active">1</a></li>
-                    <li><a href="#" class="page-btn">2</a></li>
-                    <li><a href="#" class="page-btn">3</a></li>
-                    <li><a href="#" class="page-btn">...</a></li>
-                    <li><a href="#" class="page-btn">16</a></li>
-                    <li><a href="#" class="page-btn" title="Next"><i class="fas fa-chevron-right"></i></a></li>
-                </ul>
-            </nav>
+        <div>{{ $orders->appends(request()->all())->links() }}</div>
         @endif
     </div>
 </div>
@@ -878,66 +955,81 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content modal-content-custom">
             <div class="modal-header modal-header-custom">
-                <h5 class="modal-title"><i class="fas fa-edit me-2"></i> Update Order Status</h5>
+                <h5 class="modal-title"><i class="fas fa-edit me-2"></i> {{ $strings['modal_title'] }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <form id="statusUpdateForm" action="{{ url('/admin/order/update-status') }}" method="POST">
                 @csrf
                 <input type="hidden" name="order_id" id="modalOrderId">
                 <div class="modal-body modal-body-custom">
-                    <p class="mb-3 text-muted">
-                        Update status for order <strong id="modalOrderNum" style="color:var(--primary-green);"></strong>
-                    </p>
+                    <p class="mb-3 text-muted">{{ $strings['modal_desc'] }} <strong id="modalOrderNum" style="color:var(--primary-green);"></strong></p>
 
                     <div class="status-option" data-status="pending">
                         <input type="radio" name="status" value="pending">
                         <div class="st-icon" style="background:#FB8C00;"><i class="fas fa-clock"></i></div>
-                        <div class="st-text"><strong>Pending</strong><span>Order received, awaiting confirmation</span></div>
+                        <div class="st-text"><strong>{{ $strings['st_pending_title'] }}</strong><span>{{ $strings['st_pending_desc'] }}</span></div>
                     </div>
 
                     <div class="status-option" data-status="confirmed">
                         <input type="radio" name="status" value="confirmed">
                         <div class="st-icon" style="background:#1976D2;"><i class="fas fa-check"></i></div>
-                        <div class="st-text"><strong>Confirmed</strong><span>Order confirmed by pharmacy</span></div>
+                        <div class="st-text"><strong>{{ $strings['st_confirmed_title'] }}</strong><span>{{ $strings['st_confirmed_desc'] }}</span></div>
                     </div>
 
                     <div class="status-option" data-status="processing">
                         <input type="radio" name="status" value="processing">
                         <div class="st-icon" style="background:#7B1FA2;"><i class="fas fa-cogs"></i></div>
-                        <div class="st-text"><strong>Processing</strong><span>Being prepared for shipment</span></div>
+                        <div class="st-text"><strong>{{ $strings['st_processing_title'] }}</strong><span>{{ $strings['st_processing_desc'] }}</span></div>
                     </div>
 
                     <div class="status-option" data-status="out_for_delivery">
                         <input type="radio" name="status" value="out_for_delivery">
                         <div class="st-icon" style="background:#C2185B;"><i class="fas fa-motorcycle"></i></div>
-                        <div class="st-text"><strong>Out for Delivery</strong><span>Assigned to delivery partner</span></div>
+                        <div class="st-text"><strong>{{ $strings['st_out_title'] }}</strong><span>{{ $strings['st_out_desc'] }}</span></div>
                     </div>
 
                     <div class="status-option" data-status="delivered">
                         <input type="radio" name="status" value="delivered">
                         <div class="st-icon" style="background:#2E7D32;"><i class="fas fa-check-circle"></i></div>
-                        <div class="st-text"><strong>Delivered</strong><span>Successfully delivered to customer</span></div>
+                        <div class="st-text"><strong>{{ $strings['st_delivered_title'] }}</strong><span>{{ $strings['st_delivered_desc'] }}</span></div>
                     </div>
 
                     <div class="status-option" data-status="cancelled">
                         <input type="radio" name="status" value="cancelled">
                         <div class="st-icon" style="background:#C62828;"><i class="fas fa-times-circle"></i></div>
-                        <div class="st-text"><strong>Cancelled</strong><span>Order was cancelled</span></div>
+                        <div class="st-text"><strong>{{ $strings['st_cancelled_title'] }}</strong><span>{{ $strings['st_cancelled_desc'] }}</span></div>
                     </div>
 
                     <div id="statusError" style="color:#E53935;font-size:0.82rem;margin-top:10px;display:none;">
-                        ⚠ Please select a status.
+                        {{ $strings['err_select_status'] }}
                     </div>
                 </div>
                 <div class="modal-footer" style="border:none;padding:15px 25px 25px;">
                     <button type="button" class="btn-reset" data-bs-dismiss="modal" style="width:auto;padding:10px 22px;">
-                        <i class="fas fa-times"></i> Cancel
+                        <i class="fas fa-times"></i> {{ $strings['btn_cancel'] }}
                     </button>
                     <button type="submit" class="btn-filter" style="width:auto;padding:10px 25px;">
-                        <i class="fas fa-save"></i> Update Status
+                        <i class="fas fa-save"></i> {{ $strings['btn_update'] }}
                     </button>
                 </div>
             </form>
+        </div>
+    </div>
+</div>
+
+<!-- ============ CUSTOM ALERT POPUP MODAL ============ -->
+<div class="modal fade" id="customAlertModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content text-center">
+            <div class="alert-icon-wrap" id="customAlertIconWrap">
+                <i class="fas" id="customAlertIcon"></i>
+            </div>
+            <h5 class="alert-title" id="customAlertTitle">Alert</h5>
+            <p class="alert-message" id="customAlertMessage">Message goes here.</p>
+
+            <div class="d-flex justify-content-center gap-3" id="alertBtnGroup">
+                <!-- Dynamic Buttons appended here by JS -->
+            </div>
         </div>
     </div>
 </div>
@@ -946,128 +1038,147 @@
 
 @section('scripts')
 <script>
-$(document).ready(function () {
+    $(document).ready(function() {
+        var jsStrings = {
+            delConfirm: @json($strings['js_del_confirm']),
+            dateErr1: @json($strings['js_date_err_1']),
+            dateErr2: @json($strings['js_date_err_2']),
+            updating: @json($strings['js_updating']),
+            btnCancel: @json($strings['btn_cancel'])
+        };
 
-    /* ============ STAT CARD CLICK - FILTER BY STATUS ============ */
-    $('.order-stat').on('click', function () {
-        var status = $(this).data('status');
-        var url = new URL(window.location.href);
-        if (status) {
-            url.searchParams.set('status', status);
-        } else {
-            url.searchParams.delete('status');
-        }
-        window.location.href = url.toString();
-    });
+        function showCustomAlert(type, title, message, isConfirm = false, onConfirm = null) {
+            var iconWrap = $('#customAlertIconWrap');
+            var icon = $('#customAlertIcon');
+            var btnGroup = $('#alertBtnGroup');
+            iconWrap.removeClass('warning danger success');
+            btnGroup.empty();
 
-    /* ============ STATUS FILTER AUTO SUBMIT ============ */
-    $('#statusFilter').on('change', function () {
-        $('#filterForm').submit();
-    });
+            if (type === 'warning') {
+                iconWrap.addClass('warning');
+                icon.attr('class', 'fas fa-exclamation-triangle');
+            } else if (type === 'danger') {
+                iconWrap.addClass('danger');
+                icon.attr('class', 'fas fa-times-circle');
+            } else {
+                iconWrap.addClass('success');
+                icon.attr('class', 'fas fa-check-circle');
+            }
 
-    /* ============ SELECT ALL CHECKBOX ============ */
-    $('#selectAll').on('change', function () {
-        $('.row-check').prop('checked', $(this).is(':checked'));
-    });
+            $('#customAlertTitle').text(title);
+            $('#customAlertMessage').html(message);
 
-    $('.row-check').on('change', function () {
-        if ($('.row-check:checked').length === $('.row-check').length) {
-            $('#selectAll').prop('checked', true);
-        } else {
-            $('#selectAll').prop('checked', false);
-        }
-    });
-
-    /* ============ STATUS UPDATE MODAL ============ */
-    $('.btn-update-status').on('click', function () {
-        var orderId = $(this).data('order-id');
-        var orderNum = $(this).data('order-num');
-        var currentStatus = $(this).data('current-status');
-
-        $('#modalOrderId').val(orderId);
-        $('#modalOrderNum').text(orderNum);
-
-        // Clear all selections
-        $('.status-option').removeClass('selected');
-        $('.status-option input[type="radio"]').prop('checked', false);
-
-        // Select current status
-        var $currentOption = $('.status-option[data-status="' + currentStatus + '"]');
-        $currentOption.addClass('selected');
-        $currentOption.find('input[type="radio"]').prop('checked', true);
-
-        $('#statusError').hide();
-        $('#statusModal').modal('show');
-    });
-
-    /* ============ STATUS OPTION SELECT ============ */
-    $('.status-option').on('click', function () {
-        $('.status-option').removeClass('selected');
-        $(this).addClass('selected');
-        $(this).find('input[type="radio"]').prop('checked', true);
-        $('#statusError').hide();
-    });
-
-    /* ============ STATUS FORM SUBMIT VALIDATION ============ */
-    $('#statusUpdateForm').on('submit', function (e) {
-        var selected = $('input[name="status"]:checked').val();
-        if (!selected) {
-            e.preventDefault();
-            $('#statusError').fadeIn();
-            return false;
+            if (isConfirm) {
+                btnGroup.append(`<button type="button" class="alert-btn-cancel" data-bs-dismiss="modal">${jsStrings.btnCancel}</button>`);
+                btnGroup.append(`<button type="button" class="alert-btn-confirm" id="customAlertConfirmBtn">Yes, Delete</button>`);
+                $('#customAlertConfirmBtn').on('click', function() {
+                    $('#customAlertModal').modal('hide');
+                    if (onConfirm) onConfirm();
+                });
+            } else {
+                btnGroup.append(`<button type="button" class="alert-btn-ok" data-bs-dismiss="modal">OK</button>`);
+            }
+            $('#customAlertModal').modal('show');
         }
 
-        var $btn = $(this).find('button[type="submit"]');
-        var original = $btn.html();
-        $btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Updating...');
-    });
+        $('.order-stat').on('click', function() {
+            var status = $(this).data('status');
+            var url = new URL(window.location.href);
+            if (status) {
+                url.searchParams.set('status', status);
+            } else {
+                url.searchParams.delete('status');
+            }
+            window.location.href = url.toString();
+        });
 
-    /* ============ DELETE ORDER ============ */
-    $('.btn-delete-order').on('click', function () {
-        var orderId = $(this).data('order-id');
-        var orderNum = $(this).data('order-num');
-
-        if (confirm('Are you sure you want to delete order ' + orderNum + '?\nThis action cannot be undone.')) {
-            // Create form and submit
-            var $form = $('<form>', {
-                method: 'POST',
-                action: '{{ url("/admin/order/delete") }}/' + orderId
-            });
-            $form.append('<input type="hidden" name="_token" value="{{ csrf_token() }}">');
-            $form.append('<input type="hidden" name="_method" value="DELETE">');
-            $('body').append($form);
-            $form.submit();
-        }
-    });
-
-    /* ============ SEARCH INPUT ENTER KEY ============ */
-    $('input[name="search"]').on('keypress', function (e) {
-        if (e.which === 13) {
+        $('#statusFilter').on('change', function() {
             $('#filterForm').submit();
-        }
+        });
+
+        $('#selectAll').on('change', function() {
+            $('.row-check').prop('checked', $(this).is(':checked'));
+        });
+        $('.row-check').on('change', function() {
+            if ($('.row-check:checked').length === $('.row-check').length) {
+                $('#selectAll').prop('checked', true);
+            } else {
+                $('#selectAll').prop('checked', false);
+            }
+        });
+
+        $('.btn-update-status').on('click', function() {
+            var orderId = $(this).data('order-id');
+            var orderNum = $(this).data('order-num');
+            var currentStatus = $(this).data('current-status');
+            $('#modalOrderId').val(orderId);
+            $('#modalOrderNum').text(orderNum);
+            $('.status-option').removeClass('selected');
+            $('.status-option input[type="radio"]').prop('checked', false);
+            var $currentOption = $('.status-option[data-status="' + currentStatus + '"]');
+            $currentOption.addClass('selected');
+            $currentOption.find('input[type="radio"]').prop('checked', true);
+            $('#statusError').hide();
+            $('#statusModal').modal('show');
+        });
+
+        $('.status-option').on('click', function() {
+            $('.status-option').removeClass('selected');
+            $(this).addClass('selected');
+            $(this).find('input[type="radio"]').prop('checked', true);
+            $('#statusError').hide();
+        });
+
+        $('#statusUpdateForm').on('submit', function(e) {
+            var selected = $('input[name="status"]:checked').val();
+            if (!selected) {
+                e.preventDefault();
+                $('#statusError').fadeIn();
+                return false;
+            }
+            var $btn = $(this).find('button[type="submit"]');
+            $btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> ' + jsStrings.updating);
+        });
+
+        $('.btn-delete-order').on('click', function() {
+            var orderId = $(this).data('order-id');
+            var orderNum = $(this).data('order-num');
+            var msg = jsStrings.delConfirm.replace(':num', orderNum);
+            showCustomAlert('danger', 'Delete Order?', msg, true, function() {
+                var $form = $('<form>', {
+                    method: 'POST',
+                    action: '{{ url("/admin/order/delete") }}/' + orderId
+                });
+                $form.append('<input type="hidden" name="_token" value="{{ csrf_token() }}">');
+                $form.append('<input type="hidden" name="_method" value="DELETE">');
+                $('body').append($form);
+                $form.submit();
+            });
+        });
+
+        $('input[name="search"]').on('keypress', function(e) {
+            if (e.which === 13) {
+                $('#filterForm').submit();
+            }
+        });
+
+        $('input[name="to_date"]').on('change', function() {
+            var fromDate = $('input[name="from_date"]').val();
+            var toDate = $(this).val();
+            if (fromDate && toDate && toDate < fromDate) {
+                showCustomAlert('warning', 'Invalid Date Range', jsStrings.dateErr1);
+                $(this).val('');
+            }
+        });
+
+        $('input[name="from_date"]').on('change', function() {
+            var fromDate = $(this).val();
+            var toDate = $('input[name="to_date"]').val();
+            if (fromDate && toDate && fromDate > toDate) {
+                showCustomAlert('warning', 'Invalid Date Range', jsStrings.dateErr2);
+                $('input[name="to_date"]').val('');
+            }
+        });
     });
-
-    /* ============ DATE VALIDATION ============ */
-    $('input[name="to_date"]').on('change', function () {
-        var fromDate = $('input[name="from_date"]').val();
-        var toDate = $(this).val();
-
-        if (fromDate && toDate && toDate < fromDate) {
-            alert('⚠ "To Date" cannot be earlier than "From Date".');
-            $(this).val('');
-        }
-    });
-
-    $('input[name="from_date"]').on('change', function () {
-        var fromDate = $(this).val();
-        var toDate = $('input[name="to_date"]').val();
-
-        if (fromDate && toDate && fromDate > toDate) {
-            alert('⚠ "From Date" cannot be later than "To Date".');
-            $('input[name="to_date"]').val('');
-        }
-    });
-
-});
 </script>
 @endsection

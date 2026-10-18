@@ -8,7 +8,7 @@ class Pharmacy extends Model
 {
     protected $fillable = [
         'pharmacy_name', 'owner_name', 'email', 'phone', 'password',
-        'license_number', 'village_id', 'address', 'logo', 'status', 'last_login'
+        'license_number', 'village_id', 'address', 'logo', 'status', 'last_login', 'logo',
     ];
 
     protected $hidden = ['password'];

@@ -659,6 +659,163 @@
 
 @section('content')
 
+{{-- Shared batch translation for the Register page --}}
+@php
+use App\Services\GoogleTranslator;
+
+$strings = GoogleTranslator::translateBatch([
+    // ---- Branding ----
+    'brand_tagline' => 'Join The Community',
+    'already_have_account' => 'Already have an account?',
+    'login_here' => 'Login here',
+
+    // ---- Welcome / headings ----
+    'signup_customer_title' => 'Join Sanjivani<br>As A Customer',
+    'signup_pharmacy_title' => 'Register Your<br>Pharmacy With Us',
+    'signup_delivery_title' => 'Become A<br>Delivery Partner',
+
+    'signup_customer_desc' => 'Create your free account and start ordering medicines from verified pharmacies with doorstep delivery in just a few clicks.',
+    'signup_pharmacy_desc' => "Partner with Sanjivani, expand your reach and grow your medicine store's sales with our robust online platform.",
+    'signup_delivery_desc' => 'Earn on your own schedule by delivering medicines in your area. Simple app, flexible hours and reliable weekly payouts.',
+
+    // ---- Customer benefits ----
+    'c_benefit_1' => 'Free registration in under 2 minutes',
+    'c_benefit_2' => 'Order from 150+ verified pharmacies',
+    'c_benefit_3' => 'Cash on Delivery available',
+    'c_benefit_4' => 'Track orders in real-time',
+
+    // ---- Pharmacy benefits ----
+    'p_benefit_1' => 'Reach thousands of local customers',
+    'p_benefit_2' => 'Manage inventory from one dashboard',
+    'p_benefit_3' => 'Grow your daily sales & revenue',
+    'p_benefit_4' => 'Free onboarding & training support',
+
+    // ---- Delivery benefits ----
+    'd_benefit_1' => 'Earn on your own flexible schedule',
+    'd_benefit_2' => 'Weekly guaranteed payouts',
+    'd_benefit_3' => 'Simple app to manage deliveries',
+    'd_benefit_4' => 'Insurance & fuel bonus available',
+
+    // ---- Right panel / headings ----
+    'form_title' => 'Create Account',
+    'form_subtitle' => 'Choose your account type and fill in your details to get started.',
+
+    // ---- Role tabs ----
+    'role_customer' => 'Customer',
+    'role_pharmacy' => 'Pharmacy',
+    'role_delivery' => 'Delivery Partner',
+
+    // ---- Role info cards ----
+    'role_info_customer' => 'As a Customer, you can order medicines and get them delivered to your address.',
+    'role_info_pharmacy' => 'As a Pharmacy, you will be reviewed and approved by admin before you can accept orders.',
+    'role_info_delivery' => 'As a Delivery Partner, your profile will be verified by admin before you can start receiving delivery assignments.',
+
+    // ---- Section headings ----
+    'section_personal' => 'Personal Information',
+    'section_delivery_address' => 'Delivery Address',
+    'section_pharmacy_details' => 'Pharmacy Details',
+    'section_delivery_details' => 'Delivery Partner Details',
+    'section_security' => 'Security',
+
+    // ---- Common labels ----
+    'label_name' => 'Full Name',
+    'label_email' => 'Email Address',
+    'label_phone' => 'Mobile Number',
+    'label_village' => 'Village / Area',
+    'label_address' => 'Full Address',
+    'label_password' => 'Password',
+    'label_confirm_password' => 'Confirm Password',
+
+    // ---- Customer field labels ----
+    'ph_name' => 'Your full name',
+    'ph_email' => 'you@example.com',
+    'ph_phone' => '10-digit mobile number',
+    'ph_address' => 'House No, Street, Landmark, City, State, PIN',
+    'ph_password' => 'Min. 6 characters',
+    'ph_confirm_password' => 'Re-enter password',
+
+    // ---- Village dropdown ----
+    'select_village' => '-- Select Village --',
+
+    // ---- Pharmacy labels ----
+    'label_pharmacy_name' => 'Pharmacy Name',
+    'label_license_number' => 'License Number',
+    'label_pharmacy_address' => 'Pharmacy Address',
+    'ph_pharmacy_name' => 'Your pharmacy/store name',
+    'ph_license_number' => 'Drug License No.',
+    'ph_pharmacy_address' => 'Complete pharmacy address',
+
+    // ---- Delivery labels ----
+    'label_vehicle_type' => 'Vehicle Type',
+    'label_vehicle_number' => 'Vehicle Number',
+    'label_aadhar' => 'Aadhar Number',
+    'label_dl' => 'Driving License',
+    'ph_vehicle_number' => 'MH-01-AB-1234',
+    'ph_aadhar' => '12-digit Aadhar',
+    'ph_dl' => 'DL Number (optional)',
+    'select_vehicle' => '-- Select Vehicle --',
+    'vehicle_bike' => 'Bike / Scooter',
+    'vehicle_bicycle' => 'Bicycle',
+    'vehicle_car' => 'Car',
+    'vehicle_auto' => 'Auto Rickshaw',
+
+    // ---- Terms ----
+    'terms_agree' => 'I agree to the',
+    'terms_and_conditions' => 'Terms & Conditions',
+    'terms_and' => 'and',
+    'terms_privacy' => 'Privacy Policy',
+    'terms_suffix' => 'of Sanjivani.',
+
+    // ---- Buttons / links ----
+    'btn_create' => 'Create My Account',
+    'btn_creating' => 'Creating Account...',
+    'divider_or' => 'OR',
+    'already_registered' => 'Already registered?',
+    'login_to_account' => 'Login to your account',
+
+    // ---- Password strength labels ----
+    'pw_very_weak' => 'Very Weak',
+    'pw_weak' => 'Weak',
+    'pw_fair' => 'Fair',
+    'pw_good' => 'Good',
+    'pw_strong' => 'Strong',
+
+    // ---- JS validation messages ----
+    'js_name_required' => 'Please enter your full name.',
+    'js_name_short' => 'Name must be at least 2 characters.',
+    'js_name_long' => 'Name is too long (max 50).',
+    'js_name_chars' => 'Only letters, spaces and dots allowed.',
+    'js_email_required' => 'Please enter your email.',
+    'js_email_invalid' => 'Please enter a valid email.',
+    'js_email_long' => 'Email is too long.',
+    'js_phone_required' => 'Please enter mobile number.',
+    'js_phone_digits' => 'Only digits allowed.',
+    'js_phone_length' => 'Must be exactly 10 digits.',
+    'js_phone_start' => 'Must start with 6, 7, 8 or 9.',
+    'js_village_required' => 'Please select your village.',
+    'js_address_required' => 'Please enter your address.',
+    'js_address_short' => 'Address must be at least 10 characters.',
+    'js_address_long' => 'Address too long (max 300).',
+    'js_pharmacy_name_required' => 'Please enter pharmacy name.',
+    'js_pharmacy_name_short' => 'Minimum 3 characters.',
+    'js_license_required' => 'Please enter license number.',
+    'js_license_invalid' => 'Invalid license number.',
+    'js_pharmacy_address_required' => 'Please enter pharmacy address.',
+    'js_pharmacy_address_short' => 'Minimum 10 characters.',
+    'js_vehicle_type_required' => 'Please select vehicle type.',
+    'js_vehicle_number_required' => 'Please enter vehicle number.',
+    'js_vehicle_number_format' => 'Format: MH-01-AB-1234',
+    'js_aadhar_required' => 'Please enter Aadhar number.',
+    'js_aadhar_invalid' => 'Aadhar must be exactly 12 digits.',
+    'js_password_required' => 'Please enter a password.',
+    'js_password_short' => 'Minimum 6 characters required.',
+    'js_password_long' => 'Password too long.',
+    'js_confirm_required' => 'Please confirm password.',
+    'js_confirm_mismatch' => 'Passwords do not match.',
+    'js_terms_required' => 'You must agree to the Terms & Conditions.',
+]);
+@endphp
+
 <section class="auth-section">
     <div class="container">
         <div class="auth-wrap" data-aos="zoom-in">
@@ -675,52 +832,49 @@
                     </div>
                     <div>
                         <h4>Sanjivani</h4>
-                        <span>Join The Community</span>
+                        <span>{{ $strings['brand_tagline'] }}</span>
                     </div>
                 </div>
 
                 <div class="auth-welcome">
-                    <h2 id="welcomeTitle">Join Sanjivani<br>As A Customer</h2>
-                    <p id="welcomeDesc">
-                        Create your free account and start ordering medicines from verified pharmacies
-                        with doorstep delivery in just a few clicks.
-                    </p>
+                    <h2 id="welcomeTitle">{!! $strings['signup_customer_title'] !!}</h2>
+                    <p id="welcomeDesc">{{ $strings['signup_customer_desc'] }}</p>
 
                     <!-- Customer Benefits -->
                     <ul class="role-benefits" id="customerBenefits">
-                        <li><div class="icon"><i class="fas fa-check"></i></div><span>Free registration in under 2 minutes</span></li>
-                        <li><div class="icon"><i class="fas fa-check"></i></div><span>Order from 150+ verified pharmacies</span></li>
-                        <li><div class="icon"><i class="fas fa-check"></i></div><span>Cash on Delivery available</span></li>
-                        <li><div class="icon"><i class="fas fa-check"></i></div><span>Track orders in real-time</span></li>
+                        <li><div class="icon"><i class="fas fa-check"></i></div><span>{{ $strings['c_benefit_1'] }}</span></li>
+                        <li><div class="icon"><i class="fas fa-check"></i></div><span>{{ $strings['c_benefit_2'] }}</span></li>
+                        <li><div class="icon"><i class="fas fa-check"></i></div><span>{{ $strings['c_benefit_3'] }}</span></li>
+                        <li><div class="icon"><i class="fas fa-check"></i></div><span>{{ $strings['c_benefit_4'] }}</span></li>
                     </ul>
 
                     <!-- Pharmacy Benefits -->
                     <ul class="role-benefits" id="pharmacyBenefits" style="display:none;">
-                        <li><div class="icon"><i class="fas fa-check"></i></div><span>Reach thousands of local customers</span></li>
-                        <li><div class="icon"><i class="fas fa-check"></i></div><span>Manage inventory from one dashboard</span></li>
-                        <li><div class="icon"><i class="fas fa-check"></i></div><span>Grow your daily sales & revenue</span></li>
-                        <li><div class="icon"><i class="fas fa-check"></i></div><span>Free onboarding & training support</span></li>
+                        <li><div class="icon"><i class="fas fa-check"></i></div><span>{{ $strings['p_benefit_1'] }}</span></li>
+                        <li><div class="icon"><i class="fas fa-check"></i></div><span>{{ $strings['p_benefit_2'] }}</span></li>
+                        <li><div class="icon"><i class="fas fa-check"></i></div><span>{{ $strings['p_benefit_3'] }}</span></li>
+                        <li><div class="icon"><i class="fas fa-check"></i></div><span>{{ $strings['p_benefit_4'] }}</span></li>
                     </ul>
 
                     <!-- Delivery Benefits -->
                     <ul class="role-benefits" id="deliveryBenefits" style="display:none;">
-                        <li><div class="icon"><i class="fas fa-check"></i></div><span>Earn on your own flexible schedule</span></li>
-                        <li><div class="icon"><i class="fas fa-check"></i></div><span>Weekly guaranteed payouts</span></li>
-                        <li><div class="icon"><i class="fas fa-check"></i></div><span>Simple app to manage deliveries</span></li>
-                        <li><div class="icon"><i class="fas fa-check"></i></div><span>Insurance & fuel bonus available</span></li>
+                        <li><div class="icon"><i class="fas fa-check"></i></div><span>{{ $strings['d_benefit_1'] }}</span></li>
+                        <li><div class="icon"><i class="fas fa-check"></i></div><span>{{ $strings['d_benefit_2'] }}</span></li>
+                        <li><div class="icon"><i class="fas fa-check"></i></div><span>{{ $strings['d_benefit_3'] }}</span></li>
+                        <li><div class="icon"><i class="fas fa-check"></i></div><span>{{ $strings['d_benefit_4'] }}</span></li>
                     </ul>
                 </div>
 
                 <div class="auth-bottom-link">
                     <i class="fas fa-sign-in-alt me-2"></i>
-                    Already have an account? <a href="{{ url('/login') }}">Login here</a>
+                    {{ $strings['already_have_account'] }} <a href="{{ url('/login') }}">{{ $strings['login_here'] }}</a>
                 </div>
             </div>
 
             <!-- ============ RIGHT SIDE - REGISTER FORM ============ -->
             <div class="auth-right">
-                <h2 class="auth-title">Create Account</h2>
-                <p class="auth-subtitle">Choose your account type and fill in your details to get started.</p>
+                <h2 class="auth-title">{{ $strings['form_title'] }}</h2>
+                <p class="auth-subtitle">{{ $strings['form_subtitle'] }}</p>
 
                 <!-- Session Alerts -->
                 @if(session('register_error'))
@@ -740,20 +894,20 @@
                 <!-- Role Tabs -->
                 <div class="role-tabs">
                     <button type="button" class="role-tab active" data-role="customer">
-                        <i class="fas fa-user"></i> Customer
+                        <i class="fas fa-user"></i> {{ $strings['role_customer'] }}
                     </button>
                     <button type="button" class="role-tab" data-role="pharmacy">
-                        <i class="fas fa-store"></i> Pharmacy
+                        <i class="fas fa-store"></i> {{ $strings['role_pharmacy'] }}
                     </button>
                     <button type="button" class="role-tab" data-role="delivery">
-                        <i class="fas fa-motorcycle"></i> Delivery Partner
+                        <i class="fas fa-motorcycle"></i> {{ $strings['role_delivery'] }}
                     </button>
                 </div>
 
                 <!-- Role Info Card -->
                 <div class="role-info-card" id="roleInfoCard">
                     <i class="fas fa-info-circle"></i>
-                    <span id="roleInfoText">As a Customer, you can order medicines and get them delivered to your address.</span>
+                    <span id="roleInfoText">{{ $strings['role_info_customer'] }}</span>
                 </div>
 
                 <!-- Register Form -->
@@ -763,18 +917,18 @@
 
                     <!-- ============ COMMON FIELDS (ALL ROLES) ============ -->
                     <div class="form-section-title">
-                        <i class="fas fa-user-circle"></i> Personal Information
+                        <i class="fas fa-user-circle"></i> {{ $strings['section_personal'] }}
                     </div>
 
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group-auth">
-                                <label class="form-label-auth">Full Name <span class="required">*</span></label>
+                                <label class="form-label-auth">{{ $strings['label_name'] }} <span class="required">*</span></label>
                                 <div class="input-wrap">
                                     <i class="fas fa-user input-icon-left"></i>
                                     <input type="text" name="name" id="name"
                                            class="form-control-auth"
-                                           placeholder="Your full name"
+                                           placeholder="{{ $strings['ph_name'] }}"
                                            value="{{ old('name') }}">
                                 </div>
                                 <span class="error-message" id="nameError"></span>
@@ -782,12 +936,12 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group-auth">
-                                <label class="form-label-auth">Email Address <span class="required">*</span></label>
+                                <label class="form-label-auth">{{ $strings['label_email'] }} <span class="required">*</span></label>
                                 <div class="input-wrap">
                                     <i class="fas fa-envelope input-icon-left"></i>
                                     <input type="email" name="email" id="email"
                                            class="form-control-auth"
-                                           placeholder="you@example.com"
+                                           placeholder="{{ $strings['ph_email'] }}"
                                            value="{{ old('email') }}">
                                 </div>
                                 <span class="error-message" id="emailError"></span>
@@ -795,12 +949,12 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group-auth">
-                                <label class="form-label-auth">Mobile Number <span class="required">*</span></label>
+                                <label class="form-label-auth">{{ $strings['label_phone'] }} <span class="required">*</span></label>
                                 <div class="input-wrap">
                                     <i class="fas fa-phone input-icon-left"></i>
                                     <input type="text" name="phone" id="phone"
                                            class="form-control-auth"
-                                           placeholder="10-digit mobile number"
+                                           placeholder="{{ $strings['ph_phone'] }}"
                                            maxlength="10"
                                            value="{{ old('phone') }}">
                                 </div>
@@ -809,11 +963,11 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group-auth">
-                                <label class="form-label-auth">Village / Area <span class="required">*</span></label>
+                                <label class="form-label-auth">{{ $strings['label_village'] }} <span class="required">*</span></label>
                                 <div class="input-wrap">
                                     <i class="fas fa-map-marker-alt input-icon-left"></i>
                                     <select name="village_id" id="village_id" class="form-select-auth">
-                                        <option value="">-- Select Village --</option>
+                                        <option value="">{{ $strings['select_village'] }}</option>
                                         @if(!empty($villages))
                                             @foreach($villages as $v)
                                                 <option value="{{ $v->id }}" {{ old('village_id') == $v->id ? 'selected' : '' }}>
@@ -831,15 +985,15 @@
                     <!-- ============ CUSTOMER FIELDS ============ -->
                     <div class="role-fields active" id="customerFields">
                         <div class="form-section-title">
-                            <i class="fas fa-location-dot"></i> Delivery Address
+                            <i class="fas fa-location-dot"></i> {{ $strings['section_delivery_address'] }}
                         </div>
                         <div class="form-group-auth">
-                            <label class="form-label-auth">Full Address <span class="required">*</span></label>
+                            <label class="form-label-auth">{{ $strings['label_address'] }} <span class="required">*</span></label>
                             <div class="input-wrap">
                                 <i class="fas fa-home input-icon-left"></i>
                                 <textarea name="address" id="address"
                                           class="form-control-auth"
-                                          placeholder="House No, Street, Landmark, City, State, PIN"
+                                          placeholder="{{ $strings['ph_address'] }}"
                                           maxlength="300">{{ old('address') }}</textarea>
                             </div>
                             <span class="error-message" id="addressError"></span>
@@ -849,17 +1003,17 @@
                     <!-- ============ PHARMACY FIELDS ============ -->
                     <div class="role-fields" id="pharmacyFields">
                         <div class="form-section-title">
-                            <i class="fas fa-store"></i> Pharmacy Details
+                            <i class="fas fa-store"></i> {{ $strings['section_pharmacy_details'] }}
                         </div>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group-auth">
-                                    <label class="form-label-auth">Pharmacy Name <span class="required">*</span></label>
+                                    <label class="form-label-auth">{{ $strings['label_pharmacy_name'] }} <span class="required">*</span></label>
                                     <div class="input-wrap">
                                         <i class="fas fa-hospital input-icon-left"></i>
                                         <input type="text" name="pharmacy_name" id="pharmacy_name"
                                                class="form-control-auth"
-                                               placeholder="Your pharmacy/store name"
+                                               placeholder="{{ $strings['ph_pharmacy_name'] }}"
                                                value="{{ old('pharmacy_name') }}">
                                     </div>
                                     <span class="error-message" id="pharmacyNameError"></span>
@@ -867,12 +1021,12 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group-auth">
-                                    <label class="form-label-auth">License Number <span class="required">*</span></label>
+                                    <label class="form-label-auth">{{ $strings['label_license_number'] }} <span class="required">*</span></label>
                                     <div class="input-wrap">
                                         <i class="fas fa-id-card input-icon-left"></i>
                                         <input type="text" name="license_number" id="license_number"
                                                class="form-control-auth"
-                                               placeholder="Drug License No."
+                                               placeholder="{{ $strings['ph_license_number'] }}"
                                                value="{{ old('license_number') }}">
                                     </div>
                                     <span class="error-message" id="licenseError"></span>
@@ -880,12 +1034,12 @@
                             </div>
                             <div class="col-12">
                                 <div class="form-group-auth">
-                                    <label class="form-label-auth">Pharmacy Address <span class="required">*</span></label>
+                                    <label class="form-label-auth">{{ $strings['label_pharmacy_address'] }} <span class="required">*</span></label>
                                     <div class="input-wrap">
                                         <i class="fas fa-map-pin input-icon-left"></i>
                                         <textarea name="pharmacy_address" id="pharmacy_address"
                                                   class="form-control-auth"
-                                                  placeholder="Complete pharmacy address"
+                                                  placeholder="{{ $strings['ph_pharmacy_address'] }}"
                                                   maxlength="300">{{ old('pharmacy_address') }}</textarea>
                                     </div>
                                     <span class="error-message" id="pharmacyAddressError"></span>
@@ -897,20 +1051,20 @@
                     <!-- ============ DELIVERY FIELDS ============ -->
                     <div class="role-fields" id="deliveryFields">
                         <div class="form-section-title">
-                            <i class="fas fa-motorcycle"></i> Delivery Partner Details
+                            <i class="fas fa-motorcycle"></i> {{ $strings['section_delivery_details'] }}
                         </div>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group-auth">
-                                    <label class="form-label-auth">Vehicle Type <span class="required">*</span></label>
+                                    <label class="form-label-auth">{{ $strings['label_vehicle_type'] }} <span class="required">*</span></label>
                                     <div class="input-wrap">
                                         <i class="fas fa-truck input-icon-left"></i>
                                         <select name="vehicle_type" id="vehicle_type" class="form-select-auth">
-                                            <option value="">-- Select Vehicle --</option>
-                                            <option value="Bike"    {{ old('vehicle_type')=='Bike'    ? 'selected' : '' }}>Bike / Scooter</option>
-                                            <option value="Bicycle" {{ old('vehicle_type')=='Bicycle' ? 'selected' : '' }}>Bicycle</option>
-                                            <option value="Car"     {{ old('vehicle_type')=='Car'     ? 'selected' : '' }}>Car</option>
-                                            <option value="Auto"    {{ old('vehicle_type')=='Auto'    ? 'selected' : '' }}>Auto Rickshaw</option>
+                                            <option value="">{{ $strings['select_vehicle'] }}</option>
+                                            <option value="Bike"    {{ old('vehicle_type')=='Bike'    ? 'selected' : '' }}>{{ $strings['vehicle_bike'] }}</option>
+                                            <option value="Bicycle" {{ old('vehicle_type')=='Bicycle' ? 'selected' : '' }}>{{ $strings['vehicle_bicycle'] }}</option>
+                                            <option value="Car"     {{ old('vehicle_type')=='Car'     ? 'selected' : '' }}>{{ $strings['vehicle_car'] }}</option>
+                                            <option value="Auto"    {{ old('vehicle_type')=='Auto'    ? 'selected' : '' }}>{{ $strings['vehicle_auto'] }}</option>
                                         </select>
                                     </div>
                                     <span class="error-message" id="vehicleTypeError"></span>
@@ -918,12 +1072,12 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group-auth">
-                                    <label class="form-label-auth">Vehicle Number <span class="required">*</span></label>
+                                    <label class="form-label-auth">{{ $strings['label_vehicle_number'] }} <span class="required">*</span></label>
                                     <div class="input-wrap">
                                         <i class="fas fa-hashtag input-icon-left"></i>
                                         <input type="text" name="vehicle_number" id="vehicle_number"
                                                class="form-control-auth"
-                                               placeholder="MH-01-AB-1234"
+                                               placeholder="{{ $strings['ph_vehicle_number'] }}"
                                                style="text-transform:uppercase;"
                                                value="{{ old('vehicle_number') }}">
                                     </div>
@@ -932,12 +1086,12 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group-auth">
-                                    <label class="form-label-auth">Aadhar Number <span class="required">*</span></label>
+                                    <label class="form-label-auth">{{ $strings['label_aadhar'] }} <span class="required">*</span></label>
                                     <div class="input-wrap">
                                         <i class="fas fa-id-badge input-icon-left"></i>
                                         <input type="text" name="aadhar_number" id="aadhar_number"
                                                class="form-control-auth"
-                                               placeholder="12-digit Aadhar"
+                                               placeholder="{{ $strings['ph_aadhar'] }}"
                                                maxlength="12"
                                                value="{{ old('aadhar_number') }}">
                                     </div>
@@ -946,12 +1100,12 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group-auth">
-                                    <label class="form-label-auth">Driving License</label>
+                                    <label class="form-label-auth">{{ $strings['label_dl'] }}</label>
                                     <div class="input-wrap">
                                         <i class="fas fa-id-card input-icon-left"></i>
                                         <input type="text" name="license_dl" id="license_dl"
                                                class="form-control-auth"
-                                               placeholder="DL Number (optional)"
+                                               placeholder="{{ $strings['ph_dl'] }}"
                                                value="{{ old('license_dl') }}">
                                     </div>
                                 </div>
@@ -961,37 +1115,37 @@
 
                     <!-- ============ PASSWORD SECTION ============ -->
                     <div class="form-section-title">
-                        <i class="fas fa-lock"></i> Security
+                        <i class="fas fa-lock"></i> {{ $strings['section_security'] }}
                     </div>
 
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group-auth">
-                                <label class="form-label-auth">Password <span class="required">*</span></label>
+                                <label class="form-label-auth">{{ $strings['label_password'] }} <span class="required">*</span></label>
                                 <div class="input-wrap">
                                     <i class="fas fa-lock input-icon-left"></i>
                                     <input type="password" name="password" id="password"
                                            class="form-control-auth"
-                                           placeholder="Min. 6 characters">
+                                           placeholder="{{ $strings['ph_password'] }}">
                                     <i class="fas fa-eye input-icon-right toggle-pwd" data-target="password"></i>
                                 </div>
                                 <div class="password-strength" id="passwordStrength">
                                     <div class="strength-bar">
                                         <div class="strength-fill" id="strengthFill"></div>
                                     </div>
-                                    <span class="strength-text" id="strengthText">Weak</span>
+                                    <span class="strength-text" id="strengthText">{{ $strings['pw_weak'] }}</span>
                                 </div>
                                 <span class="error-message" id="passwordError"></span>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group-auth">
-                                <label class="form-label-auth">Confirm Password <span class="required">*</span></label>
+                                <label class="form-label-auth">{{ $strings['label_confirm_password'] }} <span class="required">*</span></label>
                                 <div class="input-wrap">
                                     <i class="fas fa-lock input-icon-left"></i>
                                     <input type="password" name="password_confirmation" id="password_confirmation"
                                            class="form-control-auth"
-                                           placeholder="Re-enter password">
+                                           placeholder="{{ $strings['ph_confirm_password'] }}">
                                     <i class="fas fa-eye input-icon-right toggle-pwd" data-target="password_confirmation"></i>
                                 </div>
                                 <span class="error-message" id="confirmPasswordError"></span>
@@ -1003,24 +1157,25 @@
                     <div class="terms-check">
                         <input type="checkbox" name="terms" id="terms">
                         <label for="terms">
-                            I agree to the <a href="#" onclick="return false;">Terms & Conditions</a>
-                            and <a href="#" onclick="return false;">Privacy Policy</a> of Sanjivani.
+                            {{ $strings['terms_agree'] }} <a href="#" onclick="return false;">{{ $strings['terms_and_conditions'] }}</a>
+                            {{ $strings['terms_and'] }} <a href="#" onclick="return false;">{{ $strings['terms_privacy'] }}</a>
+                            {{ $strings['terms_suffix'] }}
                         </label>
                     </div>
                     <span class="error-message" id="termsError" style="margin-top:-15px;margin-bottom:15px;"></span>
 
                     <button type="submit" class="btn-auth-submit" id="submitBtn">
                         <i class="fas fa-user-plus"></i>
-                        <span>Create My Account</span>
+                        <span>{{ $strings['btn_create'] }}</span>
                     </button>
 
                     <div class="auth-divider">
-                        <span>OR</span>
+                        <span>{{ $strings['divider_or'] }}</span>
                     </div>
 
                     <div class="auth-login-link">
-                        Already registered?
-                        <a href="{{ url('/login') }}">Login to your account</a>
+                        {{ $strings['already_registered'] }}
+                        <a href="{{ url('/login') }}">{{ $strings['login_to_account'] }}</a>
                     </div>
                 </form>
             </div>
@@ -1040,21 +1195,21 @@ $(document).ready(function () {
     ============================================= */
     var roleInfo = {
         'customer': {
-            title: 'Join Sanjivani<br>As A Customer',
-            desc:  'Create your free account and start ordering medicines from verified pharmacies with doorstep delivery in just a few clicks.',
-            info:  'As a Customer, you can order medicines and get them delivered to your address.',
+            title: {!! json_encode($strings['signup_customer_title']) !!},
+            desc:  {!! json_encode($strings['signup_customer_desc']) !!},
+            info:  {!! json_encode($strings['role_info_customer']) !!},
             benefits: 'customerBenefits'
         },
         'pharmacy': {
-            title: 'Register Your<br>Pharmacy With Us',
-            desc:  'Partner with Sanjivani, expand your reach and grow your medicine store\'s sales with our robust online platform.',
-            info:  'As a Pharmacy, you will be reviewed and approved by admin before you can accept orders.',
+            title: {!! json_encode($strings['signup_pharmacy_title']) !!},
+            desc:  {!! json_encode($strings['signup_pharmacy_desc']) !!},
+            info:  {!! json_encode($strings['role_info_pharmacy']) !!},
             benefits: 'pharmacyBenefits'
         },
         'delivery': {
-            title: 'Become A<br>Delivery Partner',
-            desc:  'Earn on your own schedule by delivering medicines in your area. Simple app, flexible hours and reliable weekly payouts.',
-            info:  'As a Delivery Partner, your profile will be verified by admin before you can start receiving delivery assignments.',
+            title: {!! json_encode($strings['signup_delivery_title']) !!},
+            desc:  {!! json_encode($strings['signup_delivery_desc']) !!},
+            info:  {!! json_encode($strings['role_info_delivery']) !!},
             benefits: 'deliveryBenefits'
         }
     };
@@ -1069,11 +1224,9 @@ $(document).ready(function () {
         $('#welcomeDesc').text(roleInfo[role].desc);
         $('#roleInfoText').text(roleInfo[role].info);
 
-        // Toggle benefits list
         $('.role-benefits').hide();
         $('#' + roleInfo[role].benefits).show();
 
-        // Toggle role-specific fields
         $('.role-fields').removeClass('active');
         if (role === 'customer')      $('#customerFields').addClass('active');
         else if (role === 'pharmacy') $('#pharmacyFields').addClass('active');
@@ -1102,6 +1255,14 @@ $(document).ready(function () {
     /* =============================================
        PASSWORD STRENGTH METER
     ============================================= */
+    var pwLabels = {
+        veryWeak: {!! json_encode($strings['pw_very_weak']) !!},
+        weak:     {!! json_encode($strings['pw_weak']) !!},
+        fair:     {!! json_encode($strings['pw_fair']) !!},
+        good:     {!! json_encode($strings['pw_good']) !!},
+        strong:   {!! json_encode($strings['pw_strong']) !!}
+    };
+
     $('#password').on('input', function () {
         var val = $(this).val();
         var $wrap = $('#passwordStrength');
@@ -1122,11 +1283,11 @@ $(document).ready(function () {
         if (/[^A-Za-z0-9]/.test(val)) score++;
 
         var levels = [
-            { w: '20%', c: '#E53935', t: 'Very Weak' },
-            { w: '40%', c: '#FB8C00', t: 'Weak' },
-            { w: '60%', c: '#FDD835', t: 'Fair' },
-            { w: '80%', c: '#7CB342', t: 'Good' },
-            { w: '100%', c: '#2E7D32', t: 'Strong' }
+            { w: '20%', c: '#E53935', t: pwLabels.veryWeak },
+            { w: '40%', c: '#FB8C00', t: pwLabels.weak },
+            { w: '60%', c: '#FDD835', t: pwLabels.fair },
+            { w: '80%', c: '#7CB342', t: pwLabels.good },
+            { w: '100%', c: '#2E7D32', t: pwLabels.strong }
         ];
         var lvl = levels[Math.max(0, score - 1)];
         $fill.css({ width: lvl.w, background: lvl.c });
@@ -1154,14 +1315,49 @@ $(document).ready(function () {
               .text('').removeClass('show');
     }
 
-    /* -------- Individual Validators -------- */
+    var js = {
+        nameRequired:   {!! json_encode($strings['js_name_required']) !!},
+        nameShort:      {!! json_encode($strings['js_name_short']) !!},
+        nameLong:       {!! json_encode($strings['js_name_long']) !!},
+        nameChars:      {!! json_encode($strings['js_name_chars']) !!},
+        emailRequired:  {!! json_encode($strings['js_email_required']) !!},
+        emailInvalid:   {!! json_encode($strings['js_email_invalid']) !!},
+        emailLong:      {!! json_encode($strings['js_email_long']) !!},
+        phoneRequired:  {!! json_encode($strings['js_phone_required']) !!},
+        phoneDigits:    {!! json_encode($strings['js_phone_digits']) !!},
+        phoneLength:    {!! json_encode($strings['js_phone_length']) !!},
+        phoneStart:     {!! json_encode($strings['js_phone_start']) !!},
+        villageRequired:{!! json_encode($strings['js_village_required']) !!},
+        addressRequired:{!! json_encode($strings['js_address_required']) !!},
+        addressShort:   {!! json_encode($strings['js_address_short']) !!},
+        addressLong:    {!! json_encode($strings['js_address_long']) !!},
+        pharmNameReq:   {!! json_encode($strings['js_pharmacy_name_required']) !!},
+        pharmNameShort: {!! json_encode($strings['js_pharmacy_name_short']) !!},
+        licenseReq:     {!! json_encode($strings['js_license_required']) !!},
+        licenseInvalid: {!! json_encode($strings['js_license_invalid']) !!},
+        pharmAddrReq:   {!! json_encode($strings['js_pharmacy_address_required']) !!},
+        pharmAddrShort: {!! json_encode($strings['js_pharmacy_address_short']) !!},
+        vehTypeReq:     {!! json_encode($strings['js_vehicle_type_required']) !!},
+        vehNumReq:      {!! json_encode($strings['js_vehicle_number_required']) !!},
+        vehNumFormat:   {!! json_encode($strings['js_vehicle_number_format']) !!},
+        aadharReq:      {!! json_encode($strings['js_aadhar_required']) !!},
+        aadharInvalid:  {!! json_encode($strings['js_aadhar_invalid']) !!},
+        pwdReq:         {!! json_encode($strings['js_password_required']) !!},
+        pwdShort:       {!! json_encode($strings['js_password_short']) !!},
+        pwdLong:        {!! json_encode($strings['js_password_long']) !!},
+        confirmReq:     {!! json_encode($strings['js_confirm_required']) !!},
+        confirmMismatch:{!! json_encode($strings['js_confirm_mismatch']) !!},
+        termsRequired:  {!! json_encode($strings['js_terms_required']) !!}
+    };
+
+    /* -------- Validators -------- */
     function validateName() {
         var $el = $('#name');
         var v = $.trim($el.val());
-        if (v === '') { showError($el, '⚠ Please enter your full name.'); return false; }
-        if (v.length < 2) { showError($el, '⚠ Name must be at least 2 characters.'); return false; }
-        if (v.length > 50) { showError($el, '⚠ Name is too long (max 50).'); return false; }
-        if (!/^[a-zA-Z\s.]+$/.test(v)) { showError($el, '⚠ Only letters, spaces and dots allowed.'); return false; }
+        if (v === '') { showError($el, '⚠ ' + js.nameRequired); return false; }
+        if (v.length < 2) { showError($el, '⚠ ' + js.nameShort); return false; }
+        if (v.length > 50) { showError($el, '⚠ ' + js.nameLong); return false; }
+        if (!/^[a-zA-Z\s.]+$/.test(v)) { showError($el, '⚠ ' + js.nameChars); return false; }
         showSuccess($el); return true;
     }
 
@@ -1169,74 +1365,73 @@ $(document).ready(function () {
         var $el = $('#email');
         var v = $.trim($el.val());
         var regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-        if (v === '') { showError($el, '⚠ Please enter your email.'); return false; }
-        if (!regex.test(v)) { showError($el, '⚠ Please enter a valid email.'); return false; }
-        if (v.length > 100) { showError($el, '⚠ Email is too long.'); return false; }
+        if (v === '') { showError($el, '⚠ ' + js.emailRequired); return false; }
+        if (!regex.test(v)) { showError($el, '⚠ ' + js.emailInvalid); return false; }
+        if (v.length > 100) { showError($el, '⚠ ' + js.emailLong); return false; }
         showSuccess($el); return true;
     }
 
     function validatePhone() {
         var $el = $('#phone');
         var v = $.trim($el.val());
-        if (v === '') { showError($el, '⚠ Please enter mobile number.'); return false; }
-        if (!/^\d+$/.test(v)) { showError($el, '⚠ Only digits allowed.'); return false; }
-        if (v.length !== 10) { showError($el, '⚠ Must be exactly 10 digits.'); return false; }
-        if (!/^[6-9]\d{9}$/.test(v)) { showError($el, '⚠ Must start with 6, 7, 8 or 9.'); return false; }
+        if (v === '') { showError($el, '⚠ ' + js.phoneRequired); return false; }
+        if (!/^\d+$/.test(v)) { showError($el, '⚠ ' + js.phoneDigits); return false; }
+        if (v.length !== 10) { showError($el, '⚠ ' + js.phoneLength); return false; }
+        if (!/^[6-9]\d{9}$/.test(v)) { showError($el, '⚠ ' + js.phoneStart); return false; }
         showSuccess($el); return true;
     }
 
     function validateVillage() {
         var $el = $('#village_id');
-        if ($.trim($el.val()) === '') { showError($el, '⚠ Please select your village.'); return false; }
+        if ($.trim($el.val()) === '') { showError($el, '⚠ ' + js.villageRequired); return false; }
         showSuccess($el); return true;
     }
 
     function validateAddress() {
         var $el = $('#address');
         var v = $.trim($el.val());
-        if (v === '') { showError($el, '⚠ Please enter your address.'); return false; }
-        if (v.length < 10) { showError($el, '⚠ Address must be at least 10 characters.'); return false; }
-        if (v.length > 300) { showError($el, '⚠ Address too long (max 300).'); return false; }
+        if (v === '') { showError($el, '⚠ ' + js.addressRequired); return false; }
+        if (v.length < 10) { showError($el, '⚠ ' + js.addressShort); return false; }
+        if (v.length > 300) { showError($el, '⚠ ' + js.addressLong); return false; }
         showSuccess($el); return true;
     }
 
     function validatePharmacyName() {
         var $el = $('#pharmacy_name');
         var v = $.trim($el.val());
-        if (v === '') { showError($el, '⚠ Please enter pharmacy name.'); return false; }
-        if (v.length < 3) { showError($el, '⚠ Minimum 3 characters.'); return false; }
+        if (v === '') { showError($el, '⚠ ' + js.pharmNameReq); return false; }
+        if (v.length < 3) { showError($el, '⚠ ' + js.pharmNameShort); return false; }
         showSuccess($el); return true;
     }
 
     function validateLicense() {
         var $el = $('#license_number');
         var v = $.trim($el.val());
-        if (v === '') { showError($el, '⚠ Please enter license number.'); return false; }
-        if (v.length < 5) { showError($el, '⚠ Invalid license number.'); return false; }
+        if (v === '') { showError($el, '⚠ ' + js.licenseReq); return false; }
+        if (v.length < 5) { showError($el, '⚠ ' + js.licenseInvalid); return false; }
         showSuccess($el); return true;
     }
 
     function validatePharmacyAddress() {
         var $el = $('#pharmacy_address');
         var v = $.trim($el.val());
-        if (v === '') { showError($el, '⚠ Please enter pharmacy address.'); return false; }
-        if (v.length < 10) { showError($el, '⚠ Minimum 10 characters.'); return false; }
+        if (v === '') { showError($el, '⚠ ' + js.pharmAddrReq); return false; }
+        if (v.length < 10) { showError($el, '⚠ ' + js.pharmAddrShort); return false; }
         showSuccess($el); return true;
     }
 
     function validateVehicleType() {
         var $el = $('#vehicle_type');
-        if ($.trim($el.val()) === '') { showError($el, '⚠ Please select vehicle type.'); return false; }
+        if ($.trim($el.val()) === '') { showError($el, '⚠ ' + js.vehTypeReq); return false; }
         showSuccess($el); return true;
     }
 
     function validateVehicleNumber() {
         var $el = $('#vehicle_number');
         var v = $.trim($el.val()).toUpperCase();
-        if (v === '') { showError($el, '⚠ Please enter vehicle number.'); return false; }
-        // Simple pattern: MH-01-AB-1234 or MH01AB1234
+        if (v === '') { showError($el, '⚠ ' + js.vehNumReq); return false; }
         if (!/^[A-Z]{2}[-\s]?\d{1,2}[-\s]?[A-Z]{1,3}[-\s]?\d{1,4}$/.test(v)) {
-            showError($el, '⚠ Format: MH-01-AB-1234'); return false;
+            showError($el, '⚠ ' + js.vehNumFormat); return false;
         }
         showSuccess($el); return true;
     }
@@ -1244,17 +1439,17 @@ $(document).ready(function () {
     function validateAadhar() {
         var $el = $('#aadhar_number');
         var v = $.trim($el.val());
-        if (v === '') { showError($el, '⚠ Please enter Aadhar number.'); return false; }
-        if (!/^\d{12}$/.test(v)) { showError($el, '⚠ Aadhar must be exactly 12 digits.'); return false; }
+        if (v === '') { showError($el, '⚠ ' + js.aadharReq); return false; }
+        if (!/^\d{12}$/.test(v)) { showError($el, '⚠ ' + js.aadharInvalid); return false; }
         showSuccess($el); return true;
     }
 
     function validatePassword() {
         var $el = $('#password');
         var v = $el.val();
-        if (v === '') { showError($el, '⚠ Please enter a password.'); return false; }
-        if (v.length < 6) { showError($el, '⚠ Minimum 6 characters required.'); return false; }
-        if (v.length > 50) { showError($el, '⚠ Password too long.'); return false; }
+        if (v === '') { showError($el, '⚠ ' + js.pwdReq); return false; }
+        if (v.length < 6) { showError($el, '⚠ ' + js.pwdShort); return false; }
+        if (v.length > 50) { showError($el, '⚠ ' + js.pwdLong); return false; }
         showSuccess($el); return true;
     }
 
@@ -1262,8 +1457,8 @@ $(document).ready(function () {
         var $el = $('#password_confirmation');
         var v = $el.val();
         var pwd = $('#password').val();
-        if (v === '') { showError($el, '⚠ Please confirm password.'); return false; }
-        if (v !== pwd) { showError($el, '⚠ Passwords do not match.'); return false; }
+        if (v === '') { showError($el, '⚠ ' + js.confirmReq); return false; }
+        if (v !== pwd) { showError($el, '⚠ ' + js.confirmMismatch); return false; }
         showSuccess($el); return true;
     }
 
@@ -1271,7 +1466,7 @@ $(document).ready(function () {
         var checked = $('#terms').is(':checked');
         var $err = $('#termsError');
         if (!checked) {
-            $err.text('⚠ You must agree to the Terms & Conditions.').addClass('show');
+            $err.text('⚠ ' + js.termsRequired).addClass('show');
             return false;
         }
         $err.text('').removeClass('show');
@@ -1296,12 +1491,10 @@ $(document).ready(function () {
     $('#password_confirmation').on('blur', validateConfirmPassword);
     $('#terms').on('change', validateTerms);
 
-    // Digits-only for phone / aadhar
     $('#phone, #aadhar_number').on('input', function () {
         this.value = this.value.replace(/[^0-9]/g, '');
     });
 
-    // Clear error on typing
     $('.form-control-auth, .form-select-auth').on('input change', function () {
         if ($(this).hasClass('error') && $.trim($(this).val()) !== '') {
             clearField($(this));
@@ -1317,13 +1510,11 @@ $(document).ready(function () {
         var role = $('#roleInput').val();
         var isValid = true;
 
-        // Common
         if (!validateName())    isValid = false;
         if (!validateEmail())   isValid = false;
         if (!validatePhone())   isValid = false;
         if (!validateVillage()) isValid = false;
 
-        // Role-specific
         if (role === 'customer') {
             if (!validateAddress()) isValid = false;
         } else if (role === 'pharmacy') {
@@ -1336,7 +1527,6 @@ $(document).ready(function () {
             if (!validateAadhar())         isValid = false;
         }
 
-        // Password + Terms
         if (!validatePassword())        isValid = false;
         if (!validateConfirmPassword()) isValid = false;
         if (!validateTerms())           isValid = false;
@@ -1355,7 +1545,7 @@ $(document).ready(function () {
         var $btn = $('#submitBtn');
         var original = $btn.html();
         $btn.prop('disabled', true).html(
-            '<i class="fas fa-spinner fa-spin"></i> <span>Creating Account...</span>'
+            '<i class="fas fa-spinner fa-spin"></i> <span>' + {!! json_encode($strings['btn_creating']) !!} + '</span>'
         );
 
         this.submit();

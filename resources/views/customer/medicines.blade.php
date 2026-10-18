@@ -2,7 +2,7 @@
 
 @section('title', 'Browse Medicines')
 @section('page_title')
-<i class="fas fa-pills"></i> Browse Medicines
+<i class="fas fa-pills"></i> {{ __('messages.hero_browse_medicines') ?? 'Browse Medicines' }}
 @endsection
 
 @section('styles')
@@ -46,7 +46,7 @@
         background: var(--white);
         border-radius: 50px;
         padding: 6px;
-        box-shadow: 0 6px 25px rgba(0,0,0,0.08);
+        box-shadow: 0 6px 25px rgba(0, 0, 0, 0.08);
         display: flex;
         align-items: center;
         margin-bottom: 20px;
@@ -76,7 +76,7 @@
 
     .main-search-bar button:hover {
         transform: scale(1.03);
-        box-shadow: 0 4px 15px rgba(46,125,50,0.3);
+        box-shadow: 0 4px 15px rgba(46, 125, 50, 0.3);
     }
 
     /* Filter Sidebar */
@@ -87,6 +87,9 @@
         box-shadow: var(--shadow);
         position: sticky;
         top: 100px;
+        overflow-x: hidden;
+        width: 100%;
+        box-sizing: border-box;
     }
 
     .filter-sidebar h6 {
@@ -137,7 +140,8 @@
         color: var(--primary-green);
     }
 
-    .filter-checkbox input[type="checkbox"] {
+    .filter-checkbox input[type="checkbox"],
+    .filter-checkbox input[type="radio"] {
         appearance: none;
         width: 17px;
         height: 17px;
@@ -150,7 +154,12 @@
         flex-shrink: 0;
     }
 
-    .filter-checkbox input[type="checkbox"]:checked {
+    .filter-checkbox input[type="radio"] {
+        border-radius: 50%;
+    }
+
+    .filter-checkbox input[type="checkbox"]:checked,
+    .filter-checkbox input[type="radio"]:checked {
         background: var(--primary-green);
         border-color: var(--primary-green);
     }
@@ -158,11 +167,24 @@
     .filter-checkbox input[type="checkbox"]:checked::after {
         content: '✓';
         position: absolute;
-        top: 50%; left: 50%;
+        top: 50%;
+        left: 50%;
         transform: translate(-50%, -50%);
         color: var(--white);
         font-size: 0.7rem;
         font-weight: 800;
+    }
+
+    .filter-checkbox input[type="radio"]:checked::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--white);
     }
 
     .filter-checkbox label {
@@ -178,13 +200,17 @@
         font-size: 0.75rem;
     }
 
-    /* Price Range */
     .price-range-wrap {
-        padding: 10px 5px;
+        padding: 10px 0;
+        width: 100%;
+        box-sizing: border-box;
+        overflow: hidden;
     }
 
     .price-range-wrap input[type="range"] {
         width: 100%;
+        max-width: 100%;
+        display: block;
         accent-color: var(--primary-green);
     }
 
@@ -192,16 +218,22 @@
         display: flex;
         gap: 8px;
         margin-top: 10px;
+        width: 100%;
+        box-sizing: border-box;
     }
 
     .price-range-inputs input {
-        flex: 1;
+        flex: 1 1 0;
+        min-width: 0;
+        /* prevents flex overflow */
+        width: 100%;
         padding: 7px 12px;
         border: 1px solid #DDD;
         border-radius: 8px;
         font-size: 0.82rem;
         outline: none;
         transition: var(--transition);
+        box-sizing: border-box;
     }
 
     .price-range-inputs input:focus {
@@ -224,7 +256,7 @@
 
     .btn-apply-filter:hover {
         transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(46,125,50,0.3);
+        box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
     }
 
     .btn-clear-filter {
@@ -249,7 +281,7 @@
         border-color: #EF9A9A;
     }
 
-    /* Toolbar (Sort + Layout) */
+    /* Toolbar */
     .toolbar {
         background: var(--white);
         border-radius: 14px;
@@ -320,7 +352,7 @@
 
     .medicine-item-card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 10px 30px rgba(46,125,50,0.18);
+        box-shadow: 0 10px 30px rgba(46, 125, 50, 0.18);
     }
 
     .med-item-img-wrap {
@@ -379,13 +411,21 @@
         border-radius: 15px;
         font-size: 0.7rem;
         font-weight: 700;
-        background: rgba(255,255,255,0.95);
+        background: rgba(255, 255, 255, 0.95);
         z-index: 2;
     }
 
-    .med-stock-c.in { color: #2E7D32; }
-    .med-stock-c.low { color: #FB8C00; }
-    .med-stock-c.out { color: #C62828; }
+    .med-stock-c.in {
+        color: #2E7D32;
+    }
+
+    .med-stock-c.low {
+        color: #FB8C00;
+    }
+
+    .med-stock-c.out {
+        color: #C62828;
+    }
 
     .med-item-body {
         padding: 16px;
@@ -482,7 +522,7 @@
 
     .btn-add-cart-c:hover:not(:disabled) {
         transform: scale(1.05);
-        box-shadow: 0 4px 12px rgba(76,175,80,0.4);
+        box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
     }
 
     .btn-add-cart-c:disabled {
@@ -520,6 +560,81 @@
     }
 
     /* Pagination */
+    .pagination-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 30px;
+        gap: 10px;
+    }
+
+    .pagination-wrap .pagination {
+        display: flex;
+        justify-content: center;
+        gap: 6px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        flex-wrap: wrap;
+    }
+
+    .pagination-wrap .pagination li {
+        display: inline-block;
+    }
+
+    .pagination-wrap .pagination li a,
+    .pagination-wrap .pagination li span,
+    .pagination-wrap .pagination .page-link {
+        min-width: 40px;
+        height: 40px;
+        padding: 8px 12px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px !important;
+        border: 1px solid #E0E0E0 !important;
+        background: var(--white);
+        color: var(--dark-text) !important;
+        font-size: 0.85rem;
+        font-weight: 500;
+        text-decoration: none;
+        transition: var(--transition);
+        box-shadow: none;
+        margin: 0;
+    }
+
+    .pagination-wrap .pagination li a:hover,
+    .pagination-wrap .pagination .page-link:hover {
+        background: var(--pale-green);
+        border-color: var(--primary-green) !important;
+        color: var(--primary-green) !important;
+    }
+
+    .pagination-wrap .pagination .active .page-link,
+    .pagination-wrap .pagination li.active span {
+        background: linear-gradient(135deg, var(--primary-green), var(--light-green)) !important;
+        color: var(--white) !important;
+        border-color: var(--primary-green) !important;
+    }
+
+    .pagination-wrap .pagination .disabled span,
+    .pagination-wrap .pagination .disabled a {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .pagination-wrap .pagination svg,
+    .pagination-wrap .pagination i,
+    .pagination-wrap .pagination .page-link svg {
+        width: 14px !important;
+        height: 14px !important;
+        max-width: 14px !important;
+        max-height: 14px !important;
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    /* Fallback pagination */
     .pagination-c {
         display: flex;
         justify-content: center;
@@ -564,7 +679,7 @@
         color: var(--white);
         padding: 14px 22px;
         border-radius: 12px;
-        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
         z-index: 10000;
         display: none;
         align-items: center;
@@ -575,39 +690,62 @@
     }
 
     @keyframes slideInRight {
-        from { transform: translateX(100%); opacity: 0; }
-        to { transform: translateX(0); opacity: 1; }
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
     }
 
-    /* Mobile Filter Modal */
-    @media (max-width: 991px) {
-        .filter-sidebar { display: none; }
-        .btn-filter-mobile { display: inline-flex; align-items: center; gap: 6px; }
+    /* Filter modal — hidden by default */
+    .filter-modal-overlay {
+        display: none;
+    }
 
-        .filter-modal-overlay {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.5);
-            z-index: 9998;
+    .filter-modal {
+        display: none;
+    }
+
+    .filter-modal-overlay.show {
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 9998;
+    }
+
+    .filter-modal.show {
+        display: block;
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 90%;
+        max-width: 350px;
+        height: 100vh;
+        background: var(--white);
+        z-index: 9999;
+        overflow-y: auto;
+        padding: 20px;
+        box-shadow: -10px 0 30px rgba(0, 0, 0, 0.15);
+    }
+
+    @media (max-width: 991px) {
+        .filter-sidebar {
             display: none;
         }
-        .filter-modal-overlay.show { display: block; }
 
-        .filter-modal {
-            position: fixed;
-            top: 0;
-            right: -100%;
-            width: 90%;
-            max-width: 350px;
-            height: 100vh;
-            background: var(--white);
-            z-index: 9999;
-            overflow-y: auto;
-            transition: right 0.3s ease;
-            padding: 20px;
+        .btn-filter-mobile {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
         }
-
-        .filter-modal.show { right: 0; }
 
         .filter-modal .close-filter {
             position: absolute;
@@ -625,129 +763,201 @@
 
 @section('content')
 
+{{-- Shared batch translation for the Medicines page --}}
 @php
-    // Demo medicine data with fallback
-    $demoMedicines = $medicines ?? [
-        (object)['id'=>1,'name'=>'Paracetamol 500mg','brand'=>'Crocin','category'=>'Fever & Pain','price'=>25,'mrp'=>30,'stock'=>150,'featured'=>1,'prescription_required'=>0,'image'=>null,'rating'=>4.5,'reviews'=>124],
-        (object)['id'=>2,'name'=>'Vitamin C 500mg','brand'=>'Limcee','category'=>'Vitamins','price'=>180,'mrp'=>200,'stock'=>80,'featured'=>1,'prescription_required'=>0,'image'=>null,'rating'=>4.7,'reviews'=>89],
-        (object)['id'=>3,'name'=>'Amoxicillin 250mg','brand'=>'Mox','category'=>'Antibiotic','price'=>85,'mrp'=>100,'stock'=>15,'featured'=>0,'prescription_required'=>1,'image'=>null,'rating'=>4.3,'reviews'=>45],
-        (object)['id'=>4,'name'=>'Cough Syrup 100ml','brand'=>'Benadryl','category'=>'Cold & Cough','price'=>145,'mrp'=>160,'stock'=>45,'featured'=>0,'prescription_required'=>0,'image'=>null,'rating'=>4.4,'reviews'=>67],
-        (object)['id'=>5,'name'=>'Insulin Injection','brand'=>'Humulin','category'=>'Diabetes','price'=>450,'mrp'=>500,'stock'=>0,'featured'=>0,'prescription_required'=>1,'image'=>null,'rating'=>4.8,'reviews'=>34],
-        (object)['id'=>6,'name'=>'Antacid Tablets','brand'=>'ENO','category'=>'Digestive','price'=>60,'mrp'=>75,'stock'=>200,'featured'=>1,'prescription_required'=>0,'image'=>null,'rating'=>4.2,'reviews'=>156],
-        (object)['id'=>7,'name'=>'Multivitamin','brand'=>'Revital','category'=>'Vitamins','price'=>320,'mrp'=>360,'stock'=>65,'featured'=>0,'prescription_required'=>0,'image'=>null,'rating'=>4.6,'reviews'=>92],
-        (object)['id'=>8,'name'=>'Blood Pressure Med','brand'=>'Amlong','category'=>'Heart Care','price'=>75,'mrp'=>90,'stock'=>15,'featured'=>0,'prescription_required'=>1,'image'=>null,'rating'=>4.5,'reviews'=>28],
-        (object)['id'=>9,'name'=>'Baby Diaper Rash Cream','brand'=>'Himalaya','category'=>'Baby Care','price'=>110,'mrp'=>125,'stock'=>90,'featured'=>0,'prescription_required'=>0,'image'=>null,'rating'=>4.7,'reviews'=>78],
-        (object)['id'=>10,'name'=>'Antiseptic Cream','brand'=>'Savlon','category'=>'First Aid','price'=>55,'mrp'=>70,'stock'=>120,'featured'=>1,'prescription_required'=>0,'image'=>null,'rating'=>4.3,'reviews'=>203],
-        (object)['id'=>11,'name'=>'Face Wash 100ml','brand'=>'Himalaya','category'=>'Skin Care','price'=>130,'mrp'=>150,'stock'=>75,'featured'=>0,'prescription_required'=>0,'image'=>null,'rating'=>4.4,'reviews'=>145],
-        (object)['id'=>12,'name'=>'Ashwagandha Tablets','brand'=>'Patanjali','category'=>'Ayurvedic','price'=>240,'mrp'=>280,'stock'=>55,'featured'=>0,'prescription_required'=>0,'image'=>null,'rating'=>4.6,'reviews'=>89],
-    ];
+use App\Services\GoogleTranslator;
 
-    $categories = [
-        ['name'=>'Fever & Pain','count'=>24],
-        ['name'=>'Cold & Cough','count'=>18],
-        ['name'=>'Vitamins','count'=>32],
-        ['name'=>'Antibiotic','count'=>15],
-        ['name'=>'Diabetes','count'=>12],
-        ['name'=>'Heart Care','count'=>9],
-        ['name'=>'Digestive','count'=>21],
-        ['name'=>'Skin Care','count'=>28],
-        ['name'=>'Baby Care','count'=>16],
-        ['name'=>'Ayurvedic','count'=>22],
-        ['name'=>'First Aid','count'=>19],
-    ];
+// Normalize $medicines safely (Paginator | Collection | array | null)
+if (isset($medicines)) {
+if ($medicines instanceof \Illuminate\Pagination\LengthAwarePaginator
+|| $medicines instanceof \Illuminate\Pagination\Paginator
+|| $medicines instanceof \Illuminate\Support\Collection) {
+$medsArray = method_exists($medicines, 'items') ? $medicines->items() : $medicines->all();
+if (empty($medsArray)) { $medsArray = $medicines->all(); }
+} elseif (is_array($medicines)) {
+$medsArray = $medicines;
+} else {
+$medsArray = [];
+}
+} else {
+$medsArray = [
+(object)['id'=>1,'name'=>'Paracetamol 500mg','brand'=>'Crocin','category'=>'Fever & Pain','price'=>25,'mrp'=>30,'stock'=>150,'featured'=>1,'prescription_required'=>0,'image'=>null,'rating'=>4.5,'reviews'=>124],
+(object)['id'=>2,'name'=>'Vitamin C 500mg','brand'=>'Limcee','category'=>'Vitamins','price'=>180,'mrp'=>200,'stock'=>80,'featured'=>1,'prescription_required'=>0,'image'=>null,'rating'=>4.7,'reviews'=>89],
+(object)['id'=>3,'name'=>'Amoxicillin 250mg','brand'=>'Mox','category'=>'Antibiotic','price'=>85,'mrp'=>100,'stock'=>15,'featured'=>0,'prescription_required'=>1,'image'=>null,'rating'=>4.3,'reviews'=>45],
+(object)['id'=>4,'name'=>'Cough Syrup 100ml','brand'=>'Benadryl','category'=>'Cold & Cough','price'=>145,'mrp'=>160,'stock'=>45,'featured'=>0,'prescription_required'=>0,'image'=>null,'rating'=>4.4,'reviews'=>67],
+];
+}
 
-    $selectedCategory = request('category', '');
-    $selectedMin = request('min_price', 0);
-    $selectedMax = request('max_price', 5000);
+// Batch-translate medicine names, brands, categories
+if (!empty($medsArray)) {
+$medNames = GoogleTranslator::translateBatch(array_map(fn($m) => $m->name, $medsArray));
+$medBrands = GoogleTranslator::translateBatch(array_map(fn($m) => $m->brand, $medsArray));
+$medCats = GoogleTranslator::translateBatch(array_map(fn($m) => $m->category, $medsArray));
+foreach ($medsArray as $i => $m) {
+$m->name = $medNames[$i] ?? $m->name;
+$m->brand = $medBrands[$i] ?? $m->brand;
+$m->category = $medCats[$i] ?? $m->category;
+}
+}
+
+// Sidebar categories
+$categoryList = [
+['name'=>'Fever & Pain','count'=>24],
+['name'=>'Cold & Cough','count'=>18],
+['name'=>'Vitamins','count'=>32],
+['name'=>'Antibiotic','count'=>15],
+['name'=>'Diabetes','count'=>12],
+['name'=>'Heart Care','count'=>9],
+['name'=>'Digestive','count'=>21],
+['name'=>'Skin Care','count'=>28],
+['name'=>'Baby Care','count'=>16],
+['name'=>'Ayurvedic','count'=>22],
+['name'=>'First Aid','count'=>19],
+];
+$catNames = GoogleTranslator::translateBatch(array_column($categoryList, 'name'));
+foreach ($categoryList as $i => $c) {
+$categoryList[$i]['display'] = $catNames[$i] ?? $c['name'];
+}
+
+$selectedCategory = request('category', '');
+$selectedMin = request('min_price', 0);
+$selectedMax = request('max_price', 5000);
+
+$strings = GoogleTranslator::translateBatch([
+'header_title' => 'Explore Our Medicine Catalog',
+'header_desc' => 'Find genuine medicines from verified pharmacies at the best prices.',
+
+'search_placeholder' => 'Search for medicines, brands, health products...',
+'search_btn' => 'Search',
+
+'filters' => 'Filters',
+'filter_categories' => 'Categories',
+'filter_price' => 'Price Range',
+'filter_avail' => 'Availability',
+'filter_in_stock' => 'In Stock Only',
+'filter_featured' => 'Featured Only',
+'filter_rx' => 'Prescription',
+'filter_no_rx' => 'No Prescription',
+'filter_with_rx' => 'Rx Required',
+'apply_filters' => 'Apply Filters',
+'clear_filters' => 'Clear All Filters',
+'placeholder_min' => 'Min',
+'placeholder_max' => 'Max',
+
+'showing' => 'Showing',
+'medicines_suffix' => 'medicines',
+'for' => 'for',
+'sort_default' => 'Default Sort',
+'sort_price_low' => 'Price: Low to High',
+'sort_price_high' => 'Price: High to Low',
+'sort_name' => 'Name (A-Z)',
+'sort_rating' => 'Highest Rated',
+'sort_newest' => 'Newest First',
+
+'badge_featured' => 'Featured',
+'badge_rx' => 'Rx',
+'stock_in' => 'In Stock',
+'stock_low' => 'Low',
+'stock_out' => 'Out of Stock',
+'add_to_cart' => 'Add',
+'out_btn' => 'Out',
+'mrp_prefix' => 'MRP',
+
+'no_medicines' => 'No medicines found',
+'no_medicines_desc' => "Try adjusting your search or filters to find what you're looking for.",
+'clear_and_retry' => 'Clear Filters',
+
+'js_search_min' => '⚠ Please enter at least 2 characters to search.',
+'js_added_to_cart' => ':name added to cart!',
+'js_add_failed' => 'Failed to add to cart',
+'js_login_confirm' => 'You need to login first. Go to login page?',
+'js_toast_added' => 'Added to cart!',
+]);
 @endphp
 
 <!-- Page Header -->
 <div class="page-header-banner">
-    <h4><i class="fas fa-pills me-2"></i> Explore Our Medicine Catalog</h4>
-    <p>Find genuine medicines from verified pharmacies at the best prices.</p>
+    <h4><i class="fas fa-pills me-2"></i> {{ $strings['header_title'] }}</h4>
+    <p>{{ $strings['header_desc'] }}</p>
 </div>
 
 <!-- Main Search -->
 <form id="mainSearchForm" method="GET" action="{{ url('/customer/medicines') }}">
     <div class="main-search-bar">
-        <input type="text" name="search" placeholder="🔍 Search for medicines, brands, health products..."
-               value="{{ request('search') }}" autocomplete="off">
-        <button type="submit"><i class="fas fa-search me-1"></i> Search</button>
+        <input type="text" name="search" placeholder="🔍 {{ $strings['search_placeholder'] }}"
+            value="{{ request('search') }}" autocomplete="off">
+        <button type="submit"><i class="fas fa-search me-1"></i> {{ $strings['search_btn'] }}</button>
     </div>
 </form>
 
 <div class="row g-4">
-    <!-- ============ FILTER SIDEBAR (DESKTOP) ============ -->
+    <!-- ============ FILTER SIDEBAR ============ -->
     <div class="col-lg-3">
         <div class="filter-sidebar">
-            <h6><i class="fas fa-filter"></i> Filters</h6>
+            <h6><i class="fas fa-filter"></i> {{ $strings['filters'] }}</h6>
 
             <form method="GET" action="{{ url('/customer/medicines') }}" id="filterForm">
                 @if(request('search'))
-                    <input type="hidden" name="search" value="{{ request('search') }}">
+                <input type="hidden" name="search" value="{{ request('search') }}">
                 @endif
 
-                <!-- Category -->
                 <div class="filter-section">
-                    <div class="filter-title">Categories</div>
-                    @foreach($categories as $cat)
-                        <div class="filter-checkbox">
-                            <input type="radio" name="category" id="cat_{{ $loop->index }}"
-                                   value="{{ $cat['name'] }}" style="border-radius:50%;"
-                                   {{ $selectedCategory == $cat['name'] ? 'checked' : '' }}>
-                            <label for="cat_{{ $loop->index }}">{{ $cat['name'] }}</label>
-                            <span class="count">({{ $cat['count'] }})</span>
-                        </div>
+                    <div class="filter-title">{{ $strings['filter_categories'] }}</div>
+                    @foreach($categoryList as $cat)
+                    <div class="filter-checkbox">
+                        <input type="radio" name="category" id="cat_{{ $loop->index }}"
+                            value="{{ $cat['name'] }}"
+                            {{ $selectedCategory == $cat['name'] ? 'checked' : '' }}>
+                        <label for="cat_{{ $loop->index }}">{{ $cat['display'] }}</label>
+                        <span class="count">({{ $cat['count'] }})</span>
+                    </div>
                     @endforeach
                 </div>
 
-                <!-- Price Range -->
                 <div class="filter-section">
-                    <div class="filter-title">Price Range</div>
+                    <div class="filter-title">{{ $strings['filter_price'] }}</div>
                     <div class="price-range-wrap">
                         <input type="range" id="priceRange" min="0" max="5000" value="{{ $selectedMax }}" step="50">
                         <div class="price-range-inputs">
-                            <input type="number" name="min_price" id="minPrice" placeholder="Min" value="{{ $selectedMin }}" min="0">
-                            <input type="number" name="max_price" id="maxPrice" placeholder="Max" value="{{ $selectedMax }}" min="0">
+                            <input type="number" name="min_price" id="minPrice" placeholder="{{ $strings['placeholder_min'] }}" value="{{ $selectedMin }}" min="0">
+                            <input type="number" name="max_price" id="maxPrice" placeholder="{{ $strings['placeholder_max'] }}" value="{{ $selectedMax }}" min="0">
                         </div>
                     </div>
                 </div>
 
-                <!-- Availability -->
                 <div class="filter-section">
-                    <div class="filter-title">Availability</div>
+                    <div class="filter-title">{{ $strings['filter_avail'] }}</div>
                     <div class="filter-checkbox">
                         <input type="checkbox" name="in_stock" value="1" id="inStock"
-                               {{ request('in_stock') ? 'checked' : '' }}>
-                        <label for="inStock">In Stock Only</label>
+                            {{ request('in_stock') ? 'checked' : '' }}>
+                        <label for="inStock">{{ $strings['filter_in_stock'] }}</label>
                     </div>
                     <div class="filter-checkbox">
                         <input type="checkbox" name="featured" value="1" id="featured"
-                               {{ request('featured') ? 'checked' : '' }}>
-                        <label for="featured">Featured Only</label>
+                            {{ request('featured') ? 'checked' : '' }}>
+                        <label for="featured">{{ $strings['filter_featured'] }}</label>
                     </div>
                 </div>
 
-                <!-- Prescription -->
                 <div class="filter-section">
-                    <div class="filter-title">Prescription</div>
+                    <div class="filter-title">{{ $strings['filter_rx'] }}</div>
                     <div class="filter-checkbox">
-                        <input type="radio" name="rx" value="0" id="noRx" style="border-radius:50%;"
-                               {{ request('rx') === '0' ? 'checked' : '' }}>
-                        <label for="noRx">No Prescription</label>
+                        <input type="radio" name="rx" value="0" id="noRx"
+                            {{ request('rx') === '0' ? 'checked' : '' }}>
+                        <label for="noRx">{{ $strings['filter_no_rx'] }}</label>
                     </div>
                     <div class="filter-checkbox">
-                        <input type="radio" name="rx" value="1" id="withRx" style="border-radius:50%;"
-                               {{ request('rx') === '1' ? 'checked' : '' }}>
-                        <label for="withRx">Rx Required</label>
+                        <input type="radio" name="rx" value="1" id="withRx"
+                            {{ request('rx') === '1' ? 'checked' : '' }}>
+                        <label for="withRx">{{ $strings['filter_with_rx'] }}</label>
                     </div>
                 </div>
 
                 <button type="submit" class="btn-apply-filter">
-                    <i class="fas fa-check"></i> Apply Filters
+                    <i class="fas fa-check"></i> {{ $strings['apply_filters'] }}
                 </button>
                 <a href="{{ url('/customer/medicines') }}" class="btn-clear-filter">
-                    <i class="fas fa-times me-1"></i> Clear All Filters
+                    <i class="fas fa-times me-1"></i> {{ $strings['clear_filters'] }}
                 </a>
             </form>
         </div>
@@ -755,126 +965,133 @@
 
     <!-- ============ MEDICINES LIST ============ -->
     <div class="col-lg-9">
-        <!-- Toolbar -->
         <div class="toolbar">
             <div class="result-count">
-                Showing <strong>{{ count($demoMedicines) }}</strong> medicines
+                {{ $strings['showing'] }} <strong>{{ count($medsArray) }}</strong> {{ $strings['medicines_suffix'] }}
                 @if(request('search'))
-                    for "<strong>{{ request('search') }}</strong>"
+                {{ $strings['for'] }} "<strong>{{ request('search') }}</strong>"
                 @endif
             </div>
             <div class="toolbar-right">
                 <button type="button" class="btn-filter-mobile" id="showFilterBtn">
-                    <i class="fas fa-filter"></i> Filters
+                    <i class="fas fa-filter"></i> {{ $strings['filters'] }}
                 </button>
                 <select id="sortSelect">
-                    <option value="">Default Sort</option>
-                    <option value="price_low" {{ request('sort')=='price_low' ? 'selected' : '' }}>Price: Low to High</option>
-                    <option value="price_high" {{ request('sort')=='price_high' ? 'selected' : '' }}>Price: High to Low</option>
-                    <option value="name" {{ request('sort')=='name' ? 'selected' : '' }}>Name (A-Z)</option>
-                    <option value="rating" {{ request('sort')=='rating' ? 'selected' : '' }}>Highest Rated</option>
-                    <option value="newest" {{ request('sort')=='newest' ? 'selected' : '' }}>Newest First</option>
+                    <option value="">{{ $strings['sort_default'] }}</option>
+                    <option value="price_low" {{ request('sort')=='price_low'  ? 'selected' : '' }}>{{ $strings['sort_price_low'] }}</option>
+                    <option value="price_high" {{ request('sort')=='price_high' ? 'selected' : '' }}>{{ $strings['sort_price_high'] }}</option>
+                    <option value="name" {{ request('sort')=='name'       ? 'selected' : '' }}>{{ $strings['sort_name'] }}</option>
+                    <option value="rating" {{ request('sort')=='rating'     ? 'selected' : '' }}>{{ $strings['sort_rating'] }}</option>
+                    <option value="newest" {{ request('sort')=='newest'     ? 'selected' : '' }}>{{ $strings['sort_newest'] }}</option>
                 </select>
             </div>
         </div>
 
-        <!-- Medicines Grid -->
-        @if(count($demoMedicines) > 0)
-            <div class="row g-3">
-                @foreach($demoMedicines as $med)
-                    @php
-                        $stockClass = $med->stock <= 0 ? 'out' : ($med->stock < 20 ? 'low' : 'in');
-                        $stockText = $med->stock <= 0 ? 'Out of Stock' : ($med->stock < 20 ? 'Low: '.$med->stock : 'In Stock');
-                    @endphp
-                    <div class="col-xl-3 col-lg-4 col-md-6">
-                        <div class="medicine-item-card">
-                            <div class="med-item-img-wrap">
-                                @if(!empty($med->image) && file_exists(public_path('uploads/medicines/'.$med->image)))
-                                    <img src="{{ asset('uploads/medicines/'.$med->image) }}" alt="{{ $med->name }}">
-                                @else
-                                    <i class="fas fa-pills no-img"></i>
-                                @endif
-
-                                @if($med->prescription_required)
-                                    <span class="med-badge-c rx"><i class="fas fa-file-prescription"></i> Rx</span>
-                                @elseif($med->featured)
-                                    <span class="med-badge-c featured"><i class="fas fa-star"></i> Featured</span>
-                                @endif
-
-                                <span class="med-stock-c {{ $stockClass }}">
-                                    <i class="fas {{ $med->stock > 0 ? 'fa-check-circle' : 'fa-times-circle' }}"></i>
-                                    {{ $stockText }}
-                                </span>
-                            </div>
-
-                            <div class="med-item-body">
-                                <div class="med-item-cat">{{ $med->category }}</div>
-                                <h5>
-                                    <a href="{{ url('/customer/medicine/'.$med->id) }}" style="color:inherit;text-decoration:none;">
-                                        {{ $med->name }}
-                                    </a>
-                                </h5>
-                                <div class="med-item-brand">
-                                    <i class="fas fa-tag me-1"></i> {{ $med->brand }}
-                                </div>
-
-                                <div class="med-item-rating">
-                                    <span class="stars">
-                                        @for($i = 1; $i <= 5; $i++)
-                                            <i class="fa{{ $i <= round($med->rating) ? 's' : 'r' }} fa-star"></i>
-                                        @endfor
-                                    </span>
-                                    <span class="count">({{ $med->reviews }})</span>
-                                </div>
-
-                                <div class="med-item-footer">
-                                    <div class="med-item-price">
-                                        ₹{{ number_format($med->price, 0) }}
-                                        @if($med->mrp > $med->price)
-                                            <small>MRP ₹{{ number_format($med->mrp, 0) }}</small>
+        @if(count($medsArray) > 0)
+        <div class="row g-3">
+            @foreach($medsArray as $med)
+            @php
+            $stockClass = $med->stock <= 0 ? 'out' : ($med->stock < 20 ? 'low' : 'in' );
+                    if ($med->stock <= 0) {
+                        $stockText=$strings['stock_out'];
+                        } elseif ($med->stock < 20) {
+                            $stockText=$strings['stock_low'] . ': ' . $med->stock;
+                            } else {
+                            $stockText = $strings['stock_in'];
+                            }
+                            @endphp
+                            <div class="col-xl-3 col-lg-4 col-md-6">
+                                <div class="medicine-item-card">
+                                    <div class="med-item-img-wrap">
+                                        @if(!empty($med->image) && file_exists(public_path('uploads/medicines/'.$med->image)))
+                                        <img src="{{ asset('uploads/medicines/'.$med->image) }}" alt="{{ $med->name }}">
+                                        @else
+                                        <i class="fas fa-pills no-img"></i>
                                         @endif
+
+                                        @if($med->prescription_required)
+                                        <span class="med-badge-c rx"><i class="fas fa-file-prescription"></i> {{ $strings['badge_rx'] }}</span>
+                                        @elseif($med->featured)
+                                        <span class="med-badge-c featured"><i class="fas fa-star"></i> {{ $strings['badge_featured'] }}</span>
+                                        @endif
+
+                                        <span class="med-stock-c {{ $stockClass }}">
+                                            <i class="fas {{ $med->stock > 0 ? 'fa-check-circle' : 'fa-times-circle' }}"></i>
+                                            {{ $stockText }}
+                                        </span>
                                     </div>
-                                    @if($med->stock > 0)
-                                        <button type="button" class="btn-add-cart-c btn-add-cart"
+
+                                    <div class="med-item-body">
+                                        <div class="med-item-cat">{{ $med->category }}</div>
+                                        <h5>
+                                            <a href="{{ url('/customer/medicine/'.$med->id) }}" style="color:inherit;text-decoration:none;">
+                                                {{ $med->name }}
+                                            </a>
+                                        </h5>
+                                        <div class="med-item-brand">
+                                            <i class="fas fa-tag me-1"></i> {{ $med->brand }}
+                                        </div>
+
+                                        <div class="med-item-rating">
+                                            <span class="stars">
+                                                @for($i = 1; $i <= 5; $i++)
+                                                    <i class="fa{{ $i <= round($med->rating ?? 4.5) ? 's' : 'r' }} fa-star"></i>
+                                                    @endfor
+                                            </span>
+                                            <span class="count">({{ $med->reviews ?? 0 }})</span>
+                                        </div>
+
+                                        <div class="med-item-footer">
+                                            <div class="med-item-price">
+                                                ₹{{ number_format($med->price, 0) }}
+                                                @if(($med->mrp ?? 0) > $med->price)
+                                                <small>{{ $strings['mrp_prefix'] }} ₹{{ number_format($med->mrp, 0) }}</small>
+                                                @endif
+                                            </div>
+                                            @if($med->stock > 0)
+                                            <button type="button" class="btn-add-cart-c btn-add-cart"
                                                 data-med-id="{{ $med->id }}"
                                                 data-med-name="{{ $med->name }}">
-                                            <i class="fas fa-cart-plus"></i> Add
-                                        </button>
-                                    @else
-                                        <button type="button" class="btn-add-cart-c" disabled>
-                                            <i class="fas fa-times"></i> Out
-                                        </button>
-                                    @endif
+                                                <i class="fas fa-cart-plus"></i> {{ $strings['add_to_cart'] }}
+                                            </button>
+                                            @else
+                                            <button type="button" class="btn-add-cart-c" disabled>
+                                                <i class="fas fa-times"></i> {{ $strings['out_btn'] }}
+                                            </button>
+                                            @endif
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
+                            @endforeach
+        </div>
 
-            <!-- Pagination -->
-            @if(isset($medicines) && method_exists($medicines, 'links'))
-                <div class="mt-4">{{ $medicines->appends(request()->all())->links() }}</div>
-            @else
-                <div class="pagination-c">
-                    <a href="#" class="page-btn"><i class="fas fa-chevron-left"></i></a>
-                    <a href="#" class="page-btn active">1</a>
-                    <a href="#" class="page-btn">2</a>
-                    <a href="#" class="page-btn">3</a>
-                    <a href="#" class="page-btn">...</a>
-                    <a href="#" class="page-btn">8</a>
-                    <a href="#" class="page-btn"><i class="fas fa-chevron-right"></i></a>
-                </div>
-            @endif
+        <!-- Pagination -->
+        @if(isset($medicines) && method_exists($medicines, 'links'))
+        <div class="pagination-wrap">
+            {{ $medicines->appends(request()->all())->links() }}
+        </div>
         @else
-            <div class="empty-state-c">
-                <i class="fas fa-pills"></i>
-                <h5>No medicines found</h5>
-                <p>Try adjusting your search or filters to find what you're looking for.</p>
-                <a href="{{ url('/customer/medicines') }}" class="btn-apply-filter" style="max-width:250px;margin:15px auto 0;text-decoration:none;display:inline-block;">
-                    <i class="fas fa-undo"></i> Clear Filters
-                </a>
-            </div>
+        <div class="pagination-c">
+            <a href="#" class="page-btn"><i class="fas fa-chevron-left"></i></a>
+            <a href="#" class="page-btn active">1</a>
+            <a href="#" class="page-btn">2</a>
+            <a href="#" class="page-btn">3</a>
+            <a href="#" class="page-btn">...</a>
+            <a href="#" class="page-btn">8</a>
+            <a href="#" class="page-btn"><i class="fas fa-chevron-right"></i></a>
+        </div>
+        @endif
+        @else
+        <div class="empty-state-c">
+            <i class="fas fa-pills"></i>
+            <h5>{{ $strings['no_medicines'] }}</h5>
+            <p>{{ $strings['no_medicines_desc'] }}</p>
+            <a href="{{ url('/customer/medicines') }}" class="btn-apply-filter"
+                style="max-width:250px;margin:15px auto 0;text-decoration:none;display:inline-block;">
+                <i class="fas fa-undo"></i> {{ $strings['clear_and_retry'] }}
+            </a>
+        </div>
         @endif
     </div>
 </div>
@@ -884,7 +1101,7 @@
 <div class="filter-modal" id="filterModal">
     <button type="button" class="close-filter" id="closeFilterBtn"><i class="fas fa-times"></i></button>
     <h6 style="font-weight:700;color:var(--dark-text);margin-bottom:15px;padding-right:30px;">
-        <i class="fas fa-filter" style="color:var(--primary-green);"></i> Filters
+        <i class="fas fa-filter" style="color:var(--primary-green);"></i> {{ $strings['filters'] }}
     </h6>
     <div id="mobileFilterContent">
         <!-- Filled by jQuery -->
@@ -894,154 +1111,159 @@
 <!-- Cart Toast -->
 <div class="cart-toast" id="cartToast">
     <i class="fas fa-check-circle"></i>
-    <span id="toastMessage">Added to cart!</span>
+    <span id="toastMessage">{{ $strings['js_toast_added'] }}</span>
 </div>
 
 @endsection
 
 @section('scripts')
 <script>
-$(document).ready(function () {
+    $(document).ready(function() {
 
-    /* ============ AUTO-SUBMIT SORT ============ */
-    $('#sortSelect').on('change', function () {
-        var url = new URL(window.location.href);
-        if ($(this).val()) {
-            url.searchParams.set('sort', $(this).val());
-        } else {
-            url.searchParams.delete('sort');
+        var jsStrings = {
+            searchMin: @json($strings['js_search_min']),
+            addedToCart: @json($strings['js_added_to_cart']),
+            addFailed: @json($strings['js_add_failed']),
+            loginConfirm: @json($strings['js_login_confirm']),
+            toastAdded: @json($strings['js_toast_added'])
+        };
+
+        var ADD_TO_CART_LABEL = @json($strings['add_to_cart']);
+
+        function tpl(str, key, val) {
+            return str.replace(':' + key, val);
         }
-        window.location.href = url.toString();
-    });
 
-    /* ============ PRICE RANGE SYNC ============ */
-    $('#priceRange').on('input', function () {
-        $('#maxPrice').val($(this).val());
-    });
+        /* ============ SORT ============ */
+        $('#sortSelect').on('change', function() {
+            var url = new URL(window.location.href);
+            if ($(this).val()) url.searchParams.set('sort', $(this).val());
+            else url.searchParams.delete('sort');
+            window.location.href = url.toString();
+        });
 
-    $('#maxPrice').on('input', function () {
-        var v = parseInt($(this).val()) || 0;
-        if (v > 5000) v = 5000;
-        $('#priceRange').val(v);
-    });
+        /* ============ PRICE RANGE ============ */
+        $('#priceRange').on('input', function() {
+            $('#maxPrice').val($(this).val());
+        });
 
-    $('#minPrice, #maxPrice').on('input', function () {
-        this.value = this.value.replace(/[^0-9]/g, '');
-    });
+        $('#maxPrice').on('input', function() {
+            var v = parseInt($(this).val()) || 0;
+            if (v > 5000) v = 5000;
+            $('#priceRange').val(v);
+        });
 
-    /* ============ CATEGORY RADIO - AUTO SUBMIT ============ */
-    $('input[name="category"]').on('change', function () {
-        $('#filterForm').submit();
-    });
+        $('#minPrice, #maxPrice').on('input', function() {
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
 
-    /* ============ MAIN SEARCH VALIDATION ============ */
-    $('#mainSearchForm').on('submit', function (e) {
-        var val = $.trim($(this).find('input[name="search"]').val());
-        if (val.length > 0 && val.length < 2) {
-            e.preventDefault();
-            alert('⚠ Please enter at least 2 characters to search.');
-            return false;
-        }
-    });
+        /* ============ CATEGORY AUTO-SUBMIT ============ */
+        $('input[name="category"]').on('change', function() {
+            $('#filterForm').submit();
+        });
 
-    /* ============ ADD TO CART (AJAX) ============ */
-    $('.btn-add-cart').on('click', function () {
-        var $btn = $(this);
-        var medId = $btn.data('med-id');
-        var medName = $btn.data('med-name');
-
-        if ($btn.hasClass('added')) return;
-
-        var originalHtml = $btn.html();
-        $btn.html('<i class="fas fa-spinner fa-spin"></i>').prop('disabled', true);
-
-        $.ajax({
-            url: '{{ url("/customer/cart/add") }}',
-            method: 'POST',
-            data: {
-                _token: '{{ csrf_token() }}',
-                medicine_id: medId,
-                quantity: 1
-            },
-            dataType: 'json',
-            success: function (res) {
-                if (res.success) {
-                    $btn.removeClass('btn-add-cart').addClass('added')
-                        .html('<i class="fas fa-check"></i> Added').prop('disabled', false);
-
-                    showToast('✓ ' + medName + ' added to cart!');
-
-                    // Update cart badge
-                    if (res.cart_count !== undefined) {
-                        $('.cart-badge').text(res.cart_count).show();
-                        $('.cart-count').text(res.cart_count).show();
-                    }
-
-                    // Reset button after 2 seconds
-                    setTimeout(function () {
-                        $btn.removeClass('added').addClass('btn-add-cart').html(originalHtml).prop('disabled', false);
-                    }, 2000);
-                } else {
-                    $btn.html(originalHtml).prop('disabled', false);
-                    showToast('⚠ ' + (res.message || 'Failed to add to cart'), 'error');
-                }
-            },
-            error: function (xhr) {
-                $btn.html(originalHtml).prop('disabled', false);
-
-                if (xhr.status === 401) {
-                    if (confirm('You need to login first. Go to login page?')) {
-                        window.location.href = '{{ url("/login") }}';
-                    }
-                } else {
-                    // Fallback: simulate success for demo
-                    $btn.removeClass('btn-add-cart').addClass('added')
-                        .html('<i class="fas fa-check"></i> Added').prop('disabled', false);
-                    showToast('✓ ' + medName + ' added to cart!');
-
-                    setTimeout(function () {
-                        $btn.removeClass('added').addClass('btn-add-cart').html(originalHtml).prop('disabled', false);
-                    }, 2000);
-                }
+        /* ============ SEARCH VALIDATION ============ */
+        $('#mainSearchForm').on('submit', function(e) {
+            var val = $.trim($(this).find('input[name="search"]').val());
+            if (val.length > 0 && val.length < 2) {
+                e.preventDefault();
+                alert(jsStrings.searchMin);
+                return false;
             }
         });
-    });
 
-    /* ============ TOAST NOTIFICATION ============ */
-    function showToast(message, type) {
-        var $toast = $('#cartToast');
-        var color = (type === 'error') ? 'linear-gradient(135deg, #C62828, #EF5350)' : 'linear-gradient(135deg, #2E7D32, #66BB6A)';
-        var icon = (type === 'error') ? 'fa-exclamation-circle' : 'fa-check-circle';
+        /* ============ ADD TO CART ============ */
+        $('.btn-add-cart').on('click', function() {
+            var $btn = $(this);
+            var medId = $btn.data('med-id');
+            var medName = $btn.data('med-name');
 
-        $toast.css('background', color);
-        $toast.find('i').removeClass().addClass('fas ' + icon);
-        $('#toastMessage').text(message);
-        $toast.fadeIn(300);
+            if ($btn.hasClass('added')) return;
 
-        setTimeout(function () {
-            $toast.fadeOut(300);
-        }, 2500);
-    }
+            var originalHtml = $btn.html();
+            $btn.html('<i class="fas fa-spinner fa-spin"></i>').prop('disabled', true);
 
-    /* ============ MOBILE FILTER MODAL ============ */
-    $('#showFilterBtn').on('click', function () {
-        // Clone filter sidebar content into modal
-        var filterHtml = $('.filter-sidebar form').clone().attr('id', 'mobileFilterForm').prop('outerHTML');
-        $('#mobileFilterContent').html(filterHtml);
-        $('#filterModal').addClass('show');
-        $('#filterModalOverlay').addClass('show');
+            $.ajax({
+                url: '{{ url("/customer/cart/add") }}',
+                method: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    medicine_id: medId,
+                    quantity: 1
+                },
+                dataType: 'json',
+                success: function(res) {
+                    if (res.success) {
+                        $btn.removeClass('btn-add-cart').addClass('added')
+                            .html('<i class="fas fa-check"></i> ' + ADD_TO_CART_LABEL)
+                            .prop('disabled', false);
 
-        // Re-bind price range for mobile
-        $('#mobileFilterContent #priceRange').on('input', function () {
-            $('#mobileFilterContent #maxPrice').val($(this).val());
+                        showToast('✓ ' + tpl(jsStrings.addedToCart, 'name', medName));
+
+                        if (res.cart_count !== undefined) {
+                            $('.cart-badge').text(res.cart_count).show();
+                            $('.cart-count').text(res.cart_count).show();
+                        }
+
+                        setTimeout(function() {
+                            $btn.removeClass('added').addClass('btn-add-cart').html(originalHtml).prop('disabled', false);
+                        }, 2000);
+                    } else {
+                        $btn.html(originalHtml).prop('disabled', false);
+                        showToast('⚠ ' + (res.message || jsStrings.addFailed), 'error');
+                    }
+                },
+                error: function(xhr) {
+                    $btn.html(originalHtml).prop('disabled', false);
+
+                    if (xhr.status === 401) {
+                        if (confirm(jsStrings.loginConfirm)) {
+                            window.location.href = '{{ url("/login") }}';
+                        }
+                    } else {
+                        $btn.removeClass('btn-add-cart').addClass('added')
+                            .html('<i class="fas fa-check"></i> ' + ADD_TO_CART_LABEL)
+                            .prop('disabled', false);
+                        showToast('✓ ' + tpl(jsStrings.addedToCart, 'name', medName));
+
+                        setTimeout(function() {
+                            $btn.removeClass('added').addClass('btn-add-cart').html(originalHtml).prop('disabled', false);
+                        }, 2000);
+                    }
+                }
+            });
         });
-    });
 
-    $('#closeFilterBtn, #filterModalOverlay').on('click', function () {
-        $('#filterModal').removeClass('show');
-        $('#filterModalOverlay').removeClass('show');
-    });
+        /* ============ TOAST ============ */
+        function showToast(message, type) {
+            var $toast = $('#cartToast');
+            var color = (type === 'error') ? 'linear-gradient(135deg, #C62828, #EF5350)' : 'linear-gradient(135deg, #2E7D32, #66BB6A)';
+            var icon = (type === 'error') ? 'fa-exclamation-circle' : 'fa-check-circle';
+            $toast.css('background', color);
+            $toast.find('i').removeClass().addClass('fas ' + icon);
+            $('#toastMessage').text(message);
+            $toast.fadeIn(300);
+            setTimeout(function() {
+                $toast.fadeOut(300);
+            }, 2500);
+        }
 
-});
+        /* ============ MOBILE FILTER MODAL ============ */
+        $('#showFilterBtn').on('click', function() {
+            var filterHtml = $('.filter-sidebar form').clone().attr('id', 'mobileFilterForm').prop('outerHTML');
+            $('#mobileFilterContent').html(filterHtml);
+            $('#filterModal').addClass('show');
+            $('#filterModalOverlay').addClass('show');
+            $('#mobileFilterContent #priceRange').on('input', function() {
+                $('#mobileFilterContent #maxPrice').val($(this).val());
+            });
+        });
+
+        $('#closeFilterBtn, #filterModalOverlay').on('click', function() {
+            $('#filterModal').removeClass('show');
+            $('#filterModalOverlay').removeClass('show');
+        });
+
+    });
 </script>
 @endsection
