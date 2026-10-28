@@ -406,6 +406,55 @@
         font-weight: 600;
     }
 
+    /* Image Upload Area */
+    .avatar-upload-area {
+        border: 2px dashed var(--primary-green);
+        border-radius: 12px;
+        padding: 20px;
+        text-align: center;
+        cursor: pointer;
+        transition: var(--transition);
+        background: var(--off-white);
+        position: relative;
+        overflow: hidden;
+        margin-bottom: 25px;
+    }
+
+    .avatar-upload-area:hover {
+        background: var(--pale-green);
+        border-color: var(--light-green);
+    }
+
+    .avatar-upload-area i.upload-icon {
+        font-size: 2.5rem;
+        color: var(--primary-green);
+        margin-bottom: 10px;
+    }
+
+    .avatar-upload-area p {
+        margin: 0;
+        color: var(--primary-green);
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+
+    .avatar-upload-area small {
+        color: var(--gray-text);
+        font-size: 0.75rem;
+        display: block;
+        margin-top: 5px;
+    }
+
+    .avatar-preview-img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin: 0 auto 10px;
+        border: 3px solid var(--primary-green);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
     /* Save Button */
     .btn-save-p {
         background: linear-gradient(135deg, var(--primary-green), var(--light-green));
@@ -917,17 +966,14 @@ $strings = GoogleTranslator::translateBatch([
 <div class="profile-header" data-aos="fade-down">
     <div class="profile-header-inner">
         <div class="profile-avatar-wrap">
-            <div class="profile-avatar-big" id="avatarDisplay">
-                @if(!empty($customer->avatar) && file_exists(public_path('uploads/customers/'.$customer->avatar)))
-                <img src="{{ asset('uploads/customers/'.$customer->avatar) }}" alt="{{ $customer->name }}">
+            <div class="profile-avatar-big" id="heroAvatar">
+                @if(!empty($customer->avatar) && file_exists(public_path('images/'.$customer->avatar)))
+                <img src="{{ asset('images/'.$customer->avatar) }}" alt="{{ $customer->name }}">
                 @else
                 {{ strtoupper(substr($customer->name, 0, 1)) }}
                 @endif
             </div>
-            <label for="avatarUploadInput" class="profile-change-photo" title="Change Photo">
-                <i class="fas fa-camera"></i>
-            </label>
-            <input type="file" id="avatarUploadInput" accept="image/*" style="display:none;">
+            <!-- Camera icon and file input removed from here -->
         </div>
 
         <div class="profile-header-info">
@@ -987,6 +1033,23 @@ $strings = GoogleTranslator::translateBatch([
             <h5 style="font-weight:700;color:var(--dark-text);margin-bottom:20px;">
                 <i class="fas fa-id-card me-2" style="color:var(--primary-green);"></i>{{ $strings['section_personal'] }}
             </h5>
+
+            <!-- Image Upload Area -->
+            <div class="avatar-upload-area" onclick="$('#avatarUploadInput').click()">
+                <div id="avatarPreviewContainer">
+                    @if(!empty($customer->avatar) && file_exists(public_path('images/'.$customer->avatar)))
+                    <img src="{{ asset('images/'.$customer->avatar) }}" class="avatar-preview-img" alt="Avatar">
+                    <p>Change Profile Image</p>
+                    @else
+                    <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                    <p>Click to Upload Profile Image</p>
+                    <small>JPG, PNG (Max 2MB)</small>
+                    @endif
+                </div>
+            </div>
+
+            <!-- Moved file input INSIDE the form and added name="avatar" -->
+            <input type="file" name="avatar" id="avatarUploadInput" accept="image/*" style="display:none;">
 
             <div class="row">
                 <div class="col-md-6">
@@ -1399,46 +1462,46 @@ $strings = GoogleTranslator::translateBatch([
     $(document).ready(function() {
 
         var jsStrings = {
-            avatarSize: @json($strings['js_avatar_size']),
-            avatarType: @json($strings['js_avatar_type']),
-            avatarSuccess: @json($strings['js_avatar_success']),
-            nameRequired: @json($strings['js_name_required']),
-            nameMin: @json($strings['js_name_min']),
-            nameChars: @json($strings['js_name_chars']),
-            emailRequired: @json($strings['js_email_required']),
-            emailInvalid: @json($strings['js_email_invalid']),
-            phoneRequired: @json($strings['js_phone_required']),
-            phoneInvalid: @json($strings['js_phone_invalid']),
-            villageReq: @json($strings['js_village_req']),
-            curPwdReq: @json($strings['js_cur_pwd_req']),
-            newPwdReq: @json($strings['js_new_pwd_req']),
-            newPwdMin: @json($strings['js_new_pwd_min']),
-            newPwdSame: @json($strings['js_new_pwd_same']),
-            confPwdReq: @json($strings['js_conf_pwd_req']),
-            confPwdMatch: @json($strings['js_conf_pwd_match']),
-            addrReq: @json($strings['js_addr_req']),
-            addrMin: @json($strings['js_addr_min']),
-            cityReq: @json($strings['js_city_req']),
-            stateReq: @json($strings['js_state_req']),
-            pinReq: @json($strings['js_pin_req']),
-            pinInvalid: @json($strings['js_pin_invalid']),
-            setDefaultC: @json($strings['js_set_default_c']),
-            delAddrC: @json($strings['js_del_addr_c']),
-            delAccC1: @json($strings['js_del_acc_c1']),
-            delAccC2: @json($strings['js_del_acc_c2']),
-            delAccC3: @json($strings['js_del_acc_c3']),
-            saving: @json($strings['btn_saving']),
-            updating: @json($strings['btn_updating']),
-            modalAdd: @json($strings['modal_add_title']),
-            modalEdit: @json($strings['modal_edit_title']),
+            avatarSize: "{{ $strings['js_avatar_size'] ?? 'Image must be less than 2MB' }}",
+            avatarType: "{{ $strings['js_avatar_type'] ?? 'Please upload a valid image file' }}",
+            avatarSuccess: "{{ $strings['js_avatar_success'] ?? 'Photo updated successfully!' }}",
+            nameRequired: "{{ $strings['js_name_required'] ?? 'Name required' }}",
+            nameMin: "{{ $strings['js_name_min'] ?? 'Min 2 characters' }}",
+            nameChars: "{{ $strings['js_name_chars'] ?? 'Only letters, spaces, dots allowed' }}",
+            emailRequired: "{{ $strings['js_email_required'] ?? 'Email required' }}",
+            emailInvalid: "{{ $strings['js_email_invalid'] ?? 'Invalid email' }}",
+            phoneRequired: "{{ $strings['js_phone_required'] ?? 'Phone required' }}",
+            phoneInvalid: "{{ $strings['js_phone_invalid'] ?? 'Must be 10 digits, starts 6-9' }}",
+            villageReq: "{{ $strings['js_village_req'] ?? 'Please select village' }}",
+            curPwdReq: "{{ $strings['js_cur_pwd_req'] ?? 'Current password required' }}",
+            newPwdReq: "{{ $strings['js_new_pwd_req'] ?? 'New password required' }}",
+            newPwdMin: "{{ $strings['js_new_pwd_min'] ?? 'Min 6 characters' }}",
+            newPwdSame: "{{ $strings['js_new_pwd_same'] ?? 'Must be different from current password' }}",
+            confPwdReq: "{{ $strings['js_conf_pwd_req'] ?? 'Confirm new password' }}",
+            confPwdMatch: "{{ $strings['js_conf_pwd_match'] ?? 'Passwords do not match' }}",
+            addrReq: "{{ $strings['js_addr_req'] ?? 'Address required' }}",
+            addrMin: "{{ $strings['js_addr_min'] ?? 'Min 10 characters' }}",
+            cityReq: "{{ $strings['js_city_req'] ?? 'City required' }}",
+            stateReq: "{{ $strings['js_state_req'] ?? 'State required' }}",
+            pinReq: "{{ $strings['js_pin_req'] ?? 'Pincode required' }}",
+            pinInvalid: "{{ $strings['js_pin_invalid'] ?? 'Must be 6 digits' }}",
+            setDefaultC: "{{ $strings['js_set_default_c'] ?? 'Set this as your default address?' }}",
+            delAddrC: "{{ $strings['js_del_addr_c'] ?? 'Are you sure you want to delete this address?' }}",
+            delAccC1: "{{ $strings['js_del_acc_c1'] ?? 'WARNING: This will permanently delete your account, orders history and all data.\n\nAre you sure you want to continue?' }}",
+            delAccC2: "{{ $strings['js_del_acc_c2'] ?? 'Please type \"DELETE\" to confirm account deletion:' }}",
+            delAccC3: "{{ $strings['js_del_acc_c3'] ?? 'Account deletion cancelled.' }}",
+            saving: "{{ $strings['btn_saving'] ?? 'Saving...' }}",
+            updating: "{{ $strings['btn_updating'] ?? 'Updating...' }}",
+            modalAdd: "{{ $strings['modal_add_title'] ?? 'Add New Address' }}",
+            modalEdit: "{{ $strings['modal_edit_title'] ?? 'Edit Address' }}",
         };
 
         var pwdLabels = {
-            veryWeak: @json($strings['pw_very_weak']),
-            weak: @json($strings['pw_weak']),
-            fair: @json($strings['pw_fair']),
-            good: @json($strings['pw_good']),
-            strong: @json($strings['pw_strong']),
+            veryWeak: "{{ $strings['pw_very_weak'] ?? 'Very Weak' }}",
+            weak: "{{ $strings['pw_weak'] ?? 'Weak' }}",
+            fair: "{{ $strings['pw_fair'] ?? 'Fair' }}",
+            good: "{{ $strings['pw_good'] ?? 'Good' }}",
+            strong: "{{ $strings['pw_strong'] ?? 'Strong' }}",
         };
 
         /* ============ TAB SWITCHING ============ */
@@ -1475,24 +1538,18 @@ $strings = GoogleTranslator::translateBatch([
 
             var reader = new FileReader();
             reader.onload = function(e) {
-                $('#avatarDisplay').html('<img src="' + e.target.result + '">');
+                // Update form preview
+                $('#avatarPreviewContainer').html(
+                    '<img src="' + e.target.result + '" class="avatar-preview-img" alt="Preview">' +
+                    '<p>Change Profile Image</p>'
+                );
+                // Update hero preview instantly
+                $('#heroAvatar').html('<img src="' + e.target.result + '">');
             };
             reader.readAsDataURL(file);
 
-            var formData = new FormData();
-            formData.append('avatar', file);
-            formData.append('_token', '{{ csrf_token() }}');
-
-            $.ajax({
-                url: '{{ url("/customer/profile/upload-avatar") }}',
-                method: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function(res) {
-                    if (res.success) alert(jsStrings.avatarSuccess);
-                }
-            });
+            // Optional: Do an AJAX upload here if you want it to save instantly, 
+            // but since it's inside the form with name="avatar", it will submit when Save Changes is clicked.
         });
 
         /* ============ PASSWORD TOGGLE ============ */

@@ -1040,11 +1040,11 @@ $strings = GoogleTranslator::translateBatch([
 <script>
     $(document).ready(function() {
         var jsStrings = {
-            delConfirm: @json($strings['js_del_confirm']),
-            dateErr1: @json($strings['js_date_err_1']),
-            dateErr2: @json($strings['js_date_err_2']),
-            updating: @json($strings['js_updating']),
-            btnCancel: @json($strings['btn_cancel'])
+            delConfirm: "{{ $strings['js_del_confirm'] ?? 'Are you sure you want to delete order :num? This action cannot be undone.' }}",
+            dateErr1: "{{ $strings['js_date_err_1'] ?? '\"To Date\" cannot be earlier than \"From Date\".' }}",
+            dateErr2: "{{ $strings['js_date_err_2'] ?? '\"From Date\" cannot be later than \"To Date\".' }}",
+            updating: "{{ $strings['js_updating'] ?? 'Updating...' }}",
+            btnCancel: "{{ $strings['btn_cancel'] ?? 'Cancel' }}"
         };
 
         function showCustomAlert(type, title, message, isConfirm = false, onConfirm = null) {

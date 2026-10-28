@@ -48,11 +48,25 @@
         font-size: 1rem;
     }
 
-    .os-ic.all { background: linear-gradient(135deg, #2E7D32, #66BB6A); }
-    .os-ic.pending { background: linear-gradient(135deg, #E65100, #FFA726); }
-    .os-ic.confirmed { background: linear-gradient(135deg, #1565C0, #42A5F5); }
-    .os-ic.processing { background: linear-gradient(135deg, #7B1FA2, #AB47BC); }
-    .os-ic.delivered { background: linear-gradient(135deg, #00695C, #26A69A); }
+    .os-ic.all {
+        background: linear-gradient(135deg, #2E7D32, #66BB6A);
+    }
+
+    .os-ic.pending {
+        background: linear-gradient(135deg, #E65100, #FFA726);
+    }
+
+    .os-ic.confirmed {
+        background: linear-gradient(135deg, #1565C0, #42A5F5);
+    }
+
+    .os-ic.processing {
+        background: linear-gradient(135deg, #7B1FA2, #AB47BC);
+    }
+
+    .os-ic.delivered {
+        background: linear-gradient(135deg, #00695C, #26A69A);
+    }
 
     .os-ph .os-v {
         font-size: 1.3rem;
@@ -200,12 +214,35 @@
         text-transform: uppercase;
     }
 
-    .stb-pending { background: #FFF3E0; color: #E65100; }
-    .stb-confirmed { background: #E3F2FD; color: #1565C0; }
-    .stb-processing { background: #F3E5F5; color: #7B1FA2; }
-    .stb-out_for_delivery { background: #FCE4EC; color: #AD1457; }
-    .stb-delivered { background: #E8F5E9; color: #1B5E20; }
-    .stb-cancelled { background: #FFEBEE; color: #B71C1C; }
+    .stb-pending {
+        background: #FFF3E0;
+        color: #E65100;
+    }
+
+    .stb-confirmed {
+        background: #E3F2FD;
+        color: #1565C0;
+    }
+
+    .stb-processing {
+        background: #F3E5F5;
+        color: #7B1FA2;
+    }
+
+    .stb-out_for_delivery {
+        background: #FCE4EC;
+        color: #AD1457;
+    }
+
+    .stb-delivered {
+        background: #E8F5E9;
+        color: #1B5E20;
+    }
+
+    .stb-cancelled {
+        background: #FFEBEE;
+        color: #B71C1C;
+    }
 
     .pay-badge-ph {
         display: inline-block;
@@ -216,9 +253,20 @@
         text-transform: uppercase;
     }
 
-    .pay-cod { background: #FFF3E0; color: #E65100; }
-    .pay-online { background: #E3F2FD; color: #1565C0; }
-    .pay-upi { background: #F3E5F5; color: #6A1B9A; }
+    .pay-cod {
+        background: #FFF3E0;
+        color: #E65100;
+    }
+
+    .pay-online {
+        background: #E3F2FD;
+        color: #1565C0;
+    }
+
+    .pay-upi {
+        background: #F3E5F5;
+        color: #6A1B9A;
+    }
 
     .ord-price-ph {
         font-weight: 700;
@@ -245,10 +293,21 @@
         text-decoration: none;
     }
 
-    .oa-btn.view { background: #1976D2; }
-    .oa-btn.confirm { background: #2E7D32; }
-    .oa-btn.process { background: #7B1FA2; }
-    .oa-btn.cancel { background: #C62828; }
+    .oa-btn.view {
+        background: #1976D2;
+    }
+
+    .oa-btn.confirm {
+        background: #2E7D32;
+    }
+
+    .oa-btn.process {
+        background: #7B1FA2;
+    }
+
+    .oa-btn.cancel {
+        background: #C62828;
+    }
 
     .oa-btn:hover {
         transform: translateY(-2px);
@@ -382,21 +441,41 @@
     }
 
     @media (max-width: 991px) {
-        .order-stats-ph { grid-template-columns: repeat(3, 1fr); }
+        .order-stats-ph {
+            grid-template-columns: repeat(3, 1fr);
+        }
     }
 
     @media (max-width: 767px) {
-        .order-stats-ph { grid-template-columns: 1fr 1fr; }
-        .orders-table-ph thead { display: none; }
-        .orders-table-ph tbody td { padding: 10px 12px; font-size: 0.85rem; }
-        .filter-bar-ph { flex-direction: column; }
-        .search-input-ph { min-width: 100%; }
+        .order-stats-ph {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .orders-table-ph thead {
+            display: none;
+        }
+
+        .orders-table-ph tbody td {
+            padding: 10px 12px;
+            font-size: 0.85rem;
+        }
+
+        .filter-bar-ph {
+            flex-direction: column;
+        }
+
+        .search-input-ph {
+            min-width: 100%;
+        }
     }
 
     /* ============ CUSTOM MODAL STYLES ============ */
     .custom-modal-overlay {
         position: fixed;
-        top: 0; left: 0; right: 0; bottom: 0;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
         background: rgba(0, 0, 0, 0.5);
         display: none;
         align-items: center;
@@ -404,22 +483,26 @@
         z-index: 10005;
         padding: 20px;
     }
+
     .custom-modal-overlay.show {
         display: flex;
     }
+
     .custom-modal {
         background: var(--white);
         border-radius: 16px;
         width: 100%;
         max-width: 400px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         overflow: hidden;
         transform: scale(0.95);
         transition: transform 0.3s ease;
     }
+
     .custom-modal-overlay.show .custom-modal {
         transform: scale(1);
     }
+
     .custom-modal-header {
         padding: 20px 25px;
         background: var(--off-white);
@@ -428,6 +511,7 @@
         align-items: center;
         gap: 12px;
     }
+
     .custom-modal-icon {
         width: 40px;
         height: 40px;
@@ -437,22 +521,36 @@
         justify-content: center;
         font-size: 1.2rem;
     }
-    .custom-modal-icon.warning { background: #FFF3E0; color: #FB8C00; }
-    .custom-modal-icon.success { background: #E8F5E9; color: #2E7D32; }
-    .custom-modal-icon.error { background: #FFEBEE; color: #C62828; }
-    
+
+    .custom-modal-icon.warning {
+        background: #FFF3E0;
+        color: #FB8C00;
+    }
+
+    .custom-modal-icon.success {
+        background: #E8F5E9;
+        color: #2E7D32;
+    }
+
+    .custom-modal-icon.error {
+        background: #FFEBEE;
+        color: #C62828;
+    }
+
     .custom-modal-header h5 {
         margin: 0;
         font-size: 1.1rem;
         font-weight: 700;
         color: var(--dark-text);
     }
+
     .custom-modal-body {
         padding: 20px 25px;
         font-size: 0.95rem;
         color: var(--gray-text);
         line-height: 1.5;
     }
+
     .custom-modal-footer {
         padding: 15px 25px;
         background: var(--off-white);
@@ -461,6 +559,7 @@
         justify-content: flex-end;
         gap: 10px;
     }
+
     .btn-modal {
         padding: 8px 20px;
         border-radius: 20px;
@@ -470,21 +569,25 @@
         transition: var(--transition);
         border: none;
     }
+
     .btn-modal-cancel {
         background: transparent;
         color: var(--gray-text);
         border: 1px solid #E0E0E0;
     }
+
     .btn-modal-cancel:hover {
         background: #F5F5F5;
     }
+
     .btn-modal-confirm {
         background: linear-gradient(135deg, var(--primary-green), var(--light-green));
         color: var(--white);
     }
+
     .btn-modal-confirm:hover {
         transform: translateY(-1px);
-        box-shadow: 0 4px 10px rgba(46,125,50,0.3);
+        box-shadow: 0 4px 10px rgba(46, 125, 50, 0.3);
     }
 </style>
 @endsection
@@ -758,13 +861,13 @@ $strings = GoogleTranslator::translateBatch([
     $(document).ready(function() {
 
         var jsStrings = {
-            confirmOrder: @json($strings['js_confirm_order']),
-            processOrder: @json($strings['js_process_order']),
-            cancelOrder: @json($strings['js_cancel_order']),
-            popupConfirmTitle: @json($strings['popup_confirm_title']),
-            popupCancelTitle: @json($strings['popup_cancel_title']),
-            popupYes: @json($strings['popup_yes']),
-            popupNo: @json($strings['popup_no'])
+            confirmOrder: "{{ $strings['js_confirm_order'] ?? 'Confirm this order?' }}",
+            processOrder: "{{ $strings['js_process_order'] ?? 'Start processing this order?' }}",
+            cancelOrder: "{{ $strings['js_cancel_order'] ?? 'Cancel order :num?' }}",
+            popupConfirmTitle: "{{ $strings['popup_confirm_title'] ?? 'Confirm Action' }}",
+            popupCancelTitle: "{{ $strings['popup_cancel_title'] ?? 'Cancel Order' }}",
+            popupYes: "{{ $strings['popup_yes'] ?? 'Yes, Proceed' }}",
+            popupNo: "{{ $strings['popup_no'] ?? 'Cancel' }}"
         };
 
         /* ============ CUSTOM MODAL LOGIC ============ */
@@ -845,7 +948,7 @@ $strings = GoogleTranslator::translateBatch([
         $('.btn-confirm-order').on('click', function() {
             var id = $(this).data('id');
             var $btn = $(this);
-            
+
             showConfirm(jsStrings.confirmOrder, function() {
                 $btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i>');
                 $.post('{{ url("/pharmacy/order/update-status") }}', {
@@ -862,7 +965,7 @@ $strings = GoogleTranslator::translateBatch([
         $('.btn-process-order').on('click', function() {
             var id = $(this).data('id');
             var $btn = $(this);
-            
+
             showConfirm(jsStrings.processOrder, function() {
                 $btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i>');
                 $.post('{{ url("/pharmacy/order/update-status") }}', {
@@ -880,7 +983,7 @@ $strings = GoogleTranslator::translateBatch([
             var id = $(this).data('id');
             var num = $(this).data('num');
             var msg = jsStrings.cancelOrder.replace(':num', num);
-            
+
             showConfirm(msg, function() {
                 var $f = $('<form>', {
                     method: 'POST',

@@ -8,23 +8,15 @@ use Illuminate\Support\Facades\Log;
 
 class GoogleTranslator
 {
-    /**
-     * Shared options for the Guzzle HTTP client used by GoogleTranslate.
-     * Prevents requests from hanging until PHP's max_execution_time kills them.
-     */
     protected static function httpOptions(): array
     {
         return [
-            'timeout'         => 10,   // 10 seconds max for the whole request
-            'connect_timeout' => 5,    // 5 seconds to establish connection
-            'verify'          => false, // skip SSL verification (helps on local dev / Windows)
+            'timeout'         => 15,
+            'connect_timeout' => 5,
+            'verify'          => false,
         ];
     }
 
-    /**
-     * Translate text from English to the current locale.
-     * Uses caching so repeated strings don't hit Google every time.
-     */
     public static function translate(?string $text, ?string $targetLocale = null, string $sourceLocale = 'en'): ?string
     {
         if (empty($text)) {
@@ -33,12 +25,10 @@ class GoogleTranslator
 
         $targetLocale = $targetLocale ?? app()->getLocale();
 
-        // Don't translate if source == target (already in that language)
         if ($targetLocale === $sourceLocale) {
             return $text;
         }
 
-        // Cache key: unique per text + locale combination
         $cacheKey = 'gtranslate_' . md5($sourceLocale . '|' . $targetLocale . '|' . $text);
 
         return Cache::rememberForever($cacheKey, function () use ($text, $targetLocale, $sourceLocale) {
@@ -47,14 +37,12 @@ class GoogleTranslator
                 $tr->setSource($sourceLocale);
                 $tr->setOptions(self::httpOptions());
 
-                // If text contains HTML, translate the inner text only
                 if (preg_match('/<[^>]+>/', $text)) {
                     return $tr->translateMarkup($text);
                 }
 
                 return $tr->translate($text);
             } catch (\Throwable $e) {
-                // If translation fails, return original text
                 Log::warning('GoogleTranslate failed: ' . $e->getMessage());
                 return $text;
             }
@@ -62,7 +50,8 @@ class GoogleTranslator
     }
 
     /**
-     * Translate a whole array of strings in bulk (fewer API calls).
+     * Translate an array of strings in bulk.
+     * Combines multiple strings into a single API request to prevent timeouts.
      */
     public static function translateBatch(array $texts, ?string $targetLocale = null, string $sourceLocale = 'en'): array
     {
@@ -75,7 +64,7 @@ class GoogleTranslator
         $uncached = [];
         $uncachedKeys = [];
 
-        // First pass: fetch cached values
+        // 1. Check Cache
         foreach ($texts as $key => $text) {
             if (empty($text)) {
                 $results[$key] = $text;
@@ -91,27 +80,41 @@ class GoogleTranslator
             }
         }
 
-        // Second pass: hit Google for uncached items
+        // 2. Translate uncached strings in a SINGLE bulk request
         if (!empty($uncached)) {
             try {
+                // Combine all strings with a unique separator
+                $separator = ' ||| ';
+                $combinedText = implode($separator, array_values($uncached));
+
+                // Truncate if the combined string exceeds Google's character limit (approx 5000 chars)
+                if (strlen($combinedText) > 4500) {
+                    $combinedText = substr($combinedText, 0, 4500);
+                }
+
                 $tr = new GoogleTranslate($targetLocale);
                 $tr->setSource($sourceLocale);
                 $tr->setOptions(self::httpOptions());
 
-                foreach ($uncached as $key => $text) {
-                    try {
-                        $translated = $tr->translate($text);
-                    } catch (\Throwable $innerEx) {
-                        // If a single string fails, fall back to the original
-                        Log::warning('GoogleTranslate per-item failed for key "' . $key . '": ' . $innerEx->getMessage());
-                        $translated = $text;
-                    }
+                // Make 1 single API call
+                $translatedCombined = $tr->translate($combinedText);
+
+                // Split the result back into an array using the separator
+                $translatedArray = explode($separator, $translatedCombined);
+
+                // Map the translated strings back to the original keys
+                $i = 0;
+                foreach ($uncached as $key => $originalText) {
+                    // If the array split successfully, use it, otherwise fallback to original
+                    $translated = isset($translatedArray[$i]) ? trim($translatedArray[$i]) : $originalText;
 
                     $results[$key] = $translated;
                     Cache::forever($uncachedKeys[$key], $translated);
+                    $i++;
                 }
             } catch (\Throwable $e) {
                 Log::warning('GoogleTranslate batch failed: ' . $e->getMessage());
+                // Fallback to original text for everything that failed
                 foreach ($uncached as $key => $text) {
                     $results[$key] = $text;
                 }

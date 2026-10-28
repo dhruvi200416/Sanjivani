@@ -1087,7 +1087,7 @@ $strings = GoogleTranslator::translateBatch([
             var max = 500;
             var $counter = $('#charCounter');
 
-            $counter.text(length + ' / ' + max + ' ' + @json($strings['char_counter_suffix']));
+            $counter.text(length + ' / ' + max + ' ' + "{{ $strings['char_counter_suffix'] ?? 'characters' }}");
             $counter.removeClass('warning danger');
 
             if (length > max * 0.9) {
@@ -1125,15 +1125,15 @@ $strings = GoogleTranslator::translateBatch([
             var regex = /^[a-zA-Z\s.]{2,50}$/;
 
             if (value === '') {
-                showError($el, '⚠ ' + @json($strings['js_name_required']));
+                showError($el, '⚠ ' + "{{ $strings['js_name_required'] ?? 'Please enter your full name.' }}");
                 return false;
             }
             if (value.length < 2) {
-                showError($el, '⚠ ' + @json($strings['js_name_short']));
+                showError($el, '⚠ ' + "{{ $strings['js_name_short'] ?? 'Name must be at least 2 characters long.' }}");
                 return false;
             }
             if (!regex.test(value)) {
-                showError($el, '⚠ ' + @json($strings['js_name_chars']));
+                showError($el, '⚠ ' + "{{ $strings['js_name_chars'] ?? 'Name can only contain letters, spaces and dots.' }}");
                 return false;
             }
             showSuccess($el);
@@ -1147,15 +1147,15 @@ $strings = GoogleTranslator::translateBatch([
             var regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
             if (value === '') {
-                showError($el, '⚠ ' + @json($strings['js_email_required']));
+                showError($el, '⚠ ' + "{{ $strings['js_email_required'] ?? 'Please enter your email address.' }}");
                 return false;
             }
             if (!regex.test(value)) {
-                showError($el, '⚠ ' + @json($strings['js_email_invalid']));
+                showError($el, '⚠ ' + "{{ $strings['js_email_invalid'] ?? 'Please enter a valid email address.' }}");
                 return false;
             }
             if (value.length > 100) {
-                showError($el, '⚠ ' + @json($strings['js_email_long']));
+                showError($el, '⚠ ' + "{{ $strings['js_email_long'] ?? 'Email address is too long.' }}");
                 return false;
             }
             showSuccess($el);
@@ -1169,19 +1169,19 @@ $strings = GoogleTranslator::translateBatch([
             var regex = /^[6-9]\d{9}$/;
 
             if (value === '') {
-                showError($el, '⚠ ' + @json($strings['js_phone_required']));
+                showError($el, '⚠ ' + "{{ $strings['js_phone_required'] ?? 'Please enter your mobile number.' }}");
                 return false;
             }
             if (!/^\d+$/.test(value)) {
-                showError($el, '⚠ ' + @json($strings['js_phone_digits']));
+                showError($el, '⚠ ' + "{{ $strings['js_phone_digits'] ?? 'Mobile number must contain only digits.' }}");
                 return false;
             }
             if (value.length !== 10) {
-                showError($el, '⚠ ' + @json($strings['js_phone_length']));
+                showError($el, '⚠ ' + "{{ $strings['js_phone_length'] ?? 'Mobile number must be exactly 10 digits.' }}");
                 return false;
             }
             if (!regex.test(value)) {
-                showError($el, '⚠ ' + @json($strings['js_phone_invalid']));
+                showError($el, '⚠ ' + "{{ $strings['js_phone_invalid'] ?? 'Please enter a valid Indian mobile number (starts with 6-9).' }}");
                 return false;
             }
             showSuccess($el);
@@ -1194,15 +1194,15 @@ $strings = GoogleTranslator::translateBatch([
             var value = $.trim($el.val());
 
             if (value === '') {
-                showError($el, '⚠ ' + @json($strings['js_subject_required']));
+                showError($el, '⚠ ' + "{{ $strings['js_subject_required'] ?? 'Please enter a subject.' }}");
                 return false;
             }
             if (value.length < 3) {
-                showError($el, '⚠ ' + @json($strings['js_subject_short']));
+                showError($el, '⚠ ' + "{{ $strings['js_subject_short'] ?? 'Subject must be at least 3 characters long.' }}");
                 return false;
             }
             if (value.length > 150) {
-                showError($el, '⚠ ' + @json($strings['js_subject_long']));
+                showError($el, '⚠ ' + "{{ $strings['js_subject_long'] ?? 'Subject must not exceed 150 characters.' }}");
                 return false;
             }
             showSuccess($el);
@@ -1215,15 +1215,15 @@ $strings = GoogleTranslator::translateBatch([
             var value = $.trim($el.val());
 
             if (value === '') {
-                showError($el, '⚠ ' + @json($strings['js_message_required']));
+                showError($el, '⚠ ' + "{{ $strings['js_message_required'] ?? 'Please write your message.' }}");
                 return false;
             }
             if (value.length < 10) {
-                showError($el, '⚠ ' + @json($strings['js_message_short']));
+                showError($el, '⚠ ' + "{{ $strings['js_message_short'] ?? 'Message must be at least 10 characters long.' }}");
                 return false;
             }
             if (value.length > 500) {
-                showError($el, '⚠ ' + @json($strings['js_message_long']));
+                showError($el, '⚠ ' + "{{ $strings['js_message_long'] ?? 'Message must not exceed 500 characters.' }}");
                 return false;
             }
             showSuccess($el);
@@ -1282,7 +1282,7 @@ $strings = GoogleTranslator::translateBatch([
             var $btn = $('#submitBtn');
             var originalHtml = $btn.html();
             $btn.prop('disabled', true).html(
-                '<i class="fas fa-spinner fa-spin"></i> <span>' + @json($strings['btn_sending']) + '</span>'
+                '<i class="fas fa-spinner fa-spin"></i> <span>' + "{{ $strings['btn_sending'] ?? 'Sending Message...' }}" + '</span>'
             );
 
             this.submit();

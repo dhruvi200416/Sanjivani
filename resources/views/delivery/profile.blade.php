@@ -779,20 +779,20 @@ $strings = GoogleTranslator::translateBatch([
     $(document).ready(function() {
 
         var jsStrings = {
-            nameReq: @json($strings['js_name_req']),
-            nameMin: @json($strings['js_name_min']),
-            emailReq: @json($strings['js_email_req']),
-            phoneReq: @json($strings['js_phone_req']),
-            addrReq: @json($strings['js_addr_req']),
-            curPwdReq: @json($strings['js_cur_pwd_req']),
-            newPwdReq: @json($strings['js_new_pwd_req']),
-            newPwdMin: @json($strings['js_new_pwd_min']),
-            newPwdSame: @json($strings['js_new_pwd_same']),
-            confPwdMatch: @json($strings['js_conf_pwd_match']),
-            saving: @json($strings['js_saving']),
-            updating: @json($strings['js_updating']),
-            imgSize: @json($strings['js_img_size']),
-            imgType: @json($strings['js_img_type'])
+            nameReq: "{{ $strings['js_name_req'] ?? 'Name required' }}",
+            nameMin: "{{ $strings['js_name_min'] ?? 'Min 2 characters' }}",
+            emailReq: "{{ $strings['js_email_req'] ?? 'Valid email required' }}",
+            phoneReq: "{{ $strings['js_phone_req'] ?? '10 digits, starts 6-9' }}",
+            addrReq: "{{ $strings['js_addr_req'] ?? 'Address required' }}",
+            curPwdReq: "{{ $strings['js_cur_pwd_req'] ?? 'Current password required' }}",
+            newPwdReq: "{{ $strings['js_new_pwd_req'] ?? 'New password required' }}",
+            newPwdMin: "{{ $strings['js_new_pwd_min'] ?? 'Min 6 characters' }}",
+            newPwdSame: "{{ $strings['js_new_pwd_same'] ?? 'Must differ from current' }}",
+            confPwdMatch: "{{ $strings['js_conf_pwd_match'] ?? 'Passwords do not match' }}",
+            saving: "{{ $strings['js_saving'] ?? 'Saving...' }}",
+            updating: "{{ $strings['js_updating'] ?? 'Updating...' }}",
+            imgSize: "{{ $strings['js_img_size'] ?? 'Image must be less than 2MB' }}",
+            imgType: "{{ $strings['js_img_type'] ?? 'Please upload a valid image file' }}"
         };
 
         /* ============ IMAGE PREVIEW ONLY ============ */

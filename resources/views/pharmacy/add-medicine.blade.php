@@ -387,18 +387,18 @@ $strings = GoogleTranslator::translateBatch([
     $(document).ready(function() {
 
         var jsStrings = {
-            imgSize: @json($strings['js_img_size']),
-            imgType: @json($strings['js_img_type']),
-            nameReq: @json($strings['js_name_req']),
-            nameMin: @json($strings['js_name_min']),
-            brandReq: @json($strings['js_brand_req']),
-            catReq: @json($strings['js_cat_req']),
-            priceReq: @json($strings['js_price_req']),
-            priceGt: @json($strings['js_price_gt']),
-            stockReq: @json($strings['js_stock_req']),
-            stockNeg: @json($strings['js_stock_neg']),
-            saving: @json($strings['js_saving']),
-            imgSelected: @json($strings['img_selected'])
+            imgSize: "{{ $strings['js_img_size'] ?? 'Image size must be less than 2MB' }}",
+            imgType: "{{ $strings['js_img_type'] ?? 'Please upload a valid image file' }}",
+            nameReq: "{{ $strings['js_name_req'] ?? 'Medicine name is required' }}",
+            nameMin: "{{ $strings['js_name_min'] ?? 'Medicine name must be at least 2 characters' }}",
+            brandReq: "{{ $strings['js_brand_req'] ?? 'Brand name is required' }}",
+            catReq: "{{ $strings['js_cat_req'] ?? 'Please select a health category' }}",
+            priceReq: "{{ $strings['js_price_req'] ?? 'Price is required' }}",
+            priceGt: "{{ $strings['js_price_gt'] ?? 'Price must be greater than 0' }}",
+            stockReq: "{{ $strings['js_stock_req'] ?? 'Stock quantity is required' }}",
+            stockNeg: "{{ $strings['js_stock_neg'] ?? 'Stock cannot be a negative value' }}",
+            saving: "{{ $strings['js_saving'] ?? 'Saving...' }}",
+            imgSelected: "{{ $strings['img_selected'] ?? 'Image Selected' }}"
         };
 
         /* ============ IMAGE UPLOAD PREVIEW ============ */

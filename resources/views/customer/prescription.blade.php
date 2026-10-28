@@ -179,27 +179,6 @@
         border: 1px solid var(--mint-green);
     }
 
-    .btn-browse-file {
-        background: linear-gradient(135deg, var(--primary-green), var(--light-green));
-        color: var(--white);
-        border: none;
-        padding: 12px 30px;
-        border-radius: 25px;
-        font-weight: 700;
-        font-size: 0.92rem;
-        cursor: pointer;
-        transition: var(--transition);
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        margin-top: 15px;
-    }
-
-    .btn-browse-file:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 18px rgba(46, 125, 50, 0.3);
-    }
-
     /* File Preview */
     .file-preview-area {
         display: none;
@@ -719,6 +698,9 @@ $prescriptions = $prescriptions ?? collect([
 (object)['id'=>5,'file_name'=>'prescription_005.pdf','doctor_name'=>'Dr. Joshi','notes'=>'BP medicines refill','status'=>'rejected','created_at'=>now()->subDays(15)],
 ]);
 
+// Fetch actual villages from database
+$villages = $villages ?? App\Models\Village::active()->orderBy('name')->get();
+
 // Ensure it's iterable
 $rxArr = is_array($prescriptions) ? $prescriptions : (method_exists($prescriptions, 'all') ? $prescriptions->all() : []);
 
@@ -730,11 +712,10 @@ foreach ($rxArr as $i => $r) {
 if (!empty($r->doctor_name)) $r->doctor_name = $doctorNames[$i] ?? $r->doctor_name;
 if (!empty($r->notes)) $r->notes = $notesArr[$i] ?? $r->notes;
 }
-// Rebuild collection for blade loops
 $prescriptions = collect($rxArr);
 }
 
-// Status → icon (labels computed below)
+// Status → icon
 $statusIcons = [
 'pending' => 'fa-clock',
 'reviewed' => 'fa-eye',
@@ -745,32 +726,22 @@ $statusIcons = [
 
 // Translate everything on the page
 $strings = GoogleTranslator::translateBatch([
-// Header banner
 'header_title' => 'Upload Prescription',
 'header_desc' => "Upload a clear photo of your doctor's prescription. Our verified pharmacists will review it and prepare your medicines for delivery.",
-
-// Steps
 'step_upload' => 'Upload Photo',
 'step_review' => 'Pharmacist Reviews',
 'step_prepare' => 'Medicines Prepared',
 'step_deliver' => 'Delivered to You',
-
-// Info cards
 'info_secure_title' => '100% Secure',
 'info_secure_desc' => 'Your prescriptions are encrypted and stored securely. Only verified pharmacists can access them.',
 'info_quick_title' => 'Quick Review',
 'info_quick_desc' => 'Our pharmacists review prescriptions within 30 minutes during working hours.',
 'info_expert_title' => 'Expert Verification',
 'info_expert_desc' => 'Licensed pharmacists verify dosage, interactions and authenticity of every prescription.',
-
-// Upload card
 'upload_title' => 'Upload New Prescription',
 'drop_h5' => 'Drag & Drop Your Prescription Here',
-'drop_p' => 'or click the button below to browse files',
+'drop_p' => 'Drag and drop your file into this area',
 'drop_max' => 'Max 5MB',
-'btn_browse' => 'Browse Files',
-
-// Form labels
 'label_doctor' => "Doctor's Name",
 'ph_doctor' => 'e.g. Dr. Sharma',
 'label_patient' => 'Patient Name',
@@ -786,14 +757,10 @@ $strings = GoogleTranslator::translateBatch([
 'notes_max' => 'Max 300 characters',
 'btn_submit' => 'Submit Prescription',
 'btn_uploading' => 'Uploading...',
-
-// History
 'history_title' => 'Prescription History',
 'history_total' => 'Total',
 'no_rx_title' => 'No prescriptions yet',
 'no_rx_desc' => 'Upload your first prescription to get started.',
-
-// Modal
 'modal_title' => 'Prescription Details',
 'modal_doctor' => 'Doctor',
 'modal_date' => 'Date',
@@ -803,15 +770,11 @@ $strings = GoogleTranslator::translateBatch([
 'modal_pdf_msg' => 'PDF preview not available.',
 'modal_pdf_download' => 'Download PDF',
 'modal_img_msg' => 'Prescription image would appear here',
-
-// Statuses
 'status_pending' => 'Pending',
 'status_reviewed' => 'Reviewed',
 'status_approved' => 'Approved',
 'status_rejected' => 'Rejected',
 'status_ordered' => 'Ordered',
-
-// JS messages
 'js_invalid_type' => '⚠ Only JPG, PNG or PDF files are allowed.',
 'js_size_exceeded' => '⚠ File size must be less than 5MB. Current: :size',
 'js_file_required' => '⚠ Please upload a prescription file.',
@@ -890,9 +853,6 @@ $strings = GoogleTranslator::translateBatch([
                             <span class="dz-format">PDF</span>
                             <span class="dz-format">{{ $strings['drop_max'] }}</span>
                         </div>
-                        <button type="button" class="btn-browse-file" onclick="$('#rxFileInput').click()">
-                            <i class="fas fa-folder-open"></i> {{ $strings['btn_browse'] }}
-                        </button>
                         <input type="file" name="prescription_file" id="rxFileInput"
                             accept="image/jpeg,image/png,image/jpg,application/pdf"
                             style="display:none;">
@@ -936,10 +896,9 @@ $strings = GoogleTranslator::translateBatch([
                                     <label class="form-label-rx">{{ $strings['label_village'] }} <span class="req">*</span></label>
                                     <select name="village_id" id="rxVillage" class="form-select-rx">
                                         <option value="">{{ $strings['ph_select_village'] }}</option>
-                                        <option value="1">Nashik</option>
-                                        <option value="2">Pune</option>
-                                        <option value="3">Mumbai</option>
-                                        <option value="4">Aurangabad</option>
+                                        @foreach($villages as $v)
+                                        <option value="{{ $v->id }}">{{ GoogleTranslator::translate($v->name) }}</option>
+                                        @endforeach
                                     </select>
                                     <span class="err-msg-rx" id="err_rxVillage"></span>
                                 </div>
@@ -1083,23 +1042,41 @@ $strings = GoogleTranslator::translateBatch([
 
         /* ============ TRANSLATED JS STRINGS ============ */
         var jsStrings = {
-            invalidType: @json($strings['js_invalid_type']),
-            sizeExceeded: @json($strings['js_size_exceeded']),
-            fileRequired: @json($strings['js_file_required']),
-            doctorRequired: @json($strings['js_doctor_required']),
-            doctorMin: @json($strings['js_doctor_min']),
-            villageRequired: @json($strings['js_village_required']),
-            deleteConfirm: @json($strings['js_delete_confirm']),
-            uploading: @json($strings['btn_uploading'])
+            invalidType: "{{ $strings['js_invalid_type'] ?? 'Only JPG, PNG or PDF files are allowed.' }}",
+            sizeExceeded: "{{ $strings['js_size_exceeded'] ?? 'File size must be less than 5MB. Current: :size' }}",
+            fileRequired: "{{ $strings['js_file_required'] ?? 'Please upload a prescription file.' }}",
+            doctorRequired: "{{ $strings['js_doctor_required'] ?? 'Doctor name required' }}",
+            doctorMin: "{{ $strings['js_doctor_min'] ?? 'Min 3 characters' }}",
+            villageRequired: "{{ $strings['js_village_required'] ?? 'Please select village' }}",
+            deleteConfirm: "{{ $strings['js_delete_confirm'] ?? 'Are you sure you want to delete this prescription?' }}",
+            uploading: "{{ $strings['btn_uploading'] ?? 'Uploading...' }}"
         };
 
         function tpl(str, key, val) {
             return str.replace(':' + key, val);
         }
 
-        /* ============ DRAG & DROP ============ */
+        /* 
+         * ==========================================
+         * DRAG & DROP LOGIC ONLY
+         * ==========================================
+         */
         var $dropZone = $('#dropZone');
+        var $fileInput = $('#rxFileInput');
 
+        // Clicking anywhere on Drop Zone opens file dialog (since there's no button now)
+        $dropZone.on('click', function(e) {
+            $fileInput.trigger('click');
+        });
+
+        // File Input Change
+        $fileInput.on('change', function() {
+            if (this.files.length > 0) {
+                handleFile(this.files[0]);
+            }
+        });
+
+        // Drag and Drop Handlers
         $dropZone.on('dragover', function(e) {
             e.preventDefault();
             e.stopPropagation();
@@ -1114,42 +1091,47 @@ $strings = GoogleTranslator::translateBatch([
 
         $dropZone.on('drop', function(e) {
             var files = e.originalEvent.dataTransfer.files;
-            if (files.length > 0) handleFile(files[0]);
-        });
+            if (files.length > 0) {
+                // Assign the dropped file to the hidden input using DataTransfer
+                var dt = new DataTransfer();
+                dt.items.add(files[0]);
+                $fileInput[0].files = dt.files;
 
-        $dropZone.on('click', function(e) {
-            if (!$(e.target).is('button') && !$(e.target).closest('button').length) {
-                $('#rxFileInput').trigger('click');
+                // Now process the file for preview
+                handleFile(files[0]);
             }
         });
 
-        $('#rxFileInput').on('change', function() {
-            if (this.files.length > 0) handleFile(this.files[0]);
-        });
-
+        // Process and Preview File
         function handleFile(file) {
             var validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'application/pdf'];
-            var maxSize = 5 * 1024 * 1024;
+            var maxSize = 5 * 1024 * 1024; // 5MB
 
             $('#err_file').removeClass('show').text('');
 
+            // Validate Type
             if (!validTypes.includes(file.type)) {
                 $('#err_file').text(jsStrings.invalidType).addClass('show');
+                $fileInput.val(''); // Clear input
                 return;
             }
 
+            // Validate Size
             if (file.size > maxSize) {
                 var sizeStr = (file.size / 1024 / 1024).toFixed(1) + 'MB';
                 $('#err_file').text(tpl(jsStrings.sizeExceeded, 'size', sizeStr)).addClass('show');
+                $fileInput.val(''); // Clear input
                 return;
             }
 
             selectedFile = file;
 
+            // Format size string
             var sizeDisplay = file.size < 1024 ? file.size + ' B' :
                 file.size < 1024 * 1024 ? (file.size / 1024).toFixed(1) + ' KB' :
                 (file.size / (1024 * 1024)).toFixed(1) + ' MB';
 
+            // Update Preview UI
             $('#fpName').text(file.name);
             $('#fpSize').text(sizeDisplay + ' · ' + file.type.split('/')[1].toUpperCase());
 
@@ -1171,9 +1153,10 @@ $strings = GoogleTranslator::translateBatch([
         }
 
         /* ============ REMOVE FILE ============ */
-        $('#fpRemove').on('click', function() {
+        $('#fpRemove').on('click', function(e) {
+            e.stopPropagation(); // Stop drop zone from opening dialog
             selectedFile = null;
-            $('#rxFileInput').val('');
+            $fileInput.val('');
             $('#filePreviewArea').removeClass('show');
             $dropZone.css({
                 'border-color': '',
@@ -1182,7 +1165,7 @@ $strings = GoogleTranslator::translateBatch([
             $('#err_file').removeClass('show').text('');
         });
 
-        /* ============ FORM VALIDATION ============ */
+        /* ============ FORM VALIDATION & SUBMIT ============ */
         function showErr($el, msg) {
             $el.addClass('error');
             $el.closest('.form-group-rx').find('.err-msg-rx').text(msg).addClass('show');
@@ -1206,13 +1189,13 @@ $strings = GoogleTranslator::translateBatch([
             $('.err-msg-rx').removeClass('show').text('');
             $('.form-control-rx, .form-select-rx').removeClass('error');
 
-            // File
-            if (!selectedFile && !$('#rxFileInput')[0].files[0]) {
+            // File Validation
+            if (!selectedFile && !$fileInput[0].files[0]) {
                 $('#err_file').text(jsStrings.fileRequired).addClass('show');
                 isValid = false;
             }
 
-            // Doctor Name
+            // Doctor Name Validation
             var doctor = $.trim($('#doctorName').val());
             if (doctor === '') {
                 showErr($('#doctorName'), jsStrings.doctorRequired);
@@ -1222,7 +1205,7 @@ $strings = GoogleTranslator::translateBatch([
                 isValid = false;
             }
 
-            // Village
+            // Village Validation
             if ($('#rxVillage').val() === '') {
                 showErr($('#rxVillage'), jsStrings.villageRequired);
                 isValid = false;
@@ -1238,15 +1221,17 @@ $strings = GoogleTranslator::translateBatch([
                 return false;
             }
 
-            if (selectedFile && !$('#rxFileInput')[0].files[0]) {
+            // Ensure the file is actually attached before submitting
+            if (selectedFile && (!$fileInput[0].files || $fileInput[0].files.length === 0)) {
                 var dt = new DataTransfer();
                 dt.items.add(selectedFile);
-                $('#rxFileInput')[0].files = dt.files;
+                $fileInput[0].files = dt.files;
             }
 
             var $btn = $('#submitRxBtn');
             $btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> ' + jsStrings.uploading);
 
+            // Submit the form natively (bypasses jQuery submit to prevent infinite loops)
             this.submit();
         });
 
@@ -1262,27 +1247,28 @@ $strings = GoogleTranslator::translateBatch([
             var isPdf = file.match(/\.pdf$/i);
             var statusClass = 'rxs-' + status;
 
-            var lblDoctor = @json($strings['modal_doctor']);
-            var lblDate = @json($strings['modal_date']);
-            var lblFile = @json($strings['modal_file']);
-            var lblStatus = @json($strings['modal_status']);
-            var lblNotes = @json($strings['modal_notes']);
-            var pdfMsg = @json($strings['modal_pdf_msg']);
-            var pdfBtn = @json($strings['modal_pdf_download']);
-            var imgMsg = @json($strings['modal_img_msg']);
+            var lblDoctor = "{{ $strings['modal_doctor'] ?? 'Doctor' }}";
+            var lblDate = "{{ $strings['modal_date'] ?? 'Date' }}";
+            var lblFile = "{{ $strings['modal_file'] ?? 'File' }}";
+            var lblStatus = "{{ $strings['modal_status'] ?? 'Status' }}";
+            var lblNotes = "{{ $strings['modal_notes'] ?? 'Notes' }}";
+            var pdfMsg = "{{ $strings['modal_pdf_msg'] ?? 'PDF preview not available.' }}";
+            var pdfBtn = "{{ $strings['modal_pdf_download'] ?? 'Download PDF' }}";
+
+            var fileUrl = "{{ asset('images') }}/" + file;
 
             var html = `
             <div class="row g-3 mb-3">
                 <div class="col-md-6"><strong style="color:var(--primary-green);">${lblDoctor}:</strong><br>${doctor}</div>
                 <div class="col-md-6"><strong style="color:var(--primary-green);">${lblDate}:</strong><br>${date}</div>
-                <div class="col-md-6"><strong style="color:var(--primary-green);">${lblFile}:</strong><br>${file}</div>
+                <div class="col-md-6"><strong style="color:var(--primary-green);">${lblFile}:</strong><br><a href="${fileUrl}" target="_blank">${file}</a></div>
                 <div class="col-md-6"><strong style="color:var(--primary-green);">${lblStatus}:</strong><br><span class="rx-status-badge ${statusClass}">${statusLabel.toUpperCase()}</span></div>
                 ${notes ? '<div class="col-12"><strong style="color:var(--primary-green);">' + lblNotes + ':</strong><br>' + notes + '</div>' : ''}
             </div>
             <div style="background:var(--pale-green);border-radius:12px;padding:40px;text-align:center;">
                 ${isPdf
-                    ? '<i class="fas fa-file-pdf" style="font-size:5rem;color:#E53935;"></i><p style="margin-top:10px;color:var(--gray-text);">' + pdfMsg + ' <a href="#">' + pdfBtn + '</a></p>'
-                    : '<i class="fas fa-file-image" style="font-size:5rem;color:var(--primary-green);"></i><p style="margin-top:10px;color:var(--gray-text);">' + imgMsg + '</p>'
+                    ? '<i class="fas fa-file-pdf" style="font-size:5rem;color:#E53935;"></i><p style="margin-top:10px;color:var(--gray-text);">' + pdfMsg + ' <a href="' + fileUrl + '" target="_blank">' + pdfBtn + '</a></p>'
+                    : '<img src="' + fileUrl + '" class="rx-preview-img" alt="Prescription">'
                 }
             </div>
         `;
@@ -1306,20 +1292,6 @@ $strings = GoogleTranslator::translateBatch([
             $('body').append($form);
             $form.submit();
         });
-
-        /* ============ TOAST ============ */
-        function showToast(message, type) {
-            var $toast = $('#cartToast');
-            var color = (type === 'error') ? 'linear-gradient(135deg, #C62828, #EF5350)' : 'linear-gradient(135deg, #2E7D32, #66BB6A)';
-            var icon = (type === 'error') ? 'fa-exclamation-circle' : 'fa-check-circle';
-            $toast.css('background', color);
-            $toast.find('i').removeClass().addClass('fas ' + icon);
-            $('#toastMessage').text(message);
-            $toast.fadeIn(300);
-            setTimeout(function() {
-                $toast.fadeOut(300);
-            }, 2500);
-        }
 
     });
 </script>

@@ -305,46 +305,6 @@
             gap: 18px;
         }
 
-        .topbar-icon {
-            position: relative;
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            background: var(--pale-green);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--primary-green);
-            font-size: 1.05rem;
-            cursor: pointer;
-            transition: var(--transition);
-            border: none;
-            text-decoration: none;
-        }
-
-        .topbar-icon:hover {
-            background: var(--light-green);
-            color: var(--white);
-        }
-
-        .topbar-icon .notif-badge {
-            position: absolute;
-            top: -2px;
-            right: -2px;
-            background: #E53935;
-            color: var(--white);
-            min-width: 18px;
-            height: 18px;
-            padding: 0 4px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.6rem;
-            font-weight: 700;
-            border: 2px solid var(--white);
-        }
-
         .user-dropdown {
             display: flex;
             align-items: center;
@@ -535,9 +495,12 @@
     'dd_logout' => 'Logout',
 
     // Topbar
-    'notif_title' => 'Notifications',
     'role_pharmacy'=> 'Pharmacy'
     ]);
+
+    // Dynamically translate the logged-in pharmacy's name
+    $rawPharmacyName = session('pharmacy_name') ?? 'My Pharmacy';
+    $translatedPharmacyName = GoogleTranslator::translate($rawPharmacyName);
     @endphp
 
     <div id="sidebarOverlay"></div>
@@ -612,34 +575,12 @@
 
             <div class="topbar-right">
                 <div class="dropdown">
-                    <button class="topbar-icon" data-bs-toggle="dropdown">
-                        <i class="fas fa-bell"></i>
-                        <span class="notif-badge">3</span>
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-end dropdown-menu-custom" style="width:310px;">
-                        <h6 style="padding:10px 15px;margin:0;font-weight:700;border-bottom:1px solid #EEE;">{{ $pharmLayoutStrings['notif_title'] }}</h6>
-                        <a class="dropdown-item" href="#">
-                            <i class="fas fa-shopping-cart me-2" style="color:var(--primary-green);"></i>
-                            {{ app(\App\Services\GoogleTranslator::class)->translate('New order received') }}
-                        </a>
-                        <a class="dropdown-item" href="#">
-                            <i class="fas fa-exclamation-triangle me-2" style="color:#FB8C00;"></i>
-                            {{ app(\App\Services\GoogleTranslator::class)->translate('Low stock alert') }}
-                        </a>
-                        <a class="dropdown-item" href="#">
-                            <i class="fas fa-check-circle me-2" style="color:#2E7D32;"></i>
-                            {{ app(\App\Services\GoogleTranslator::class)->translate('Payment received') }}
-                        </a>
-                    </div>
-                </div>
-
-                <div class="dropdown">
                     <button class="user-dropdown" data-bs-toggle="dropdown">
                         <div class="user-avatar">
-                            {{ strtoupper(substr(session('pharmacy_name') ?? 'P', 0, 1)) }}
+                            {{ strtoupper(substr($translatedPharmacyName, 0, 1)) }}
                         </div>
                         <div class="user-info d-none d-md-block">
-                            <strong>{{ session('pharmacy_name') ?? app(\App\Services\GoogleTranslator::class)->translate('My Pharmacy') }}</strong>
+                            <strong>{{ $translatedPharmacyName }}</strong>
                             <span>{{ $pharmLayoutStrings['role_pharmacy'] }}</span>
                         </div>
                     </button>

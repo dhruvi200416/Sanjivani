@@ -48,6 +48,52 @@
             overflow-x: hidden;
         }
 
+        /* ============ PRELOADER ============ */
+        .page-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 99999;
+            transition: opacity 0.5s ease;
+        }
+
+        .page-loader.hide {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loader-content {
+            text-align: center;
+        }
+
+        .loader-content .spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid var(--pale-green);
+            border-top: 4px solid var(--primary-green);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        .loader-content p {
+            color: var(--primary-green);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
         /* ============ SIDEBAR ============ */
         .sidebar {
             position: fixed;
@@ -347,46 +393,30 @@
             font-size: 0.9rem;
         }
 
-        /* Updated Topbar Icons to match Delivery Layout */
-        .topbar-icon {
-            position: relative;
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
+        /* ============ Language Switcher ============ */
+        .btn-lang-switch {
             background: var(--pale-green);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            border: 2px solid var(--primary-green);
             color: var(--primary-green);
-            font-size: 1.05rem;
-            cursor: pointer;
+            padding: 7px 16px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.85rem;
             transition: var(--transition);
-            border: none;
-        }
-
-        .topbar-icon:hover {
-            background: var(--light-green);
-            color: var(--white);
-        }
-
-        .topbar-icon .notification-badge {
-            position: absolute;
-            top: -2px;
-            right: -2px;
-            background: #E53935;
-            color: var(--white);
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            display: flex;
+            text-decoration: none;
+            display: inline-flex;
             align-items: center;
-            justify-content: center;
-            font-size: 0.6rem;
-            font-weight: 700;
-            border: 2px solid var(--white);
+            gap: 6px;
+            white-space: nowrap;
         }
 
-        /* Updated User Dropdown to match Delivery Layout */
+        .btn-lang-switch:hover {
+            background: var(--primary-green);
+            color: var(--white);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(46, 125, 50, 0.3);
+        }
+
         .user-dropdown {
             display: flex;
             align-items: center;
@@ -449,107 +479,6 @@
 
         .dropdown-menu-custom .dropdown-item:hover {
             background: var(--pale-green);
-        }
-
-        /* ============ NOTIFICATION DROPDOWN ============ */
-        .notification-dropdown {
-            border: none;
-            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.15);
-            border-radius: 16px;
-            padding: 0;
-            width: 330px;
-            max-height: 450px;
-            overflow-y: auto;
-        }
-
-        .notification-dropdown .notif-header {
-            background: linear-gradient(135deg, var(--primary-green), var(--light-green));
-            color: var(--white);
-            padding: 15px 20px;
-            font-weight: 600;
-            font-size: 0.95rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .notification-dropdown .notif-header span {
-            font-size: 0.7rem;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 3px 8px;
-            border-radius: 10px;
-        }
-
-        .notification-item {
-            padding: 12px 20px;
-            border-bottom: 1px solid #F5F5F5;
-            transition: var(--transition);
-            display: flex;
-            gap: 12px;
-        }
-
-        .notification-item:hover {
-            background: var(--off-white);
-        }
-
-        .notification-item .notif-icon {
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            font-size: 0.9rem;
-        }
-
-        .notification-item .notif-icon.success {
-            background: #E8F5E9;
-            color: #2E7D32;
-        }
-
-        .notification-item .notif-icon.warning {
-            background: #FFF3E0;
-            color: #FB8C00;
-        }
-
-        .notification-item .notif-icon.error {
-            background: #FFEBEE;
-            color: #E53935;
-        }
-
-        .notification-item .notif-content strong {
-            display: block;
-            font-size: 0.85rem;
-            color: var(--dark-text);
-            margin-bottom: 3px;
-        }
-
-        .notification-item .notif-content p {
-            font-size: 0.78rem;
-            color: var(--gray-text);
-            margin: 0;
-            line-height: 1.4;
-        }
-
-        .notification-item .notif-time {
-            font-size: 0.68rem;
-            color: #999;
-            display: block;
-            margin-top: 4px;
-        }
-
-        .notification-dropdown .notif-footer {
-            padding: 12px;
-            text-align: center;
-            background: var(--off-white);
-        }
-
-        .notification-dropdown .notif-footer a {
-            color: var(--primary-green);
-            font-weight: 600;
-            font-size: 0.85rem;
-            text-decoration: none;
         }
 
         /* ============ PAGE CONTENT ============ */
@@ -653,6 +582,14 @@
 
 <body>
 
+    <!-- ============ PRELOADER ============ -->
+    <div class="page-loader" id="pageLoader">
+        <div class="loader-content">
+            <div class="spinner"></div>
+            <p><i class="fas fa-leaf"></i> Sanjivani</p>
+        </div>
+    </div>
+
     @php
     use App\Services\GoogleTranslator;
     use App\Models\Admin;
@@ -680,24 +617,12 @@
 
     // Topbar & Dropdowns
     'search_placeholder' => 'Search...',
-    'notif_title' => 'Notifications',
-    'notif_new' => 'New',
-    'notif_view_all' => 'View All Notifications',
     'role_admin' => 'Administrator',
     'dd_profile' => 'My Profile',
     'dd_edit_profile' => 'Edit Profile',
     'dd_logout' => 'Logout',
-
-    // Demo Notifications
-    'notif_low_stock' => 'Low Stock Alert',
-    'notif_low_stock_p' => 'Paracetamol 500mg is running low',
-    'notif_new_order' => 'New Order',
-    'notif_new_order_p' => 'Order #ORD-2025-0042 placed',
-    'notif_new_pharm' => 'New Pharmacy',
-    'notif_new_pharm_p' => 'Medicore Pharmacy registered',
-    'time_5m' => '5 minutes ago',
-    'time_30m' => '30 minutes ago',
-    'time_2h' => '2 hours ago',
+    'lang_gujarati' => 'ગુજરાતી',
+    'lang_english' => 'English',
     ]);
 
     // Fetch the admin details dynamically from database
@@ -809,46 +734,16 @@
                     <input type="text" placeholder="{{ $adminLayoutStrings['search_placeholder'] }}" autocomplete="off">
                 </div>
 
-                <!-- Notifications Dropdown -->
-                <div class="dropdown">
-                    <button class="topbar-icon" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fas fa-bell"></i>
-                        <span class="notification-badge">3</span>
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-end notification-dropdown">
-                        <div class="notif-header">
-                            {{ $adminLayoutStrings['notif_title'] }}
-                            <span>3 {{ $adminLayoutStrings['notif_new'] }}</span>
-                        </div>
-                        <div class="notification-item">
-                            <div class="notif-icon warning"><i class="fas fa-exclamation-triangle"></i></div>
-                            <div class="notif-content">
-                                <strong>{{ $adminLayoutStrings['notif_low_stock'] }}</strong>
-                                <p>{{ $adminLayoutStrings['notif_low_stock_p'] }}</p>
-                                <span class="notif-time">{{ $adminLayoutStrings['time_5m'] }}</span>
-                            </div>
-                        </div>
-                        <div class="notification-item">
-                            <div class="notif-icon success"><i class="fas fa-check-circle"></i></div>
-                            <div class="notif-content">
-                                <strong>{{ $adminLayoutStrings['notif_new_order'] }}</strong>
-                                <p>{{ $adminLayoutStrings['notif_new_order_p'] }}</p>
-                                <span class="notif-time">{{ $adminLayoutStrings['time_30m'] }}</span>
-                            </div>
-                        </div>
-                        <div class="notification-item">
-                            <div class="notif-icon success"><i class="fas fa-user-plus"></i></div>
-                            <div class="notif-content">
-                                <strong>{{ $adminLayoutStrings['notif_new_pharm'] }}</strong>
-                                <p>{{ $adminLayoutStrings['notif_new_pharm_p'] }}</p>
-                                <span class="notif-time">{{ $adminLayoutStrings['time_2h'] }}</span>
-                            </div>
-                        </div>
-                        <div class="notif-footer">
-                            <a href="#">{{ $adminLayoutStrings['notif_view_all'] }}</a>
-                        </div>
-                    </div>
-                </div>
+                {{-- LANGUAGE SWITCHER BUTTON --}}
+                @if(app()->getLocale() == 'gu')
+                <a href="{{ route('locale.switch', 'en') }}" class="btn-lang-switch d-none d-md-inline-flex" title="Switch to English">
+                    <i class="fas fa-globe"></i> {{ $adminLayoutStrings['lang_english'] }}
+                </a>
+                @else
+                <a href="{{ route('locale.switch', 'gu') }}" class="btn-lang-switch d-none d-md-inline-flex" title="ગુજરાતીમાં બદલો">
+                    <i class="fas fa-globe"></i> {{ $adminLayoutStrings['lang_gujarati'] }}
+                </a>
+                @endif
 
                 <!-- User Dropdown -->
                 <div class="dropdown">
@@ -887,6 +782,15 @@
 
     <script>
         $(document).ready(function() {
+
+            /* ============ HIDE PRELOADER ============ */
+            // Hides the loader once the page is fully loaded
+            setTimeout(function() {
+                $('#pageLoader').addClass('hide');
+                setTimeout(function() {
+                    $('#pageLoader').remove();
+                }, 500);
+            }, 500); // 500ms delay for smooth animation
 
             /* ============ SIDEBAR TOGGLE (DESKTOP) ============ */
             $('#sidebarToggleDesktop').on('click', function() {

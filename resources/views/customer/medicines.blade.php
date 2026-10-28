@@ -1003,7 +1003,10 @@ $strings = GoogleTranslator::translateBatch([
                             <div class="col-xl-3 col-lg-4 col-md-6">
                                 <div class="medicine-item-card">
                                     <div class="med-item-img-wrap">
-                                        @if(!empty($med->image) && file_exists(public_path('uploads/medicines/'.$med->image)))
+                                        {{-- FIXED: Image path changed from uploads/medicines to images/ --}}
+                                        @if(!empty($med->image) && file_exists(public_path('images/'.$med->image)))
+                                        <img src="{{ asset('images/'.$med->image) }}" alt="{{ $med->name }}">
+                                        @elseif(!empty($med->image) && file_exists(public_path('uploads/medicines/'.$med->image)))
                                         <img src="{{ asset('uploads/medicines/'.$med->image) }}" alt="{{ $med->name }}">
                                         @else
                                         <i class="fas fa-pills no-img"></i>
@@ -1121,14 +1124,14 @@ $strings = GoogleTranslator::translateBatch([
     $(document).ready(function() {
 
         var jsStrings = {
-            searchMin: @json($strings['js_search_min']),
-            addedToCart: @json($strings['js_added_to_cart']),
-            addFailed: @json($strings['js_add_failed']),
-            loginConfirm: @json($strings['js_login_confirm']),
-            toastAdded: @json($strings['js_toast_added'])
+            searchMin: "{{ $strings['js_search_min'] ?? 'Please enter at least 2 characters to search.' }}",
+            addedToCart: "{{ $strings['js_added_to_cart'] ?? ':name added to cart!' }}",
+            addFailed: "{{ $strings['js_add_failed'] ?? 'Failed to add to cart' }}",
+            loginConfirm: "{{ $strings['js_login_confirm'] ?? 'You need to login first. Go to login page?' }}",
+            toastAdded: "{{ $strings['js_toast_added'] ?? 'Added to cart!' }}"
         };
 
-        var ADD_TO_CART_LABEL = @json($strings['add_to_cart']);
+        var ADD_TO_CART_LABEL = "{{ $strings['add_to_cart'] ?? 'Add' }}";
 
         function tpl(str, key, val) {
             return str.replace(':' + key, val);

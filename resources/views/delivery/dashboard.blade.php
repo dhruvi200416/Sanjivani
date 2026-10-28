@@ -787,9 +787,9 @@ $strings = GoogleTranslator::translateBatch([
     $(document).ready(function() {
 
         var jsStrings = {
-            pickupConfirm: @json($strings['js_pickup_confirm']),
-            deliveredConfirm: @json($strings['js_delivered_confirm']),
-            updating: @json($strings['js_updating'])
+            pickupConfirm: "{{ $strings['js_pickup_confirm'] ?? 'Confirm you have picked up the order from the pharmacy?' }}",
+            deliveredConfirm: "{{ $strings['js_delivered_confirm'] ?? 'Confirm you have delivered the order to the customer?' }}",
+            updating: "{{ $strings['js_updating'] ?? 'Updating...' }}"
         };
 
         /* ============ MARK PICKED UP ============ */

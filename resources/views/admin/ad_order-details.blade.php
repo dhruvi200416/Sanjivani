@@ -2,7 +2,7 @@
 
 @section('title', 'Order Details - Sanjivani Admin')
 @section('page_title')
-    <i class="fas fa-file-invoice"></i> {{ app(\App\Services\GoogleTranslator::class)->translate('Order Details') }}
+<i class="fas fa-file-invoice"></i> {{ app(\App\Services\GoogleTranslator::class)->translate('Order Details') }}
 @endsection
 
 @section('styles')
@@ -23,6 +23,7 @@
         transition: var(--transition);
         margin-bottom: 18px;
     }
+
     .back-btn:hover {
         background: var(--primary-green);
         color: var(--white);
@@ -39,6 +40,7 @@
         position: relative;
         overflow: hidden;
     }
+
     .order-header-card::after {
         content: '\f570';
         font-family: 'Font Awesome 6 Free';
@@ -50,6 +52,7 @@
         opacity: 0.08;
         color: #ffffff;
     }
+
     .order-header-info h3 {
         font-size: 1.45rem;
         font-weight: 800;
@@ -57,6 +60,7 @@
         color: #ffffff !important;
         text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
     }
+
     .order-header-info p {
         opacity: 0.95;
         font-size: 0.85rem;
@@ -64,10 +68,12 @@
         color: #ffffff !important;
         text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
     }
+
     .order-header-info p i {
         margin-right: 5px;
         color: #ffffff !important;
     }
+
     .order-status-big {
         background: rgba(255, 255, 255, 0.2);
         border: 2px solid rgba(255, 255, 255, 0.4);
@@ -83,6 +89,7 @@
         color: #ffffff !important;
         backdrop-filter: blur(4px);
     }
+
     .order-status-big i {
         color: #ffffff !important;
     }
@@ -95,6 +102,7 @@
         box-shadow: var(--shadow);
         margin-bottom: 16px;
     }
+
     .info-block h6 {
         font-size: 0.9rem;
         font-weight: 700;
@@ -107,10 +115,12 @@
         justify-content: space-between;
         gap: 8px;
     }
+
     .info-block h6 i {
         color: var(--primary-green);
         margin-right: 6px;
     }
+
     .info-block h6 .h6-tag {
         font-size: 0.68rem;
         font-weight: 600;
@@ -129,6 +139,7 @@
         align-items: center;
         margin-bottom: 16px;
     }
+
     .customer-avatar-lg {
         width: 56px;
         height: 56px;
@@ -142,17 +153,20 @@
         font-size: 1.35rem;
         font-weight: 700;
     }
+
     .customer-detail .cd-info h5 {
         font-size: 1rem;
         font-weight: 700;
         color: var(--dark-text);
         margin: 0 0 3px;
     }
+
     .customer-detail .cd-info span {
         font-size: 0.78rem;
         color: var(--gray-text);
         display: block;
     }
+
     .info-row {
         display: flex;
         align-items: flex-start;
@@ -160,9 +174,11 @@
         padding: 8px 0;
         border-bottom: 1px solid #F5F5F5;
     }
+
     .info-row:last-child {
         border-bottom: none;
     }
+
     .info-row .info-icon-sm {
         width: 28px;
         height: 28px;
@@ -175,10 +191,12 @@
         justify-content: center;
         font-size: 0.72rem;
     }
+
     .info-row .info-text {
         flex: 1;
         min-width: 0;
     }
+
     .info-row .info-text .label {
         font-size: 0.68rem;
         color: var(--gray-text);
@@ -187,16 +205,19 @@
         letter-spacing: 0.5px;
         margin-bottom: 1px;
     }
+
     .info-row .info-text .value {
         font-size: 0.85rem;
         color: var(--dark-text);
         font-weight: 500;
         word-break: break-word;
     }
+
     .info-row .info-text .value a {
         color: var(--primary-green);
         text-decoration: none;
     }
+
     .info-row .info-text .value a:hover {
         text-decoration: underline;
     }
@@ -207,9 +228,11 @@
         grid-template-columns: 1fr 1fr;
         gap: 10px;
     }
+
     .meta-grid.single {
         grid-template-columns: 1fr;
     }
+
     .meta-item {
         background: #FAFFFA;
         border: 1px solid #EEF5EE;
@@ -220,6 +243,7 @@
         gap: 9px;
         min-width: 0;
     }
+
     .meta-item .mi-icon {
         width: 26px;
         height: 26px;
@@ -232,10 +256,12 @@
         justify-content: center;
         font-size: 0.7rem;
     }
+
     .meta-item .mi-body {
         flex: 1;
         min-width: 0;
     }
+
     .meta-item .mi-label {
         font-size: 0.62rem;
         color: var(--gray-text);
@@ -244,6 +270,7 @@
         letter-spacing: 0.4px;
         margin-bottom: 1px;
     }
+
     .meta-item .mi-value {
         font-size: 0.82rem;
         color: var(--dark-text);
@@ -251,11 +278,13 @@
         word-break: break-word;
         line-height: 1.3;
     }
+
     .meta-item .mi-value.money {
         color: var(--primary-green);
         font-weight: 800;
         font-size: 0.92rem;
     }
+
     .meta-item.full {
         grid-column: 1 / -1;
     }
@@ -265,6 +294,7 @@
         width: 100%;
         margin: 0;
     }
+
     .items-table thead th {
         background: var(--off-white);
         color: var(--gray-text);
@@ -275,6 +305,7 @@
         padding: 10px 14px;
         border-bottom: 1px solid #E0E0E0;
     }
+
     .items-table tbody td {
         padding: 12px 14px;
         font-size: 0.85rem;
@@ -282,14 +313,17 @@
         vertical-align: middle;
         border-bottom: 1px solid #F5F5F5;
     }
+
     .items-table tbody tr:last-child td {
         border-bottom: none;
     }
+
     .item-info {
         display: flex;
         align-items: center;
         gap: 10px;
     }
+
     .item-img {
         width: 42px;
         height: 42px;
@@ -303,21 +337,25 @@
         overflow: hidden;
         flex-shrink: 0;
     }
+
     .item-img img {
         width: 100%;
         height: 100%;
         object-fit: cover;
     }
+
     .item-info .item-name {
         font-weight: 600;
         color: var(--dark-text);
         display: block;
         font-size: 0.85rem;
     }
+
     .item-info .item-brand {
         font-size: 0.72rem;
         color: var(--gray-text);
     }
+
     .qty-badge {
         background: var(--pale-green);
         color: var(--primary-green);
@@ -335,6 +373,7 @@
         color: var(--gray-text);
         font-size: 0.85rem;
     }
+
     .summary-row.total {
         border-top: 2px dashed #E0E0E0;
         margin-top: 8px;
@@ -351,6 +390,7 @@
         margin: 0;
         position: relative;
     }
+
     .order-timeline::before {
         content: '';
         position: absolute;
@@ -360,13 +400,16 @@
         width: 2px;
         background: linear-gradient(180deg, var(--primary-green), var(--pale-green));
     }
+
     .order-timeline li {
         position: relative;
         padding: 0 0 14px 40px;
     }
+
     .order-timeline li:last-child {
         padding-bottom: 0;
     }
+
     .timeline-dot {
         position: absolute;
         left: 4px;
@@ -378,33 +421,46 @@
         border: 3px solid var(--mint-green);
         z-index: 2;
     }
+
     .timeline-dot.done {
         background: var(--primary-green);
         border-color: var(--white);
         box-shadow: 0 0 0 2px var(--pale-green);
     }
+
     .timeline-dot.current {
         background: #FB8C00;
         border-color: var(--white);
         box-shadow: 0 0 0 2px #FFF3E0;
         animation: pulse-dot 2s infinite;
     }
+
     @keyframes pulse-dot {
-        0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.15); }
+
+        0%,
+        100% {
+            transform: scale(1);
+        }
+
+        50% {
+            transform: scale(1.15);
+        }
     }
+
     .timeline-content h6 {
         font-size: 0.82rem;
         font-weight: 700;
         color: var(--dark-text);
         margin: 0 0 1px;
     }
+
     .timeline-content p {
         font-size: 0.72rem;
         color: var(--gray-text);
         margin: 0;
         line-height: 1.3;
     }
+
     .timeline-content .tl-time {
         font-size: 0.66rem;
         color: #999;
@@ -418,6 +474,7 @@
         grid-template-columns: 1fr 1fr;
         gap: 8px;
     }
+
     .action-btn-full {
         padding: 10px 14px;
         border-radius: 10px;
@@ -435,13 +492,27 @@
         text-align: center;
         line-height: 1.2;
     }
+
     .action-btn-full.wide {
         grid-column: 1 / -1;
     }
-    .btn-update { background: linear-gradient(135deg, #1976D2, #42A5F5); }
-    .btn-assign { background: linear-gradient(135deg, #7B1FA2, #AB47BC); }
-    .btn-print { background: linear-gradient(135deg, #455A64, #78909C); }
-    .btn-cancel-order { background: linear-gradient(135deg, #C62828, #EF5350); }
+
+    .btn-update {
+        background: linear-gradient(135deg, #1976D2, #42A5F5);
+    }
+
+    .btn-assign {
+        background: linear-gradient(135deg, #7B1FA2, #AB47BC);
+    }
+
+    .btn-print {
+        background: linear-gradient(135deg, #455A64, #78909C);
+    }
+
+    .btn-cancel-order {
+        background: linear-gradient(135deg, #C62828, #EF5350);
+    }
+
     .action-btn-full:hover {
         transform: translateY(-2px);
         box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
@@ -458,20 +529,24 @@
         cursor: pointer;
         transition: var(--transition);
     }
+
     .prescription-preview:hover {
         background: var(--mint-green);
     }
+
     .prescription-preview img {
         max-width: 100%;
         max-height: 150px;
         border-radius: 8px;
         margin-bottom: 8px;
     }
+
     .prescription-preview i {
         font-size: 3rem;
         color: var(--primary-green);
         margin-bottom: 8px;
     }
+
     .prescription-preview p {
         margin: 0;
         font-size: 0.82rem;
@@ -485,15 +560,18 @@
         border-radius: 18px;
         overflow: hidden;
     }
+
     .modal-header-custom {
         background: linear-gradient(135deg, var(--primary-green), var(--light-green));
         color: var(--white);
         padding: 18px 25px;
         border: none;
     }
+
     .modal-header-custom .btn-close {
         filter: brightness(0) invert(1);
     }
+
     .status-option {
         display: flex;
         align-items: center;
@@ -505,14 +583,17 @@
         cursor: pointer;
         transition: var(--transition);
     }
+
     .status-option:hover {
         border-color: var(--primary-green);
         background: var(--off-white);
     }
+
     .status-option.selected {
         border-color: var(--primary-green);
         background: var(--pale-green);
     }
+
     .status-option .st-icon {
         width: 40px;
         height: 40px;
@@ -522,11 +603,13 @@
         justify-content: center;
         color: var(--white);
     }
+
     .status-option .st-text strong {
         display: block;
         font-size: 0.9rem;
         color: var(--dark-text);
     }
+
     .status-option .st-text span {
         font-size: 0.75rem;
         color: var(--gray-text);
@@ -537,11 +620,12 @@
         border: none;
         border-radius: 20px;
         overflow: hidden;
-        box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
         padding: 35px 25px;
         max-width: 420px;
         margin: 0 auto;
     }
+
     #customAlertModal .alert-icon-wrap {
         width: 80px;
         height: 80px;
@@ -553,34 +637,48 @@
         font-size: 2.4rem;
         animation: scaleIn 0.3s ease-out;
     }
+
     @keyframes scaleIn {
-        0% { transform: scale(0.5); opacity: 0; }
-        100% { transform: scale(1); opacity: 1; }
+        0% {
+            transform: scale(0.5);
+            opacity: 0;
+        }
+
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
     }
+
     #customAlertModal .alert-icon-wrap.warning {
         background: #FFF3E0;
         color: #FB8C00;
     }
+
     #customAlertModal .alert-icon-wrap.danger {
         background: #FFEBEE;
         color: #C62828;
     }
+
     #customAlertModal .alert-icon-wrap.success {
         background: #E8F5E9;
         color: #2E7D32;
     }
+
     #customAlertModal .alert-title {
         font-size: 1.25rem;
         font-weight: 800;
         color: var(--dark-text);
         margin-bottom: 10px;
     }
+
     #customAlertModal .alert-message {
         font-size: 0.95rem;
         color: var(--gray-text);
         margin-bottom: 30px;
         line-height: 1.5;
     }
+
     .alert-btn-cancel {
         background: var(--white);
         color: var(--gray-text);
@@ -591,11 +689,13 @@
         font-size: 0.88rem;
         transition: var(--transition);
     }
+
     .alert-btn-cancel:hover {
         background: var(--pale-green);
         color: var(--primary-green);
         border-color: var(--primary-green);
     }
+
     .alert-btn-confirm {
         background: linear-gradient(135deg, #C62828, #EF5350);
         color: var(--white);
@@ -606,11 +706,13 @@
         font-size: 0.88rem;
         transition: var(--transition);
     }
+
     .alert-btn-confirm:hover {
         transform: translateY(-2px);
         box-shadow: 0 6px 15px rgba(198, 40, 40, 0.3);
         color: var(--white);
     }
+
     .alert-btn-ok {
         background: linear-gradient(135deg, var(--primary-green), var(--light-green));
         color: var(--white);
@@ -621,6 +723,7 @@
         font-size: 0.88rem;
         transition: var(--transition);
     }
+
     .alert-btn-ok:hover {
         transform: translateY(-2px);
         box-shadow: 0 6px 15px rgba(46, 125, 50, 0.3);
@@ -628,11 +731,22 @@
     }
 
     @media print {
-        .sidebar, .topbar, .back-btn, .quick-actions-panel, .no-print {
+
+        .sidebar,
+        .topbar,
+        .back-btn,
+        .quick-actions-panel,
+        .no-print {
             display: none !important;
         }
-        .main-content { margin-left: 0 !important; }
-        .page-content { padding: 20px !important; }
+
+        .main-content {
+            margin-left: 0 !important;
+        }
+
+        .page-content {
+            padding: 20px !important;
+        }
     }
 </style>
 @endsection
@@ -643,99 +757,99 @@
 use App\Services\GoogleTranslator;
 
 $strings = GoogleTranslator::translateBatch([
-    'back_orders'        => 'Back to Orders',
-    'order_details'      => 'Order Details',
-    'placed_on'          => 'Placed on',
-    'order_status'       => 'Order Status',
-    'customer_info'      => 'Customer Information',
-    'phone'              => 'Phone',
-    'email'              => 'Email',
-    'delivery_address'   => 'Delivery Address',
-    'customer_notes'     => 'Customer Notes',
-    'order_items'        => 'Order Items',
-    'th_product'         => 'Product',
-    'th_qty'             => 'Qty',
-    'th_price'           => 'Price',
-    'th_total'           => 'Total',
-    'subtotal'           => 'Subtotal',
-    'delivery_fee'       => 'Delivery Fee',
-    'tax_gst'            => 'Tax (GST)',
-    'discount'           => 'Discount',
-    'total_amount'       => 'Total Amount',
-    'prescription'       => 'Prescription Attached',
-    'view_full'          => 'Click to view full size',
-    'quick_actions'      => 'Quick Actions',
-    'update_status'      => 'Update Status',
-    'assign_delivery'    => 'Assign Delivery Partner',
-    'print_invoice'      => 'Print Invoice',
-    'cancel_order'       => 'Cancel Order',
-    'payment_details'    => 'Payment Details',
-    'payment_method'     => 'Payment Method',
-    'payment_status'     => 'Payment Status',
-    'pharmacy_details'   => 'Pharmacy Details',
-    'pharmacy_name'      => 'Pharmacy Name',
-    'contact'            => 'Contact',
-    'address'            => 'Address',
-    'delivery_partner'   => 'Delivery Partner',
-    'order_timeline'     => 'Order Timeline',
-    'current_status'     => 'Current Status',
-    'completed'          => 'Completed',
-    'pending'            => 'Pending',
-    'st_pending'         => 'Order Placed',
-    'st_pending_desc'    => 'Order received and awaiting confirmation',
-    'st_confirmed'       => 'Order Confirmed',
-    'st_confirmed_desc'  => 'Confirmed by pharmacy',
-    'st_processing'      => 'Processing',
-    'st_processing_desc' => 'Being prepared by pharmacy',
-    'st_out'             => 'Out for Delivery',
-    'st_out_desc'        => 'Assigned to delivery partner',
-    'st_delivered'       => 'Delivered',
-    'st_delivered_desc'  => 'Successfully delivered',
-    'st_cancelled'       => 'Cancelled',
-    'st_cancelled_desc'  => 'Order cancelled',
-    'modal_update_title'=> 'Update Order Status',
-    'modal_select_desc' => 'Select the new status for this order.',
-    'modal_note_label'  => 'Add a note (optional)',
-    'modal_note_ph'     => 'Add a note for the customer...',
-    'btn_cancel'        => 'Cancel',
-    'btn_update'        => 'Update Status',
-    'assign_modal_title'=> 'Assign Delivery Partner',
-    'select_partner'    => 'Select Delivery Partner',
-    'choose_partner'    => '-- Choose a partner --',
-    'btn_assign'        => 'Assign',
-    'err_select_partner'=> '⚠ Please select a delivery partner.',
-    'js_updating'       => 'Updating...',
-    'js_assigning'      => 'Assigning...',
-    'js_cancel_confirm' => 'Are you sure you want to cancel this order? This action cannot be undone.',
-    'js_select_status'  => 'Please select a status.'
+'back_orders' => 'Back to Orders',
+'order_details' => 'Order Details',
+'placed_on' => 'Placed on',
+'order_status' => 'Order Status',
+'customer_info' => 'Customer Information',
+'phone' => 'Phone',
+'email' => 'Email',
+'delivery_address' => 'Delivery Address',
+'customer_notes' => 'Customer Notes',
+'order_items' => 'Order Items',
+'th_product' => 'Product',
+'th_qty' => 'Qty',
+'th_price' => 'Price',
+'th_total' => 'Total',
+'subtotal' => 'Subtotal',
+'delivery_fee' => 'Delivery Fee',
+'tax_gst' => 'Tax (GST)',
+'discount' => 'Discount',
+'total_amount' => 'Total Amount',
+'prescription' => 'Prescription Attached',
+'view_full' => 'Click to view full size',
+'quick_actions' => 'Quick Actions',
+'update_status' => 'Update Status',
+'assign_delivery' => 'Assign Delivery Partner',
+'print_invoice' => 'Print Invoice',
+'cancel_order' => 'Cancel Order',
+'payment_details' => 'Payment Details',
+'payment_method' => 'Payment Method',
+'payment_status' => 'Payment Status',
+'pharmacy_details' => 'Pharmacy Details',
+'pharmacy_name' => 'Pharmacy Name',
+'contact' => 'Contact',
+'address' => 'Address',
+'delivery_partner' => 'Delivery Partner',
+'order_timeline' => 'Order Timeline',
+'current_status' => 'Current Status',
+'completed' => 'Completed',
+'pending' => 'Pending',
+'st_pending' => 'Order Placed',
+'st_pending_desc' => 'Order received and awaiting confirmation',
+'st_confirmed' => 'Order Confirmed',
+'st_confirmed_desc' => 'Confirmed by pharmacy',
+'st_processing' => 'Processing',
+'st_processing_desc' => 'Being prepared by pharmacy',
+'st_out' => 'Out for Delivery',
+'st_out_desc' => 'Assigned to delivery partner',
+'st_delivered' => 'Delivered',
+'st_delivered_desc' => 'Successfully delivered',
+'st_cancelled' => 'Cancelled',
+'st_cancelled_desc' => 'Order cancelled',
+'modal_update_title'=> 'Update Order Status',
+'modal_select_desc' => 'Select the new status for this order.',
+'modal_note_label' => 'Add a note (optional)',
+'modal_note_ph' => 'Add a note for the customer...',
+'btn_cancel' => 'Cancel',
+'btn_update' => 'Update Status',
+'assign_modal_title'=> 'Assign Delivery Partner',
+'select_partner' => 'Select Delivery Partner',
+'choose_partner' => '-- Choose a partner --',
+'btn_assign' => 'Assign',
+'err_select_partner'=> '⚠ Please select a delivery partner.',
+'js_updating' => 'Updating...',
+'js_assigning' => 'Assigning...',
+'js_cancel_confirm' => 'Are you sure you want to cancel this order? This action cannot be undone.',
+'js_select_status' => 'Please select a status.'
 ]);
 
 $order = $order ?? (object)[
-    'id' => 1,
-    'created_at' => now()->subHours(4),
-    'status' => 'processing',
-    'payment_method' => 'cod',
-    'payment_status' => 'pending',
-    'total_amount' => 1580,
-    'subtotal' => 1450,
-    'delivery_fee' => 50,
-    'discount' => 0,
-    'tax' => 80,
-    'delivery_address' => 'House No. 45, Gandhi Road, Near Sai Temple, Nashik, Maharashtra - 422001',
-    'notes' => 'Please deliver in the evening after 6 PM. Ring the bell twice.',
-    'prescription' => null,
+'id' => 1,
+'created_at' => now()->subHours(4),
+'status' => 'processing',
+'payment_method' => 'cod',
+'payment_status' => 'pending',
+'total_amount' => 1580,
+'subtotal' => 1450,
+'delivery_fee' => 50,
+'discount' => 0,
+'tax' => 80,
+'delivery_address' => 'House No. 45, Gandhi Road, Near Sai Temple, Nashik, Maharashtra - 422001',
+'notes' => 'Please deliver in the evening after 6 PM. Ring the bell twice.',
+'prescription' => null,
 ];
 
 $customer = $customer ?? (object)[
-    'name' => 'Ramesh Patil',
-    'phone' => '9876543210',
-    'email' => 'ramesh.patil@example.com',
-    'village' => (object)['name' => 'Nashik']
+'name' => 'Ramesh Patil',
+'phone' => '9876543210',
+'email' => 'ramesh.patil@example.com',
+'village' => (object)['name' => 'Nashik']
 ];
 
 $items = $items ?? [
-    (object)['medicine_name'=>'Paracetamol 500mg', 'medicine_brand'=>'Crocin', 'unit_price'=>25, 'quantity'=>4, 'total_price'=>100, 'image'=>null],
-    (object)['medicine_name'=>'Vitamin C 500mg', 'medicine_brand'=>'Limcee', 'unit_price'=>180, 'quantity'=>2, 'total_price'=>360, 'image'=>null],
+(object)['medicine_name'=>'Paracetamol 500mg', 'medicine_brand'=>'Crocin', 'unit_price'=>25, 'quantity'=>4, 'total_price'=>100, 'image'=>null],
+(object)['medicine_name'=>'Vitamin C 500mg', 'medicine_brand'=>'Limcee', 'unit_price'=>180, 'quantity'=>2, 'total_price'=>360, 'image'=>null],
 ];
 
 $pharmacy = $pharmacy ?? (object)['pharmacy_name'=>'MediCare Pharmacy', 'phone'=>'9812345678', 'address'=>'Main Market, Nashik'];
@@ -743,11 +857,11 @@ $deliveryPartner = $deliveryPartner ?? null;
 
 $currentStatus = strtolower(str_replace(' ', '_', $order->status));
 $statuses = [
-    'pending'          => ['label'=>$strings['st_pending'],    'icon'=>'fa-clock',        'desc'=>$strings['st_pending_desc']],
-    'confirmed'        => ['label'=>$strings['st_confirmed'],  'icon'=>'fa-check',        'desc'=>$strings['st_confirmed_desc']],
-    'processing'       => ['label'=>$strings['st_processing'], 'icon'=>'fa-cogs',         'desc'=>$strings['st_processing_desc']],
-    'out_for_delivery' => ['label'=>$strings['st_out'],        'icon'=>'fa-motorcycle',   'desc'=>$strings['st_out_desc']],
-    'delivered'        => ['label'=>$strings['st_delivered'],  'icon'=>'fa-check-circle', 'desc'=>$strings['st_delivered_desc']],
+'pending' => ['label'=>$strings['st_pending'], 'icon'=>'fa-clock', 'desc'=>$strings['st_pending_desc']],
+'confirmed' => ['label'=>$strings['st_confirmed'], 'icon'=>'fa-check', 'desc'=>$strings['st_confirmed_desc']],
+'processing' => ['label'=>$strings['st_processing'], 'icon'=>'fa-cogs', 'desc'=>$strings['st_processing_desc']],
+'out_for_delivery' => ['label'=>$strings['st_out'], 'icon'=>'fa-motorcycle', 'desc'=>$strings['st_out_desc']],
+'delivered' => ['label'=>$strings['st_delivered'], 'icon'=>'fa-check-circle', 'desc'=>$strings['st_delivered_desc']],
 ];
 
 $statusKeys = array_keys($statuses);
@@ -772,7 +886,7 @@ if ($currentIndex === false) $currentIndex = 0;
         </div>
         <div class="col-md-4 text-md-end">
             @php
-                $stIcon = $statuses[$currentStatus]['icon'] ?? 'fa-clock';
+            $stIcon = $statuses[$currentStatus]['icon'] ?? 'fa-clock';
             @endphp
             <span class="order-status-big">
                 <i class="fas {{ $stIcon }}"></i> {{ $statuses[$currentStatus]['label'] ?? ucfirst(str_replace('_', ' ', $order->status)) }}
@@ -856,33 +970,33 @@ if ($currentIndex === false) $currentIndex = 0;
                     </thead>
                     <tbody>
                         @forelse($items as $item)
-                            <tr>
-                                <td>
-                                    <div class="item-info">
-                                        <div class="item-img">
-                                            @if(!empty($item->image) && file_exists(public_path('images/'.$item->image)))
-                                                <img src="{{ asset('images/'.$item->image) }}" alt="{{ $item->medicine_name }}">
-                                            @else
-                                                <i class="fas fa-pills"></i>
-                                            @endif
-                                        </div>
-                                        <div>
-                                            {{-- Directly using your database columns --}}
-                                            <span class="item-name">{{ GoogleTranslator::translate($item->medicine_name ?? 'Unknown') }}</span>
-                                            <span class="item-brand">{{ GoogleTranslator::translate($item->medicine_brand ?? 'Generic') }}</span>
-                                        </div>
+                        <tr>
+                            <td>
+                                <div class="item-info">
+                                    <div class="item-img">
+                                        @if(!empty($item->image) && file_exists(public_path('images/'.$item->image)))
+                                        <img src="{{ asset('images/'.$item->image) }}" alt="{{ $item->medicine_name }}">
+                                        @else
+                                        <i class="fas fa-pills"></i>
+                                        @endif
                                     </div>
-                                </td>
-                                <td class="text-center"><span class="qty-badge">×{{ $item->quantity }}</span></td>
-                                <td class="text-end">₹{{ number_format($item->unit_price ?? 0, 2) }}</td>
-                                <td class="text-end" style="font-weight:700;color:var(--primary-green);">₹{{ number_format($item->total_price ?? 0, 2) }}</td>
-                            </tr>
+                                    <div>
+                                        {{-- Directly using your database columns --}}
+                                        <span class="item-name">{{ GoogleTranslator::translate($item->medicine_name ?? 'Unknown') }}</span>
+                                        <span class="item-brand">{{ GoogleTranslator::translate($item->medicine_brand ?? 'Generic') }}</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="text-center"><span class="qty-badge">×{{ $item->quantity }}</span></td>
+                            <td class="text-end">₹{{ number_format($item->unit_price ?? 0, 2) }}</td>
+                            <td class="text-end" style="font-weight:700;color:var(--primary-green);">₹{{ number_format($item->total_price ?? 0, 2) }}</td>
+                        </tr>
                         @empty
-                            <tr>
-                                <td colspan="4" class="text-center py-4 text-muted">
-                                    No items found in this order.
-                                </td>
-                            </tr>
+                        <tr>
+                            <td colspan="4" class="text-center py-4 text-muted">
+                                No items found in this order.
+                            </td>
+                        </tr>
                         @endforelse
                     </tbody>
                 </table>
@@ -1171,7 +1285,7 @@ if ($currentIndex === false) $currentIndex = 0;
             </div>
             <h5 class="alert-title" id="customAlertTitle">Alert</h5>
             <p class="alert-message" id="customAlertMessage">Message goes here.</p>
-            
+
             <div class="d-flex justify-content-center gap-3" id="alertBtnGroup">
                 <!-- Dynamic Buttons appended here by JS -->
             </div>
@@ -1186,11 +1300,11 @@ if ($currentIndex === false) $currentIndex = 0;
     $(document).ready(function() {
 
         var jsStrings = {
-            updating: @json($strings['js_updating']),
-            assigning: @json($strings['js_assigning']),
-            cancelConfirm: @json($strings['js_cancel_confirm']),
-            selectStatus: @json($strings['js_select_status']),
-            btnCancel: @json($strings['btn_cancel'])
+            updating: "{{ $strings['js_updating'] ?? 'Updating...' }}",
+            assigning: "{{ $strings['js_assigning'] ?? 'Assigning...' }}",
+            cancelConfirm: "{{ $strings['js_cancel_confirm'] ?? 'Are you sure you want to cancel this order? This action cannot be undone.' }}",
+            selectStatus: "{{ $strings['js_select_status'] ?? 'Please select a status.' }}",
+            btnCancel: "{{ $strings['btn_cancel'] ?? 'Cancel' }}"
         };
 
         // ==========================================
@@ -1200,7 +1314,7 @@ if ($currentIndex === false) $currentIndex = 0;
             var iconWrap = $('#customAlertIconWrap');
             var icon = $('#customAlertIcon');
             var btnGroup = $('#alertBtnGroup');
-            
+
             iconWrap.removeClass('warning danger success');
             btnGroup.empty();
 
@@ -1223,7 +1337,7 @@ if ($currentIndex === false) $currentIndex = 0;
                 // Confirm style (Cancel + Yes button)
                 btnGroup.append(`<button type="button" class="alert-btn-cancel" data-bs-dismiss="modal">${jsStrings.btnCancel}</button>`);
                 btnGroup.append(`<button type="button" class="alert-btn-confirm" id="customAlertConfirmBtn">Yes, Cancel Order</button>`);
-                
+
                 $('#customAlertConfirmBtn').on('click', function() {
                     $('#customAlertModal').modal('hide');
                     if (onConfirm) onConfirm();
@@ -1279,21 +1393,21 @@ if ($currentIndex === false) $currentIndex = 0;
         // Cancel Order Button (Uses existing update-status route)
         $('#cancelOrderBtn').on('click', function() {
             showCustomAlert(
-                'danger', 
-                'Cancel Order?', 
-                jsStrings.cancelConfirm, 
-                true, 
+                'danger',
+                'Cancel Order?',
+                jsStrings.cancelConfirm,
+                true,
                 function() {
                     // Create a hidden form to submit the cancellation
                     var $form = $('<form>', {
                         method: 'POST',
                         action: '{{ url("/admin/order/update-status") }}'
                     });
-                    
+
                     $form.append('<input type="hidden" name="_token" value="{{ csrf_token() }}">');
                     $form.append('<input type="hidden" name="order_id" value="{{ $order->id }}">');
                     $form.append('<input type="hidden" name="status" value="cancelled">');
-                    
+
                     $('body').append($form);
                     $form.submit();
                 }

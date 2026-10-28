@@ -232,7 +232,7 @@
         object-fit: cover;
         margin: 0 auto 10px;
         border: 3px solid var(--primary-green);
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
 
     /* Form Fields */
@@ -652,9 +652,9 @@ $strings = GoogleTranslator::translateBatch([
             <div class="profile-card-header">
                 <div class="profile-card-avatar">
                     @if(!empty($pharmacy->logo) && file_exists(public_path('images/'.$pharmacy->logo)))
-                        <img src="{{ asset('images/'.$pharmacy->logo) }}" alt="{{ $tPharmName }}">
+                    <img src="{{ asset('images/'.$pharmacy->logo) }}" alt="{{ $tPharmName }}">
                     @else
-                        {{ strtoupper(substr($tPharmName, 0, 1)) }}
+                    {{ strtoupper(substr($tPharmName, 0, 1)) }}
                     @endif
                 </div>
                 <h4>{{ $tPharmName }}</h4>
@@ -720,12 +720,12 @@ $strings = GoogleTranslator::translateBatch([
                 <div class="logo-upload-area" onclick="$('#logoUploadInput').click()">
                     <div id="logoPreviewContainer">
                         @if(!empty($pharmacy->logo) && file_exists(public_path('images/'.$pharmacy->logo)))
-                            <img src="{{ asset('images/'.$pharmacy->logo) }}" class="logo-preview-img" alt="Logo">
-                            <p>Change Profile Image</p>
+                        <img src="{{ asset('images/'.$pharmacy->logo) }}" class="logo-preview-img" alt="Logo">
+                        <p>Change Profile Image</p>
                         @else
-                            <i class="fas fa-cloud-upload-alt upload-icon"></i>
-                            <p>Click to Upload Profile Image</p>
-                            <small>JPG, PNG (Max 2MB)</small>
+                        <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                        <p>Click to Upload Profile Image</p>
+                        <small>JPG, PNG (Max 2MB)</small>
                         @endif
                     </div>
                 </div>
@@ -817,23 +817,23 @@ $strings = GoogleTranslator::translateBatch([
     $(document).ready(function() {
 
         var jsStrings = {
-            nameReq: @json($strings['js_name_req']),
-            nameMin: @json($strings['js_name_min']),
-            ownerReq: @json($strings['js_owner_req']),
-            emailReq: @json($strings['js_email_req']),
-            emailInvalid: @json($strings['js_email_invalid']),
-            phoneReq: @json($strings['js_phone_req']),
-            phoneInvalid: @json($strings['js_phone_invalid']),
-            villageReq: @json($strings['js_village_req']),
-            addrReq: @json($strings['js_addr_req']),
-            addrMin: @json($strings['js_addr_min']),
-            curPwdReq: @json($strings['js_cur_pwd_req']),
-            newPwdReq: @json($strings['js_new_pwd_req']),
-            newPwdMin: @json($strings['js_new_pwd_min']),
-            newPwdSame: @json($strings['js_new_pwd_same']),
-            confPwdReq: @json($strings['js_conf_pwd_req']),
-            confPwdMatch: @json($strings['js_conf_pwd_match']),
-            saving: @json($strings['js_saving'])
+            nameReq: "{{ $strings['js_name_req'] ?? 'Pharmacy name is required' }}",
+            nameMin: "{{ $strings['js_name_min'] ?? 'Pharmacy name must contain at least 3 characters' }}",
+            ownerReq: "{{ $strings['js_owner_req'] ?? 'Owner name is required' }}",
+            emailReq: "{{ $strings['js_email_req'] ?? 'Email address is required' }}",
+            emailInvalid: "{{ $strings['js_email_invalid'] ?? 'Enter a valid email format' }}",
+            phoneReq: "{{ $strings['js_phone_req'] ?? 'Mobile phone number is required' }}",
+            phoneInvalid: "{{ $strings['js_phone_invalid'] ?? 'Enter a valid 10-digit mobile starting with 6-9' }}",
+            villageReq: "{{ $strings['js_village_req'] ?? 'Selecting a local market village is required' }}",
+            addrReq: "{{ $strings['js_addr_req'] ?? 'Store physical address is required' }}",
+            addrMin: "{{ $strings['js_addr_min'] ?? 'Physical address details must contain at least 10 characters' }}",
+            curPwdReq: "{{ $strings['js_cur_pwd_req'] ?? 'Current password cannot be empty' }}",
+            newPwdReq: "{{ $strings['js_new_pwd_req'] ?? 'New password is required' }}",
+            newPwdMin: "{{ $strings['js_new_pwd_min'] ?? 'Password must be at least 6 characters' }}",
+            newPwdSame: "{{ $strings['js_new_pwd_same'] ?? 'New password must be different from current password' }}",
+            confPwdReq: "{{ $strings['js_conf_pwd_req'] ?? 'Confirming your new password is required' }}",
+            confPwdMatch: "{{ $strings['js_conf_pwd_match'] ?? 'Confirmed password does not match new password input' }}",
+            saving: "{{ $strings['js_saving'] ?? 'Saving...' }}"
         };
 
         /* ============ IMAGE PREVIEW ============ */
@@ -846,7 +846,7 @@ $strings = GoogleTranslator::translateBatch([
                     $(this).val('');
                     return;
                 }
-                
+
                 var reader = new FileReader();
                 reader.onload = function(e) {
                     // Replace content with image preview

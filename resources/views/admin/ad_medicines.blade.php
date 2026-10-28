@@ -1,6 +1,6 @@
 ﻿@extends('layouts.admin')
 
-@section('title', __('Manage Medicines') . ' - Sanjivani Admin')
+@section('title', 'Manage Medicines - Sanjivani Admin')
 @section('page_title')
 <i class="fas fa-pills"></i> {{ app(\App\Services\GoogleTranslator::class)->translate('Manage Medicines') }}
 @endsection
@@ -545,14 +545,21 @@ $uiStrings = [
 'Price', 'MRP', 'Description', 'Brief description of the medicine...', 'Featured Product', 'Prescription Required', 'Medicine Image', 'Click to Upload',
 'Max 2MB (JPG, PNG)', 'Cancel', 'Save Medicine', 'Are you sure you want to delete', 'This action cannot be undone.', 'Delete Medicine?', 'Yes, Delete', 'OK',
 'Medicine name required', 'Min 2 characters', 'Brand required', 'Please select category', 'Please select pharmacy', 'Price required', 'Price must be greater than 0',
-'Stock required', 'Stock cannot be negative', 'Saving...', 'Edit Medicine', 'Current Image'
+'Stock required', 'Stock cannot be negative', 'Saving...', 'Edit Medicine', 'Current Image',
+'Image size must be less than 2MB', 'Please upload a valid image file', 'Image Selected'
 ];
 
-$translatedUI = GoogleTranslator::translateBatch(array_unique($uiStrings));
+// Build Associative Array using GoogleTranslator::translate
+$strings = [];
+foreach($uiStrings as $str) {
+$strings[$str] = GoogleTranslator::translate($str);
+}
 
 // Helper function to get translated UI string safely
+if (!function_exists('__ui')) {
 function __ui($str, $translated) {
 return $translated[$str] ?? $str;
+}
 }
 @endphp
 
@@ -561,42 +568,42 @@ return $translated[$str] ?? $str;
     <form id="filterForm" method="GET" action="{{ url('/admin/medicines') }}">
         <div class="row g-3 align-items-end">
             <div class="col-lg-4 col-md-6">
-                <label style="font-size:0.78rem;font-weight:600;color:var(--dark-text);text-transform:uppercase;margin-bottom:6px;display:block;"><i class="fas fa-search me-1"></i> {{ __ui('Search', $translatedUI) }}</label>
+                <label style="font-size:0.78rem;font-weight:600;color:var(--dark-text);text-transform:uppercase;margin-bottom:6px;display:block;"><i class="fas fa-search me-1"></i> {{ __ui('Search', $strings) }}</label>
                 <div class="search-wrap">
                     <i class="fas fa-search"></i>
-                    <input type="text" name="search" class="filter-input" placeholder="{{ __ui('Medicine name, brand...', $translatedUI) }}" value="{{ request('search') }}">
+                    <input type="text" name="search" class="filter-input" placeholder="{{ __ui('Medicine name, brand...', $strings) }}" value="{{ request('search') }}">
                 </div>
             </div>
             <div class="col-lg-2 col-md-6">
-                <label style="font-size:0.78rem;font-weight:600;color:var(--dark-text);text-transform:uppercase;margin-bottom:6px;display:block;"><i class="fas fa-tags me-1"></i> {{ __ui('Category', $translatedUI) }}</label>
+                <label style="font-size:0.78rem;font-weight:600;color:var(--dark-text);text-transform:uppercase;margin-bottom:6px;display:block;"><i class="fas fa-tags me-1"></i> {{ __ui('Category', $strings) }}</label>
                 <select name="category" class="filter-select">
-                    <option value="">{{ __ui('All Categories', $translatedUI) }}</option>
-                    <option value="Fever & Pain" {{ request('category')=='Fever & Pain' ? 'selected' : '' }}>{{ __ui('Fever & Pain', $translatedUI) }}</option>
-                    <option value="Cold & Cough" {{ request('category')=='Cold & Cough' ? 'selected' : '' }}>{{ __ui('Cold & Cough', $translatedUI) }}</option>
-                    <option value="Vitamins" {{ request('category')=='Vitamins' ? 'selected' : '' }}>{{ __ui('Vitamins', $translatedUI) }}</option>
-                    <option value="Antibiotic" {{ request('category')=='Antibiotic' ? 'selected' : '' }}>{{ __ui('Antibiotic', $translatedUI) }}</option>
-                    <option value="Diabetes" {{ request('category')=='Diabetes' ? 'selected' : '' }}>{{ __ui('Diabetes', $translatedUI) }}</option>
-                    <option value="Heart Care" {{ request('category')=='Heart Care' ? 'selected' : '' }}>{{ __ui('Heart Care', $translatedUI) }}</option>
-                    <option value="Digestive" {{ request('category')=='Digestive' ? 'selected' : '' }}>{{ __ui('Digestive', $translatedUI) }}</option>
+                    <option value="">{{ __ui('All Categories', $strings) }}</option>
+                    <option value="Fever & Pain" {{ request('category')=='Fever & Pain' ? 'selected' : '' }}>{{ __ui('Fever & Pain', $strings) }}</option>
+                    <option value="Cold & Cough" {{ request('category')=='Cold & Cough' ? 'selected' : '' }}>{{ __ui('Cold & Cough', $strings) }}</option>
+                    <option value="Vitamins" {{ request('category')=='Vitamins' ? 'selected' : '' }}>{{ __ui('Vitamins', $strings) }}</option>
+                    <option value="Antibiotic" {{ request('category')=='Antibiotic' ? 'selected' : '' }}>{{ __ui('Antibiotic', $strings) }}</option>
+                    <option value="Diabetes" {{ request('category')=='Diabetes' ? 'selected' : '' }}>{{ __ui('Diabetes', $strings) }}</option>
+                    <option value="Heart Care" {{ request('category')=='Heart Care' ? 'selected' : '' }}>{{ __ui('Heart Care', $strings) }}</option>
+                    <option value="Digestive" {{ request('category')=='Digestive' ? 'selected' : '' }}>{{ __ui('Digestive', $strings) }}</option>
                 </select>
             </div>
             <div class="col-lg-2 col-md-6">
-                <label style="font-size:0.78rem;font-weight:600;color:var(--dark-text);text-transform:uppercase;margin-bottom:6px;display:block;"><i class="fas fa-box me-1"></i> {{ __ui('Stock', $translatedUI) }}</label>
+                <label style="font-size:0.78rem;font-weight:600;color:var(--dark-text);text-transform:uppercase;margin-bottom:6px;display:block;"><i class="fas fa-box me-1"></i> {{ __ui('Stock', $strings) }}</label>
                 <select name="stock" class="filter-select">
-                    <option value="">{{ __ui('All Stock', $translatedUI) }}</option>
-                    <option value="in" {{ request('stock')=='in' ? 'selected' : '' }}>{{ __ui('In Stock', $translatedUI) }}</option>
-                    <option value="low" {{ request('stock')=='low' ? 'selected' : '' }}>{{ __ui('Low Stock', $translatedUI) }}</option>
-                    <option value="out" {{ request('stock')=='out' ? 'selected' : '' }}>{{ __ui('Out of Stock', $translatedUI) }}</option>
+                    <option value="">{{ __ui('All Stock', $strings) }}</option>
+                    <option value="in" {{ request('stock')=='in' ? 'selected' : '' }}>{{ __ui('In Stock', $strings) }}</option>
+                    <option value="low" {{ request('stock')=='low' ? 'selected' : '' }}>{{ __ui('Low Stock', $strings) }}</option>
+                    <option value="out" {{ request('stock')=='out' ? 'selected' : '' }}>{{ __ui('Out of Stock', $strings) }}</option>
                 </select>
             </div>
             <div class="col-lg-2 col-md-6">
                 <button type="submit" class="btn-primary-custom w-100 justify-content-center">
-                    <i class="fas fa-filter"></i> {{ __ui('Filter', $translatedUI) }}
+                    <i class="fas fa-filter"></i> {{ __ui('Filter', $strings) }}
                 </button>
             </div>
             <div class="col-lg-2 col-md-6">
                 <button type="button" class="btn-primary-custom w-100 justify-content-center" data-bs-toggle="modal" data-bs-target="#medicineModal" id="addMedicineBtn">
-                    <i class="fas fa-plus"></i> {{ __ui('Add Medicine', $translatedUI) }}
+                    <i class="fas fa-plus"></i> {{ __ui('Add Medicine', $strings) }}
                 </button>
             </div>
         </div>
@@ -609,7 +616,7 @@ return $translated[$str] ?? $str;
     @foreach($demoMedicines as $med)
     @php
     $stockClass = $med->stock <= 0 ? 'out' : ($med->stock < 20 ? 'low' : 'in' );
-            $stockText=$med->stock <= 0 ? __ui('Out', $translatedUI) : ($med->stock < 20 ? __ui('Low', $translatedUI) . ': ' . $med->stock : $med->stock);
+            $stockText=$med->stock <= 0 ? __ui('Out', $strings) : ($med->stock < 20 ? __ui('Low', $strings) . ': ' . $med->stock : $med->stock);
 
                     // Directly translating the dynamic database columns
                     $translatedName = GoogleTranslator::translate($med->name);
@@ -627,9 +634,9 @@ return $translated[$str] ?? $str;
                                 @endif
 
                                 @if($med->prescription_required)
-                                <span class="med-badge-corner rx"><i class="fas fa-file-prescription"></i> {{ __ui('Rx', $translatedUI) }}</span>
+                                <span class="med-badge-corner rx"><i class="fas fa-file-prescription"></i> {{ __ui('Rx', $strings) }}</span>
                                 @elseif($med->featured)
-                                <span class="med-badge-corner featured"><i class="fas fa-star"></i> {{ __ui('Featured', $translatedUI) }}</span>
+                                <span class="med-badge-corner featured"><i class="fas fa-star"></i> {{ __ui('Featured', $strings) }}</span>
                                 @endif
 
                                 <span class="med-stock-corner {{ $stockClass }}">
@@ -656,11 +663,11 @@ return $translated[$str] ?? $str;
                                     <div class="med-actions">
                                         <button type="button" class="med-action-btn edit btn-edit-medicine"
                                             data-med='@json($med)'
-                                            title="{{ __ui('Edit', $translatedUI) }}"><i class="fas fa-edit"></i></button>
+                                            title="{{ __ui('Edit', $strings) }}"><i class="fas fa-edit"></i></button>
                                         <button type="button" class="med-action-btn delete btn-delete-medicine"
                                             data-id="{{ $med->id }}"
                                             data-name="{{ $translatedName }}"
-                                            title="{{ __ui('Delete', $translatedUI) }}"><i class="fas fa-trash"></i></button>
+                                            title="{{ __ui('Delete', $strings) }}"><i class="fas fa-trash"></i></button>
                                     </div>
                                 </div>
                             </div>
@@ -671,8 +678,8 @@ return $translated[$str] ?? $str;
                     <div class="col-12">
                         <div class="no-results">
                             <i class="fas fa-pills"></i>
-                            <h5>{{ __ui('No medicines found', $translatedUI) }}</h5>
-                            <p class="text-muted">{{ __ui('Try changing your filters or add a new medicine.', $translatedUI) }}</p>
+                            <h5>{{ __ui('No medicines found', $strings) }}</h5>
+                            <p class="text-muted">{{ __ui('Try changing your filters or add a new medicine.', $strings) }}</p>
                         </div>
                     </div>
                     @endif
@@ -683,7 +690,7 @@ return $translated[$str] ?? $str;
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content modal-content-custom">
             <div class="modal-header modal-header-custom">
-                <h5 class="modal-title" id="modalTitle"><i class="fas fa-plus-circle me-2"></i> {{ __ui('Add New Medicine', $translatedUI) }}</h5>
+                <h5 class="modal-title" id="modalTitle"><i class="fas fa-plus-circle me-2"></i> {{ __ui('Add New Medicine', $strings) }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <form id="medicineForm" action="{{ url('/admin/medicine/save') }}" method="POST" enctype="multipart/form-data" novalidate>
@@ -695,51 +702,51 @@ return $translated[$str] ?? $str;
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group-modal">
-                                        <label class="form-label-modal">{{ __ui('Medicine Name', $translatedUI) }} <span class="req">*</span></label>
-                                        <input type="text" name="name" id="med_name" class="form-control-modal" placeholder="{{ __ui('e.g. Paracetamol 500mg', $translatedUI) }}">
+                                        <label class="form-label-modal">{{ __ui('Medicine Name', $strings) }} <span class="req">*</span></label>
+                                        <input type="text" name="name" id="med_name" class="form-control-modal" placeholder="{{ __ui('e.g. Paracetamol 500mg', $strings) }}">
                                         <span class="err-msg" id="err_name"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group-modal">
-                                        <label class="form-label-modal">{{ __ui('Brand Name', $translatedUI) }} <span class="req">*</span></label>
-                                        <input type="text" name="brand" id="med_brand" class="form-control-modal" placeholder="{{ __ui('e.g. Crocin', $translatedUI) }}">
+                                        <label class="form-label-modal">{{ __ui('Brand Name', $strings) }} <span class="req">*</span></label>
+                                        <input type="text" name="brand" id="med_brand" class="form-control-modal" placeholder="{{ __ui('e.g. Crocin', $strings) }}">
                                         <span class="err-msg" id="err_brand"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group-modal">
-                                        <label class="form-label-modal">{{ __ui('Category', $translatedUI) }} <span class="req">*</span></label>
+                                        <label class="form-label-modal">{{ __ui('Category', $strings) }} <span class="req">*</span></label>
                                         <select name="category" id="med_category" class="form-control-modal">
-                                            <option value="">{{ __ui('-- Select --', $translatedUI) }}</option>
-                                            <option value="Fever & Pain">{{ __ui('Fever & Pain', $translatedUI) }}</option>
-                                            <option value="Cold & Cough">{{ __ui('Cold & Cough', $translatedUI) }}</option>
-                                            <option value="Vitamins">{{ __ui('Vitamins', $translatedUI) }}</option>
-                                            <option value="Antibiotic">{{ __ui('Antibiotic', $translatedUI) }}</option>
-                                            <option value="Diabetes">{{ __ui('Diabetes', $translatedUI) }}</option>
-                                            <option value="Heart Care">{{ __ui('Heart Care', $translatedUI) }}</option>
-                                            <option value="Skin Care">{{ __ui('Skin Care', $translatedUI) }}</option>
-                                            <option value="Baby Care">{{ __ui('Baby Care', $translatedUI) }}</option>
-                                            <option value="Ayurvedic">{{ __ui('Ayurvedic', $translatedUI) }}</option>
-                                            <option value="Digestive">{{ __ui('Digestive', $translatedUI) }}</option>
-                                            <option value="First Aid">{{ __ui('First Aid', $translatedUI) }}</option>
+                                            <option value="">{{ __ui('-- Select --', $strings) }}</option>
+                                            <option value="Fever & Pain">{{ __ui('Fever & Pain', $strings) }}</option>
+                                            <option value="Cold & Cough">{{ __ui('Cold & Cough', $strings) }}</option>
+                                            <option value="Vitamins">{{ __ui('Vitamins', $strings) }}</option>
+                                            <option value="Antibiotic">{{ __ui('Antibiotic', $strings) }}</option>
+                                            <option value="Diabetes">{{ __ui('Diabetes', $strings) }}</option>
+                                            <option value="Heart Care">{{ __ui('Heart Care', $strings) }}</option>
+                                            <option value="Skin Care">{{ __ui('Skin Care', $strings) }}</option>
+                                            <option value="Baby Care">{{ __ui('Baby Care', $strings) }}</option>
+                                            <option value="Ayurvedic">{{ __ui('Ayurvedic', $strings) }}</option>
+                                            <option value="Digestive">{{ __ui('Digestive', $strings) }}</option>
+                                            <option value="First Aid">{{ __ui('First Aid', $strings) }}</option>
                                         </select>
                                         <span class="err-msg" id="err_category"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group-modal">
-                                        <label class="form-label-modal">{{ __ui('Pharmacy', $translatedUI) }} <span class="req">*</span></label>
+                                        <label class="form-label-modal">{{ __ui('Pharmacy', $strings) }} <span class="req">*</span></label>
                                         <select name="pharmacy_id" id="med_pharmacy" class="form-control-modal">
-                                            <option value="">{{ __ui('-- Select Pharmacy --', $translatedUI) }}</option>
+                                            <option value="">{{ __ui('-- Select Pharmacy --', $strings) }}</option>
                                             @if(!empty($pharmacies))
                                             @foreach($pharmacies as $ph)
                                             <option value="{{ $ph->id }}">{{ GoogleTranslator::translate($ph->pharmacy_name) }}</option>
                                             @endforeach
                                             @else
-                                            <option value="1">{{ __ui('MediCare Pharmacy', $translatedUI) }}</option>
-                                            <option value="2">{{ __ui('HealthPlus Pharmacy', $translatedUI) }}</option>
-                                            <option value="3">{{ __ui('DiabetCare Store', $translatedUI) }}</option>
+                                            <option value="1">{{ __ui('MediCare Pharmacy', $strings) }}</option>
+                                            <option value="2">{{ __ui('HealthPlus Pharmacy', $strings) }}</option>
+                                            <option value="3">{{ __ui('DiabetCare Store', $strings) }}</option>
                                             @endif
                                         </select>
                                         <span class="err-msg" id="err_pharmacy"></span>
@@ -747,39 +754,39 @@ return $translated[$str] ?? $str;
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group-modal">
-                                        <label class="form-label-modal">{{ __ui('Price', $translatedUI) }} (₹) <span class="req">*</span></label>
+                                        <label class="form-label-modal">{{ __ui('Price', $strings) }} (₹) <span class="req">*</span></label>
                                         <input type="number" name="price" id="med_price" class="form-control-modal" placeholder="0.00" step="0.01" min="0">
                                         <span class="err-msg" id="err_price"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group-modal">
-                                        <label class="form-label-modal">{{ __ui('MRP', $translatedUI) }} (₹)</label>
+                                        <label class="form-label-modal">{{ __ui('MRP', $strings) }} (₹)</label>
                                         <input type="number" name="mrp" id="med_mrp" class="form-control-modal" placeholder="0.00" step="0.01" min="0">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group-modal">
-                                        <label class="form-label-modal">{{ __ui('Stock', $translatedUI) }} <span class="req">*</span></label>
+                                        <label class="form-label-modal">{{ __ui('Stock', $strings) }} <span class="req">*</span></label>
                                         <input type="number" name="stock" id="med_stock" class="form-control-modal" placeholder="0" min="0">
                                         <span class="err-msg" id="err_stock"></span>
                                     </div>
                                 </div>
                                 <div class="col-12">
                                     <div class="form-group-modal">
-                                        <label class="form-label-modal">{{ __ui('Description', $translatedUI) }}</label>
-                                        <textarea name="description" id="med_description" class="form-control-modal" rows="3" placeholder="{{ __ui('Brief description of the medicine...', $translatedUI) }}"></textarea>
+                                        <label class="form-label-modal">{{ __ui('Description', $strings) }}</label>
+                                        <textarea name="description" id="med_description" class="form-control-modal" rows="3" placeholder="{{ __ui('Brief description of the medicine...', $strings) }}"></textarea>
                                     </div>
                                 </div>
                                 <div class="col-12">
                                     <div class="checkbox-row">
                                         <div class="checkbox-item">
                                             <input type="checkbox" name="featured" id="med_featured" value="1">
-                                            <label for="med_featured"><i class="fas fa-star" style="color:#FFA726;"></i> {{ __ui('Featured Product', $translatedUI) }}</label>
+                                            <label for="med_featured"><i class="fas fa-star" style="color:#FFA726;"></i> {{ __ui('Featured Product', $strings) }}</label>
                                         </div>
                                         <div class="checkbox-item">
                                             <input type="checkbox" name="prescription_required" id="med_rx" value="1">
-                                            <label for="med_rx"><i class="fas fa-file-prescription" style="color:#E53935;"></i> {{ __ui('Prescription Required', $translatedUI) }}</label>
+                                            <label for="med_rx"><i class="fas fa-file-prescription" style="color:#E53935;"></i> {{ __ui('Prescription Required', $strings) }}</label>
                                         </div>
                                     </div>
                                 </div>
@@ -788,11 +795,11 @@ return $translated[$str] ?? $str;
 
                         <div class="col-md-4">
                             <div class="form-group-modal">
-                                <label class="form-label-modal">{{ __ui('Medicine Image', $translatedUI) }}</label>
+                                <label class="form-label-modal">{{ __ui('Medicine Image', $strings) }}</label>
                                 <div class="image-upload-preview" id="uploadPreview" onclick="$('#imageInput').click()">
                                     <i class="fas fa-cloud-upload-alt"></i>
-                                    <p>{{ __ui('Click to Upload', $translatedUI) }}</p>
-                                    <small style="color:var(--gray-text);font-size:0.7rem;">{{ __ui('Max 2MB (JPG, PNG)', $translatedUI) }}</small>
+                                    <p>{{ __ui('Click to Upload', $strings) }}</p>
+                                    <small style="color:var(--gray-text);font-size:0.7rem;">{{ __ui('Max 2MB (JPG, PNG)', $strings) }}</small>
                                 </div>
                                 <input type="file" name="image" id="imageInput" accept="image/*" style="display:none;">
                                 <span class="err-msg" id="err_image"></span>
@@ -802,10 +809,10 @@ return $translated[$str] ?? $str;
                 </div>
                 <div class="modal-footer" style="border:none;padding:15px 25px 25px;">
                     <button type="button" class="btn-primary-custom" data-bs-dismiss="modal" style="background:linear-gradient(135deg,#607D8B,#90A4AE);">
-                        <i class="fas fa-times"></i> {{ __ui('Cancel', $translatedUI) }}
+                        <i class="fas fa-times"></i> {{ __ui('Cancel', $strings) }}
                     </button>
                     <button type="submit" class="btn-primary-custom" id="saveMedBtn">
-                        <i class="fas fa-save"></i> {{ __ui('Save Medicine', $translatedUI) }}
+                        <i class="fas fa-save"></i> {{ __ui('Save Medicine', $strings) }}
                     </button>
                 </div>
             </form>
@@ -836,6 +843,33 @@ return $translated[$str] ?? $str;
 <script>
     $(document).ready(function() {
 
+        var jsStrings = {
+            cancel: "{{ $strings['Cancel'] ?? 'Cancel' }}",
+            yesDelete: "{{ $strings['Yes, Delete'] ?? 'Yes, Delete' }}",
+            ok: "{{ $strings['OK'] ?? 'OK' }}",
+            imageSizeError: "{{ $strings['Image size must be less than 2MB'] ?? 'Image size must be less than 2MB' }}",
+            imageInvalid: "{{ $strings['Please upload a valid image file'] ?? 'Please upload a valid image file' }}",
+            imageSelected: "{{ $strings['Image Selected'] ?? 'Image Selected' }}",
+            addMedTitle: "{{ $strings['Add New Medicine'] ?? 'Add New Medicine' }}",
+            editMedTitle: "{{ $strings['Edit Medicine'] ?? 'Edit Medicine' }}",
+            clickUpload: "{{ $strings['Click to Upload'] ?? 'Click to Upload' }}",
+            maxSize: "{{ $strings['Max 2MB (JPG, PNG)'] ?? 'Max 2MB (JPG, PNG)' }}",
+            currentImage: "{{ $strings['Current Image'] ?? 'Current Image' }}",
+            delMedTitle: "{{ $strings['Delete Medicine?'] ?? 'Delete Medicine?' }}",
+            delMedMsg: "{{ $strings['Are you sure you want to delete'] ?? 'Are you sure you want to delete' }}",
+            delMedUndo: "{{ $strings['This action cannot be undone.'] ?? 'This action cannot be undone.' }}",
+            medNameReq: "{{ $strings['Medicine name required'] ?? 'Medicine name required' }}",
+            minChars: "{{ $strings['Min 2 characters'] ?? 'Min 2 characters' }}",
+            brandReq: "{{ $strings['Brand required'] ?? 'Brand required' }}",
+            catReq: "{{ $strings['Please select category'] ?? 'Please select category' }}",
+            pharmReq: "{{ $strings['Please select pharmacy'] ?? 'Please select pharmacy' }}",
+            priceReq: "{{ $strings['Price required'] ?? 'Price required' }}",
+            priceMin: "{{ $strings['Price must be greater than 0'] ?? 'Price must be greater than 0' }}",
+            stockReq: "{{ $strings['Stock required'] ?? 'Stock required' }}",
+            stockMin: "{{ $strings['Stock cannot be negative'] ?? 'Stock cannot be negative' }}",
+            saving: "{{ $strings['Saving...'] ?? 'Saving...' }}"
+        };
+
         // ==========================================
         // CUSTOM ALERT POPUP LOGIC
         // ==========================================
@@ -864,8 +898,8 @@ return $translated[$str] ?? $str;
 
             if (isConfirm) {
                 // Confirm style (Cancel + Yes button)
-                btnGroup.append(`<button type="button" class="alert-btn-cancel" data-bs-dismiss="modal">{{ __ui('Cancel', $translatedUI) }}</button>`);
-                btnGroup.append(`<button type="button" class="alert-btn-confirm" id="customAlertConfirmBtn">{{ __ui('Yes, Delete', $translatedUI) }}</button>`);
+                btnGroup.append(`<button type="button" class="alert-btn-cancel" data-bs-dismiss="modal">${jsStrings.cancel}</button>`);
+                btnGroup.append(`<button type="button" class="alert-btn-confirm" id="customAlertConfirmBtn">${jsStrings.yesDelete}</button>`);
 
                 $('#customAlertConfirmBtn').on('click', function() {
                     $('#customAlertModal').modal('hide');
@@ -873,7 +907,7 @@ return $translated[$str] ?? $str;
                 });
             } else {
                 // Standard alert (Just OK button)
-                btnGroup.append(`<button type="button" class="alert-btn-ok" data-bs-dismiss="modal">{{ __ui('OK', $translatedUI) }}</button>`);
+                btnGroup.append(`<button type="button" class="alert-btn-ok" data-bs-dismiss="modal">${jsStrings.ok}</button>`);
             }
 
             $('#customAlertModal').modal('show');
@@ -884,19 +918,19 @@ return $translated[$str] ?? $str;
             var file = this.files[0];
             if (file) {
                 if (file.size > 2 * 1024 * 1024) {
-                    $('#err_image').text('⚠ {{ __ui("Image size must be less than 2MB", $translatedUI) }}').addClass('show');
+                    $('#err_image').text('⚠ ' + jsStrings.imageSizeError).addClass('show');
                     $(this).val('');
                     return;
                 }
                 if (!file.type.match('image.*')) {
-                    $('#err_image').text('⚠ {{ __ui("Please upload a valid image file", $translatedUI) }}').addClass('show');
+                    $('#err_image').text('⚠ ' + jsStrings.imageInvalid).addClass('show');
                     $(this).val('');
                     return;
                 }
 
                 var reader = new FileReader();
                 reader.onload = function(e) {
-                    $('#uploadPreview').html('<img src="' + e.target.result + '" style="max-height:150px;"><p><i class="fas fa-check-circle" style="color:#2E7D32;"></i> {{ __ui("Image Selected", $translatedUI) }}</p>');
+                    $('#uploadPreview').html('<img src="' + e.target.result + '" style="max-height:150px;"><p><i class="fas fa-check-circle" style="color:#2E7D32;"></i> ' + jsStrings.imageSelected + '</p>');
                 };
                 reader.readAsDataURL(file);
                 $('#err_image').text('').removeClass('show');
@@ -907,8 +941,8 @@ return $translated[$str] ?? $str;
         $('#addMedicineBtn').on('click', function() {
             $('#medicineForm')[0].reset();
             $('#medicineId').val('');
-            $('#modalTitle').html('<i class="fas fa-plus-circle me-2"></i> {{ __ui("Add New Medicine", $translatedUI) }}');
-            $('#uploadPreview').html('<i class="fas fa-cloud-upload-alt"></i><p>{{ __ui("Click to Upload", $translatedUI) }}</p><small style="color:var(--gray-text);font-size:0.7rem;">{{ __ui("Max 2MB (JPG, PNG)", $translatedUI) }}</small>');
+            $('#modalTitle').html('<i class="fas fa-plus-circle me-2"></i> ' + jsStrings.addMedTitle);
+            $('#uploadPreview').html('<i class="fas fa-cloud-upload-alt"></i><p>' + jsStrings.clickUpload + '</p><small style="color:var(--gray-text);font-size:0.7rem;">' + jsStrings.maxSize + '</small>');
             $('.err-msg').removeClass('show').text('');
             $('.form-control-modal').removeClass('error');
         });
@@ -929,10 +963,10 @@ return $translated[$str] ?? $str;
             $('#med_featured').prop('checked', med.featured == 1);
             $('#med_rx').prop('checked', med.prescription_required == 1);
 
-            $('#modalTitle').html('<i class="fas fa-edit me-2"></i> {{ __ui("Edit Medicine", $translatedUI) }}');
+            $('#modalTitle').html('<i class="fas fa-edit me-2"></i> ' + jsStrings.editMedTitle);
 
             if (med.image) {
-                $('#uploadPreview').html('<img src="{{ asset("images") }}/' + med.image + '" style="max-height:150px;"><p>{{ __ui("Current Image", $translatedUI) }}</p>');
+                $('#uploadPreview').html('<img src="{{ asset("images") }}/' + med.image + '" style="max-height:150px;"><p>' + jsStrings.currentImage + '</p>');
             }
 
             $('.err-msg').removeClass('show').text('');
@@ -944,11 +978,11 @@ return $translated[$str] ?? $str;
         $('.btn-delete-medicine').on('click', function() {
             var id = $(this).data('id');
             var name = $(this).data('name');
-            var msg = '{{ __ui("Are you sure you want to delete", $translatedUI) }} <strong>"' + name + '"</strong>?<br>{{ __ui("This action cannot be undone.", $translatedUI) }}';
+            var msg = jsStrings.delMedMsg + ' <strong>"' + name + '"</strong>?<br>' + jsStrings.delMedUndo;
 
             showCustomAlert(
                 'danger',
-                '{{ __ui("Delete Medicine?", $translatedUI) }}',
+                jsStrings.delMedTitle,
                 msg,
                 true,
                 function() {
@@ -986,55 +1020,55 @@ return $translated[$str] ?? $str;
             // Name
             var name = $.trim($('#med_name').val());
             if (name === '') {
-                showFieldError($('#med_name'), '⚠ {{ __ui("Medicine name required", $translatedUI) }}');
+                showFieldError($('#med_name'), '⚠ ' + jsStrings.medNameReq);
                 isValid = false;
             } else if (name.length < 2) {
-                showFieldError($('#med_name'), '⚠ {{ __ui("Min 2 characters", $translatedUI) }}');
+                showFieldError($('#med_name'), '⚠ ' + jsStrings.minChars);
                 isValid = false;
             }
 
             // Brand
             if ($.trim($('#med_brand').val()) === '') {
-                showFieldError($('#med_brand'), '⚠ {{ __ui("Brand required", $translatedUI) }}');
+                showFieldError($('#med_brand'), '⚠ ' + jsStrings.brandReq);
                 isValid = false;
             }
 
             // Category
             if ($('#med_category').val() === '') {
-                showFieldError($('#med_category'), '⚠ {{ __ui("Please select category", $translatedUI) }}');
+                showFieldError($('#med_category'), '⚠ ' + jsStrings.catReq);
                 isValid = false;
             }
 
             // Pharmacy
             if ($('#med_pharmacy').val() === '') {
-                showFieldError($('#med_pharmacy'), '⚠ {{ __ui("Please select pharmacy", $translatedUI) }}');
+                showFieldError($('#med_pharmacy'), '⚠ ' + jsStrings.pharmReq);
                 isValid = false;
             }
 
             // Price
             var price = parseFloat($('#med_price').val());
             if (!$('#med_price').val() || isNaN(price)) {
-                showFieldError($('#med_price'), '⚠ {{ __ui("Price required", $translatedUI) }}');
+                showFieldError($('#med_price'), '⚠ ' + jsStrings.priceReq);
                 isValid = false;
             } else if (price <= 0) {
-                showFieldError($('#med_price'), '⚠ {{ __ui("Price must be greater than 0", $translatedUI) }}');
+                showFieldError($('#med_price'), '⚠ ' + jsStrings.priceMin);
                 isValid = false;
             }
 
             // Stock
             var stock = parseInt($('#med_stock').val());
             if ($('#med_stock').val() === '' || isNaN(stock)) {
-                showFieldError($('#med_stock'), '⚠ {{ __ui("Stock required", $translatedUI) }}');
+                showFieldError($('#med_stock'), '⚠ ' + jsStrings.stockReq);
                 isValid = false;
             } else if (stock < 0) {
-                showFieldError($('#med_stock'), '⚠ {{ __ui("Stock cannot be negative", $translatedUI) }}');
+                showFieldError($('#med_stock'), '⚠ ' + jsStrings.stockMin);
                 isValid = false;
             }
 
             if (!isValid) return false;
 
             var $btn = $('#saveMedBtn');
-            $btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> {{ __ui("Saving...", $translatedUI) }}');
+            $btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> ' + jsStrings.saving);
             this.submit();
         });
 

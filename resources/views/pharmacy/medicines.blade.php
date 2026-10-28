@@ -199,6 +199,121 @@
         transform: translateY(-2px);
         color: var(--white);
     }
+
+    /* ============ Custom Alert Popup ============ */
+    #customAlertModal .modal-content {
+        border: none;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        padding: 35px 25px;
+        max-width: 420px;
+        margin: 0 auto;
+    }
+
+    #customAlertModal .alert-icon-wrap {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 20px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.4rem;
+        animation: scaleIn 0.3s ease-out;
+    }
+
+    @keyframes scaleIn {
+        0% {
+            transform: scale(0.5);
+            opacity: 0;
+        }
+
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    #customAlertModal .alert-icon-wrap.danger {
+        background: #FFEBEE;
+        color: #C62828;
+    }
+
+    #customAlertModal .alert-icon-wrap.warning {
+        background: #FFF3E0;
+        color: #FB8C00;
+    }
+
+    #customAlertModal .alert-icon-wrap.success {
+        background: #E8F5E9;
+        color: #2E7D32;
+    }
+
+    #customAlertModal .alert-title {
+        font-size: 1.25rem;
+        font-weight: 800;
+        color: var(--dark-text);
+        margin-bottom: 10px;
+    }
+
+    #customAlertModal .alert-message {
+        font-size: 0.95rem;
+        color: var(--gray-text);
+        margin-bottom: 30px;
+        line-height: 1.5;
+    }
+
+    .alert-btn-cancel {
+        background: var(--white);
+        color: var(--gray-text);
+        border: 2px solid #E0E0E0;
+        padding: 10px 22px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 0.88rem;
+        transition: var(--transition);
+    }
+
+    .alert-btn-cancel:hover {
+        background: var(--pale-green);
+        color: var(--primary-green);
+        border-color: var(--primary-green);
+    }
+
+    .alert-btn-confirm {
+        background: linear-gradient(135deg, #C62828, #EF5350);
+        color: var(--white);
+        border: none;
+        padding: 10px 22px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 0.88rem;
+        transition: var(--transition);
+    }
+
+    .alert-btn-confirm:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(198, 40, 40, 0.3);
+        color: var(--white);
+    }
+
+    .alert-btn-ok {
+        background: linear-gradient(135deg, var(--primary-green), var(--light-green));
+        color: var(--white);
+        border: none;
+        padding: 10px 35px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 0.88rem;
+        transition: var(--transition);
+    }
+
+    .alert-btn-ok:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(46, 125, 50, 0.3);
+        color: var(--white);
+    }
 </style>
 @endsection
 
@@ -243,7 +358,13 @@ $strings = GoogleTranslator::translateBatch([
 'stock_out' => 'Out of Stock',
 'badge_out' => 'Out',
 'badge_low' => 'Low',
-'js_delete_confirm' => 'Delete ":name"?'
+'js_delete_confirm' => 'Delete ":name"?',
+'js_del_title' => 'Delete Medicine?',
+'js_del_msg' => 'Are you sure you want to delete',
+'js_del_warn' => 'This action cannot be undone.',
+'yesDelete' => 'Yes, Delete',
+'ok' => 'OK',
+'cancel' => 'Cancel'
 ]);
 @endphp
 
@@ -286,7 +407,13 @@ $strings = GoogleTranslator::translateBatch([
             <div class="col-xl-3 col-lg-4 col-md-6 med-item-ph" data-cat="{{ $med->category }}" data-stock="{{ $sc }}">
             <div class="med-card-ph">
                 <div class="med-img-ph">
-                    @if(!empty($med->image))<img src="{{ asset('uploads/medicines/'.$med->image) }}" alt="{{ $med->name }}">@else<i class="fas fa-pills"></i>@endif
+                    @if(!empty($med->image) && file_exists(public_path('images/'.$med->image)))
+                    <img src="{{ asset('images/'.$med->image) }}" alt="{{ $med->name }}">
+                    @elseif(!empty($med->image) && file_exists(public_path('uploads/medicines/'.$med->image)))
+                    <img src="{{ asset('uploads/medicines/'.$med->image) }}" alt="{{ $med->name }}">
+                    @else
+                    <i class="fas fa-pills"></i>
+                    @endif
                     <span class="stock-badge-ph {{ $sc }}">
                         {{ $med->stock <= 0 ? $strings['badge_out'] : ($med->stock < 20 ? $strings['badge_low'].': '.$med->stock : $med->stock) }}
                     </span>
@@ -308,6 +435,23 @@ $strings = GoogleTranslator::translateBatch([
 @endforeach
 </div>
 
+<!-- ============ CUSTOM ALERT POPUP MODAL ============ -->
+<div class="modal fade" id="customAlertModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content text-center">
+            <div class="alert-icon-wrap" id="customAlertIconWrap">
+                <i class="fas" id="customAlertIcon"></i>
+            </div>
+            <h5 class="alert-title" id="customAlertTitle">Alert</h5>
+            <p class="alert-message" id="customAlertMessage">Message goes here.</p>
+
+            <div class="d-flex justify-content-center gap-3" id="alertBtnGroup">
+                <!-- Dynamic Buttons appended here by JS -->
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @section('scripts')
@@ -315,9 +459,56 @@ $strings = GoogleTranslator::translateBatch([
     $(document).ready(function() {
 
         var jsStrings = {
-            deleteConfirm: @json($strings['js_delete_confirm'])
+            deleteConfirm: "{{ $strings['js_delete_confirm'] ?? 'Delete :name?' }}",
+            delTitle: "{{ $strings['js_del_title'] ?? 'Delete Medicine?' }}",
+            delMsg: "{{ $strings['js_del_msg'] ?? 'Are you sure you want to delete' }}",
+            delWarn: "{{ $strings['js_del_warn'] ?? 'This action cannot be undone.' }}",
+            yesDelete: "{{ $strings['yesDelete'] ?? 'Yes, Delete' }}",
+            ok: "{{ $strings['ok'] ?? 'OK' }}",
+            cancel: "{{ $strings['cancel'] ?? 'Cancel' }}"
         };
 
+        // ==========================================
+        // CUSTOM ALERT POPUP LOGIC
+        // ==========================================
+        function showCustomAlert(type, title, message, isConfirm = false, onConfirm = null) {
+            var iconWrap = $('#customAlertIconWrap');
+            var icon = $('#customAlertIcon');
+            var btnGroup = $('#alertBtnGroup');
+
+            iconWrap.removeClass('warning danger success');
+            btnGroup.empty();
+
+            if (type === 'warning') {
+                iconWrap.addClass('warning');
+                icon.attr('class', 'fas fa-exclamation-triangle');
+            } else if (type === 'danger') {
+                iconWrap.addClass('danger');
+                icon.attr('class', 'fas fa-times-circle');
+            } else {
+                iconWrap.addClass('success');
+                icon.attr('class', 'fas fa-check-circle');
+            }
+
+            $('#customAlertTitle').text(title);
+            $('#customAlertMessage').html(message);
+
+            if (isConfirm) {
+                btnGroup.append(`<button type="button" class="alert-btn-cancel" data-bs-dismiss="modal">${jsStrings.cancel}</button>`);
+                btnGroup.append(`<button type="button" class="alert-btn-confirm" id="customAlertConfirmBtn">${jsStrings.yesDelete}</button>`);
+
+                $('#customAlertConfirmBtn').on('click', function() {
+                    $('#customAlertModal').modal('hide');
+                    if (onConfirm) onConfirm();
+                });
+            } else {
+                btnGroup.append(`<button type="button" class="alert-btn-ok" data-bs-dismiss="modal">${jsStrings.ok}</button>`);
+            }
+
+            $('#customAlertModal').modal('show');
+        }
+
+        /* ============ FILTERING ============ */
         $('#medSearchPh').on('input', function() {
             var q = $(this).val().toLowerCase();
             $('.med-item-ph').each(function() {
@@ -343,22 +534,30 @@ $strings = GoogleTranslator::translateBatch([
             }
         });
 
+        /* ============ DELETE MEDICINE (Custom Popup) ============ */
         $('.btn-del-med-ph').on('click', function() {
             var id = $(this).data('id'),
                 name = $(this).data('name');
-            var msg = jsStrings.deleteConfirm.replace(':name', name);
 
-            if (!confirm(msg)) return;
+            var msg = jsStrings.delMsg + ' <strong>"' + name + '"</strong>?<br>' + jsStrings.delWarn;
 
-            var $f = $('<form>', {
-                method: 'POST',
-                action: '{{ url("/pharmacy/medicine/delete") }}'
-            });
-            $f.append('<input type="hidden" name="_token" value="{{ csrf_token() }}">');
-            $f.append('<input type="hidden" name="medicine_id" value="' + id + '">');
-            $f.append('<input type="hidden" name="_method" value="DELETE">');
-            $('body').append($f);
-            $f.submit();
+            showCustomAlert(
+                'danger',
+                jsStrings.delTitle,
+                msg,
+                true,
+                function() {
+                    var $f = $('<form>', {
+                        method: 'POST',
+                        action: '{{ url("/pharmacy/medicine/delete") }}'
+                    });
+                    $f.append('<input type="hidden" name="_token" value="{{ csrf_token() }}">');
+                    $f.append('<input type="hidden" name="medicine_id" value="' + id + '">');
+                    $f.append('<input type="hidden" name="_method" value="DELETE">');
+                    $('body').append($f);
+                    $f.submit();
+                }
+            );
         });
     });
 </script>

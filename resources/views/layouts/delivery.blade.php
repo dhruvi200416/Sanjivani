@@ -305,46 +305,6 @@
             gap: 18px;
         }
 
-        .topbar-icon {
-            position: relative;
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            background: var(--pale-green);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--primary-green);
-            font-size: 1.05rem;
-            cursor: pointer;
-            transition: var(--transition);
-            border: none;
-            text-decoration: none;
-        }
-
-        .topbar-icon:hover {
-            background: var(--light-green);
-            color: var(--white);
-        }
-
-        .topbar-icon .notif-badge {
-            position: absolute;
-            top: -2px;
-            right: -2px;
-            background: #E53935;
-            color: var(--white);
-            min-width: 18px;
-            height: 18px;
-            padding: 0 4px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.6rem;
-            font-weight: 700;
-            border: 2px solid var(--white);
-        }
-
         .user-dropdown {
             display: flex;
             align-items: center;
@@ -533,11 +493,7 @@
     'dd_profile' => 'Profile',
     'dd_history' => 'History',
     'dd_logout' => 'Logout',
-    'notif_title' => 'Notifications',
     'role_delivery'=> 'Delivery',
-    'notif_new' => 'New delivery assignment',
-    'notif_rating' => 'Rating updated',
-    'notif_payment'=> 'Payment received',
     ]);
 
     // Fetch the delivery partner details dynamically from database
@@ -622,27 +578,7 @@
             </div>
 
             <div class="topbar-right">
-                <div class="dropdown">
-                    <button class="topbar-icon" data-bs-toggle="dropdown">
-                        <i class="fas fa-bell"></i>
-                        <span class="notif-badge">3</span>
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-end dropdown-menu-custom" style="width:310px;">
-                        <h6 style="padding:10px 15px;margin:0;font-weight:700;border-bottom:1px solid #EEE;">{{ $deliveryLayoutStrings['notif_title'] }}</h6>
-                        <a class="dropdown-item" href="#">
-                            <i class="fas fa-truck me-2" style="color:var(--primary-green);"></i>
-                            {{ $deliveryLayoutStrings['notif_new'] }}
-                        </a>
-                        <a class="dropdown-item" href="#">
-                            <i class="fas fa-star me-2" style="color:#FFA726;"></i>
-                            {{ $deliveryLayoutStrings['notif_rating'] }}
-                        </a>
-                        <a class="dropdown-item" href="#">
-                            <i class="fas fa-wallet me-2" style="color:#2E7D32;"></i>
-                            {{ $deliveryLayoutStrings['notif_payment'] }}
-                        </a>
-                    </div>
-                </div>
+                <!-- Removed Notification Dropdown -->
 
                 <div class="dropdown">
                     <button class="user-dropdown" data-bs-toggle="dropdown">

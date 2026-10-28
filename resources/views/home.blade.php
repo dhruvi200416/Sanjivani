@@ -1873,18 +1873,18 @@
 
             if (val === '') {
                 e.preventDefault();
-                $err.text('⚠ ' + @json(__('messages.js_search_required'))).fadeIn();
+                $err.text('⚠ ' + "{{ __('messages.js_search_required') ?? 'Search required.' }}").fadeIn();
                 $('#heroSearchInput').focus();
                 return false;
             }
             if (val.length < 2) {
                 e.preventDefault();
-                $err.text('⚠ ' + @json(__('messages.js_search_min'))).fadeIn();
+                $err.text('⚠ ' + "{{ __('messages.js_search_min') ?? 'Min 2 characters.' }}").fadeIn();
                 return false;
             }
             if (!/^[a-zA-Z0-9\s\-\.\+]+$/.test(val)) {
                 e.preventDefault();
-                $err.text('⚠ ' + @json(__('messages.js_search_invalid'))).fadeIn();
+                $err.text('⚠ ' + "{{ __('messages.js_search_invalid') ?? 'Invalid search.' }}").fadeIn();
                 return false;
             }
             return true;
@@ -1940,12 +1940,12 @@
             var regex = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/;
 
             if (email === '') {
-                alert(@json(__('messages.js_email_required')));
+                alert("{{ __('messages.js_email_required') ?? 'Email required.' }}");
                 $input.focus();
                 return false;
             }
             if (!regex.test(email)) {
-                alert(@json(__('messages.js_email_invalid')));
+                alert("{{ __('messages.js_email_invalid') ?? 'Invalid email.' }}");
                 $input.focus();
                 return false;
             }

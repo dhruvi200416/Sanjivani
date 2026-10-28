@@ -208,6 +208,121 @@
         background: linear-gradient(135deg, #C62828, #EF5350);
     }
 
+    /* ============ Custom Alert Popup ============ */
+    #customAlertModal .modal-content {
+        border: none;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        padding: 35px 25px;
+        max-width: 420px;
+        margin: 0 auto;
+    }
+
+    #customAlertModal .alert-icon-wrap {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 20px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.4rem;
+        animation: scaleIn 0.3s ease-out;
+    }
+
+    @keyframes scaleIn {
+        0% {
+            transform: scale(0.5);
+            opacity: 0;
+        }
+
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    #customAlertModal .alert-icon-wrap.danger {
+        background: #FFEBEE;
+        color: #C62828;
+    }
+
+    #customAlertModal .alert-icon-wrap.warning {
+        background: #FFF3E0;
+        color: #FB8C00;
+    }
+
+    #customAlertModal .alert-icon-wrap.success {
+        background: #E8F5E9;
+        color: #2E7D32;
+    }
+
+    #customAlertModal .alert-title {
+        font-size: 1.25rem;
+        font-weight: 800;
+        color: var(--dark-text);
+        margin-bottom: 10px;
+    }
+
+    #customAlertModal .alert-message {
+        font-size: 0.95rem;
+        color: var(--gray-text);
+        margin-bottom: 30px;
+        line-height: 1.5;
+    }
+
+    .alert-btn-cancel {
+        background: var(--white);
+        color: var(--gray-text);
+        border: 2px solid #E0E0E0;
+        padding: 10px 22px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 0.88rem;
+        transition: var(--transition);
+    }
+
+    .alert-btn-cancel:hover {
+        background: var(--pale-green);
+        color: var(--primary-green);
+        border-color: var(--primary-green);
+    }
+
+    .alert-btn-confirm {
+        background: linear-gradient(135deg, #C62828, #EF5350);
+        color: var(--white);
+        border: none;
+        padding: 10px 22px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 0.88rem;
+        transition: var(--transition);
+    }
+
+    .alert-btn-confirm:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(198, 40, 40, 0.3);
+        color: var(--white);
+    }
+
+    .alert-btn-ok {
+        background: linear-gradient(135deg, var(--primary-green), var(--light-green));
+        color: var(--white);
+        border: none;
+        padding: 10px 35px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 0.88rem;
+        transition: var(--transition);
+    }
+
+    .alert-btn-ok:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(46, 125, 50, 0.3);
+        color: var(--white);
+    }
+
     @media print {
 
         .sidebar,
@@ -224,6 +339,16 @@
         .page-content {
             padding: 20px !important;
         }
+    }
+
+    .payment-paid {
+        color: #2E7D32;
+        font-weight: 700;
+    }
+
+    .payment-pending {
+        color: #FB8C00;
+        font-weight: 700;
     }
 </style>
 @endsection
@@ -272,7 +397,11 @@ $strings = GoogleTranslator::translateBatch([
 'lbl_amount' => 'Amount',
 'js_update_status' => 'Update order status to ":status"?',
 'js_updating' => 'Updating...',
-'js_cancel_confirm' => '⚠ Cancel this order? This cannot be undone.'
+'js_cancel_confirm' => '⚠ Cancel this order? This cannot be undone.',
+'js_cancel_title' => 'Cancel Order?',
+'js_yes_cancel' => 'Yes, Cancel',
+'js_ok' => 'OK',
+'js_cancel_btn' => 'Cancel'
 ]);
 @endphp
 
@@ -431,8 +560,7 @@ $strings = GoogleTranslator::translateBatch([
                 <div class="info-ico-ph"><i class="fas fa-check-circle"></i></div>
                 <div class="info-txt-ph">
                     <div class="lbl">{{ $strings['lbl_status'] }}</div>
-                    <div class="val" style="color:{{ ($order->payment_status ?? '') == 'paid' ? '#2E7D32' : '#FB8C00' }};font-weight:700;">
-                        {{ app(\App\Services\GoogleTranslator::class)->translate(strtoupper($order->payment_status ?? 'PENDING')) }}
+                    <div class="val {{ ($order->payment_status ?? '') == 'paid' ? 'payment-paid' : 'payment-pending' }}"> {{ app(\App\Services\GoogleTranslator::class)->translate(strtoupper($order->payment_status ?? 'PENDING')) }}
                     </div>
                 </div>
             </div>
@@ -447,6 +575,23 @@ $strings = GoogleTranslator::translateBatch([
     </div>
 </div>
 
+<!-- ============ CUSTOM ALERT POPUP MODAL ============ -->
+<div class="modal fade" id="customAlertModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content text-center">
+            <div class="alert-icon-wrap" id="customAlertIconWrap">
+                <i class="fas" id="customAlertIcon"></i>
+            </div>
+            <h5 class="alert-title" id="customAlertTitle">Alert</h5>
+            <p class="alert-message" id="customAlertMessage">Message goes here.</p>
+
+            <div class="d-flex justify-content-center gap-3" id="alertBtnGroup">
+                <!-- Dynamic Buttons appended here by JS -->
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @section('scripts')
@@ -454,10 +599,54 @@ $strings = GoogleTranslator::translateBatch([
     $(document).ready(function() {
 
         var jsStrings = {
-            updateStatus: @json($strings['js_update_status']),
-            updating: @json($strings['js_updating']),
-            cancelConfirm: @json($strings['js_cancel_confirm'])
+            updateStatus: "{{ $strings['js_update_status'] ?? 'Update order status to :status?' }}",
+            updating: "{{ $strings['js_updating'] ?? 'Updating...' }}",
+            cancelConfirm: "{{ $strings['js_cancel_confirm'] ?? '⚠ Cancel this order? This cannot be undone.' }}",
+            cancelTitle: "{{ $strings['js_cancel_title'] ?? 'Cancel Order?' }}",
+            yesCancel: "{{ $strings['js_yes_cancel'] ?? 'Yes, Cancel' }}",
+            ok: "{{ $strings['js_ok'] ?? 'OK' }}",
+            cancelBtn: "{{ $strings['js_cancel_btn'] ?? 'Cancel' }}"
         };
+
+        // ==========================================
+        // CUSTOM ALERT POPUP LOGIC
+        // ==========================================
+        function showCustomAlert(type, title, message, isConfirm = false, onConfirm = null) {
+            var iconWrap = $('#customAlertIconWrap');
+            var icon = $('#customAlertIcon');
+            var btnGroup = $('#alertBtnGroup');
+
+            iconWrap.removeClass('warning danger success');
+            btnGroup.empty();
+
+            if (type === 'warning') {
+                iconWrap.addClass('warning');
+                icon.attr('class', 'fas fa-exclamation-triangle');
+            } else if (type === 'danger') {
+                iconWrap.addClass('danger');
+                icon.attr('class', 'fas fa-times-circle');
+            } else {
+                iconWrap.addClass('success');
+                icon.attr('class', 'fas fa-check-circle');
+            }
+
+            $('#customAlertTitle').text(title);
+            $('#customAlertMessage').html(message);
+
+            if (isConfirm) {
+                btnGroup.append(`<button type="button" class="alert-btn-cancel" data-bs-dismiss="modal">${jsStrings.cancelBtn}</button>`);
+                btnGroup.append(`<button type="button" class="alert-btn-confirm" id="customAlertConfirmBtn">${jsStrings.yesCancel}</button>`);
+
+                $('#customAlertConfirmBtn').on('click', function() {
+                    $('#customAlertModal').modal('hide');
+                    if (onConfirm) onConfirm();
+                });
+            } else {
+                btnGroup.append(`<button type="button" class="alert-btn-ok" data-bs-dismiss="modal">${jsStrings.ok}</button>`);
+            }
+
+            $('#customAlertModal').modal('show');
+        }
 
         $('.btn-status-ph').on('click', function() {
             var status = $(this).data('status');
@@ -479,16 +668,22 @@ $strings = GoogleTranslator::translateBatch([
         });
 
         $('#cancelOrdPh').on('click', function() {
-            if (!confirm(jsStrings.cancelConfirm)) return;
-
-            var $f = $('<form>', {
-                method: 'POST',
-                action: '{{ url("/pharmacy/order/cancel") }}'
-            });
-            $f.append('<input type="hidden" name="_token" value="{{ csrf_token() }}">');
-            $f.append('<input type="hidden" name="order_id" value="{{ $order->id }}">');
-            $('body').append($f);
-            $f.submit();
+            showCustomAlert(
+                'danger',
+                jsStrings.cancelTitle,
+                jsStrings.cancelConfirm,
+                true,
+                function() {
+                    var $f = $('<form>', {
+                        method: 'POST',
+                        action: '{{ url("/pharmacy/order/cancel") }}'
+                    });
+                    $f.append('<input type="hidden" name="_token" value="{{ csrf_token() }}">');
+                    $f.append('<input type="hidden" name="order_id" value="{{ $order->id }}">');
+                    $('body').append($f);
+                    $f.submit();
+                }
+            );
         });
     });
 </script>

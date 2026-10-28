@@ -673,17 +673,21 @@ class CustomerController extends Controller
         ]);
 
         $file = $request->file('prescription_file');
-        $fileName = time() . '_' . $file->getClientOriginalName();
-        $filePath = $file->storeAs('prescriptions', $fileName, 'public');
+        $fileName = 'rx_' . time() . '_' . $file->getClientOriginalName();
 
+        // 1. Move the file to public/images (as requested)
+        $file->move(public_path('images'), $fileName);
+
+        // 2. Save to Database
         Prescription::create([
             'customer_id'   => session('user_id'),
             'file_name'     => $fileName,
-            'file_path'     => $filePath,
+            'file_path'     => 'images/' . $fileName, // Storing the relative path
             'doctor_name'   => $request->doctor_name,
-            'patient_name'  => $request->patient_name ?? null,
+            'patient_name'  => $request->patient_name ?? session('customer_name'),
             'village_id'    => $request->village_id,
             'notes'         => $request->notes ?? null,
+            'urgency'       => $request->urgency ?? 'normal',
             'status'        => 'active',
             'review_status' => 'pending',
         ]);
@@ -798,11 +802,13 @@ class CustomerController extends Controller
             'address'    => 'nullable|string',
             'gender'     => 'nullable|in:male,female,other',
             'dob'        => 'nullable|date',
+            'avatar'     => 'nullable|image|mimes:jpg,jpeg,png|max:2048', // Added validation for avatar
         ]);
 
         $customer = Customer::findOrFail(session('user_id'));
 
-        $customer->update($request->only([
+        // Prepare data for update
+        $data = $request->only([
             'name',
             'email',
             'phone',
@@ -810,7 +816,25 @@ class CustomerController extends Controller
             'address',
             'gender',
             'dob'
-        ]));
+        ]);
+
+        // Handle Avatar Upload when "Save Changes" is clicked
+        if ($request->hasFile('avatar')) {
+            // Delete old avatar if it exists
+            if ($customer->avatar && file_exists(public_path('images/' . $customer->avatar))) {
+                unlink(public_path('images/' . $customer->avatar));
+            }
+
+            // Save new avatar to public/images
+            $avatarName = 'cust_' . $customer->id . '_' . time() . '.' . $request->avatar->extension();
+            $request->avatar->move(public_path('images'), $avatarName);
+
+            // Add to data array to save in DB
+            $data['avatar'] = $avatarName;
+        }
+
+        // Update the database
+        $customer->update($data);
 
         session([
             'customer_name'  => $customer->name,

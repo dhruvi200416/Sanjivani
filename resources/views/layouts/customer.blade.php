@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -29,7 +30,11 @@
             --shadow: 0 4px 15px rgba(46, 125, 50, 0.12);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         body {
             font-family: 'Poppins', sans-serif;
@@ -51,18 +56,29 @@
             overflow-y: auto;
         }
 
-        .sidebar.collapsed { width: var(--sidebar-collapsed); }
+        .sidebar.collapsed {
+            width: var(--sidebar-collapsed);
+        }
 
-        .sidebar::-webkit-scrollbar { width: 5px; }
-        .sidebar::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
-        .sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 5px; }
+        .sidebar::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+        }
 
         .sidebar-brand {
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px 15px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             min-height: var(--topbar-height);
         }
 
@@ -76,13 +92,16 @@
             justify-content: center;
             color: var(--primary-green);
             font-size: 1.2rem;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
             flex-shrink: 0;
             overflow: hidden;
         }
 
         .sidebar-brand .brand-icon img {
-            width: 38px; height: 38px; border-radius: 50%; object-fit: cover;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            object-fit: cover;
         }
 
         .sidebar-brand .brand-info {
@@ -99,19 +118,23 @@
         }
 
         .sidebar-brand .brand-info span {
-            color: rgba(255,255,255,0.7);
+            color: rgba(255, 255, 255, 0.7);
             font-size: 0.65rem;
             text-transform: uppercase;
             letter-spacing: 1px;
             display: block;
         }
 
-        .sidebar.collapsed .brand-info { display: none; }
+        .sidebar.collapsed .brand-info {
+            display: none;
+        }
 
-        .sidebar-nav { padding: 20px 10px; }
+        .sidebar-nav {
+            padding: 20px 10px;
+        }
 
         .nav-section-title {
-            color: rgba(255,255,255,0.5);
+            color: rgba(255, 255, 255, 0.5);
             font-size: 0.7rem;
             text-transform: uppercase;
             letter-spacing: 2px;
@@ -130,7 +153,7 @@
             align-items: center;
             padding: 12px 15px;
             border-radius: 12px;
-            color: rgba(255,255,255,0.85);
+            color: rgba(255, 255, 255, 0.85);
             text-decoration: none;
             margin-bottom: 5px;
             transition: var(--transition);
@@ -138,7 +161,7 @@
         }
 
         .sidebar-link:hover {
-            background: rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.1);
             color: var(--white);
             transform: translateX(3px);
         }
@@ -146,7 +169,7 @@
         .sidebar-link.active {
             background: linear-gradient(90deg, var(--light-green), var(--accent-green));
             color: var(--white);
-            box-shadow: 0 4px 12px rgba(76,175,80,0.4);
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
         }
 
         .sidebar-link i {
@@ -161,7 +184,9 @@
             font-weight: 500;
         }
 
-        .sidebar.collapsed .link-title { display: none; }
+        .sidebar.collapsed .link-title {
+            display: none;
+        }
 
         .sidebar-link .cart-count {
             margin-left: auto;
@@ -173,21 +198,25 @@
             border-radius: 20px;
         }
 
-        .sidebar.collapsed .cart-count { display: none; }
+        .sidebar.collapsed .cart-count {
+            display: none;
+        }
 
         .sidebar-footer {
             padding: 15px;
-            border-top: 1px solid rgba(255,255,255,0.1);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .sidebar.collapsed .sidebar-footer { padding: 15px 5px; }
+        .sidebar.collapsed .sidebar-footer {
+            padding: 15px 5px;
+        }
 
         .logout-btn {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
-            background: rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.1);
             border: none;
             color: var(--white);
             padding: 10px;
@@ -203,7 +232,9 @@
             color: var(--white);
         }
 
-        .sidebar.collapsed .logout-btn span { display: none; }
+        .sidebar.collapsed .logout-btn span {
+            display: none;
+        }
 
         /* ============ MAIN CONTENT ============ */
         .main-content {
@@ -212,7 +243,9 @@
             transition: var(--transition);
         }
 
-        .main-content.expanded { margin-left: var(--sidebar-collapsed); }
+        .main-content.expanded {
+            margin-left: var(--sidebar-collapsed);
+        }
 
         /* ============ TOPBAR ============ */
         .topbar {
@@ -222,7 +255,7 @@
             left: var(--sidebar-width);
             height: var(--topbar-height);
             background: var(--white);
-            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -231,7 +264,9 @@
             transition: var(--transition);
         }
 
-        .main-content.expanded .topbar { left: var(--sidebar-collapsed); }
+        .main-content.expanded .topbar {
+            left: var(--sidebar-collapsed);
+        }
 
         .topbar-left {
             display: flex;
@@ -369,7 +404,10 @@
             font-size: 1rem;
         }
 
-        .user-info { text-align: left; line-height: 1.2; }
+        .user-info {
+            text-align: left;
+            line-height: 1.2;
+        }
 
         .user-info strong {
             display: block;
@@ -384,7 +422,7 @@
 
         .dropdown-menu-custom {
             border: none;
-            box-shadow: 0 10px 35px rgba(0,0,0,0.15);
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.15);
             border-radius: 14px;
             padding: 8px;
             min-width: 200px;
@@ -411,33 +449,57 @@
             .sidebar {
                 transform: translateX(-100%);
             }
+
             .sidebar.show {
                 transform: translateX(0);
             }
+
             .main-content,
             .main-content.expanded {
                 margin-left: 0;
             }
+
             .topbar,
             .main-content.expanded .topbar {
                 left: 0;
             }
-            .topbar-search { display: none; }
+
+            .topbar-search {
+                display: none;
+            }
+
             #sidebarOverlay {
                 display: none;
                 position: fixed;
-                top: 0; left: 0; right: 0; bottom: 0;
-                background: rgba(0,0,0,0.5);
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.5);
                 z-index: 999;
             }
-            #sidebarOverlay.show { display: block; }
+
+            #sidebarOverlay.show {
+                display: block;
+            }
         }
 
         @media (max-width: 768px) {
-            .page-title { display: none; }
-            .user-info { display: none; }
-            .topbar { padding: 0 15px; }
-            .page-content { padding: calc(var(--topbar-height) + 15px) 15px 15px; }
+            .page-title {
+                display: none;
+            }
+
+            .user-info {
+                display: none;
+            }
+
+            .topbar {
+                padding: 0 15px;
+            }
+
+            .page-content {
+                padding: calc(var(--topbar-height) + 15px) 15px 15px;
+            }
         }
 
         /* Alert */
@@ -453,8 +515,15 @@
         }
 
         @keyframes slideDown {
-            from { transform: translateY(-10px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+            from {
+                transform: translateY(-10px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
 
         .flash-alert.success {
@@ -472,57 +541,63 @@
 
     @yield('styles')
 </head>
+
 <body>
 
-@php
+    @php
     use App\Services\GoogleTranslator;
 
     $custLayoutStrings = GoogleTranslator::translateBatch([
-        // ---- Sidebar brand ----
-        'brand_name'      => 'Sanjivani',
-        'portal_name'     => 'Customer Portal',
+    // ---- Sidebar brand ----
+    'brand_name' => 'Sanjivani',
+    'portal_name' => 'Customer Portal',
 
-        // ---- Sidebar sections ----
-        'menu_main'       => 'Main Menu',
-        'menu_account'    => 'Account',
+    // ---- Sidebar sections ----
+    'menu_main' => 'Main Menu',
+    'menu_account' => 'Account',
 
-        // ---- Sidebar links ----
-        'link_dashboard'  => 'Dashboard',
-        'link_medicines'  => 'Browse Medicines',
-        'link_cart'       => 'My Cart',
-        'link_orders'     => 'My Orders',
-        'link_prescriptions' => 'Prescriptions',
-        'link_profile'    => 'My Profile',
-        'link_home'       => 'Back to Home',
-        'link_logout'     => 'Logout',
+    // ---- Sidebar links ----
+    'link_dashboard' => 'Dashboard',
+    'link_medicines' => 'Browse Medicines',
+    'link_cart' => 'My Cart',
+    'link_orders' => 'My Orders',
+    'link_prescriptions' => 'Prescriptions',
+    'link_profile' => 'My Profile',
+    'link_home' => 'Back to Home',
+    'link_logout' => 'Logout',
 
-        // ---- Topbar ----
-        'search_placeholder' => 'Search medicines...',
-        'cart_title'      => 'Cart',
-        'role_customer'   => 'Customer',
+    // ---- Topbar ----
+    'search_placeholder' => 'Search medicines...',
+    'cart_title' => 'Cart',
+    'role_customer' => 'Customer',
 
-        // ---- Dropdown ----
-        'dd_profile'      => 'My Profile',
-        'dd_orders'       => 'My Orders',
-        'dd_cart'         => 'My Cart',
-        'dd_logout'       => 'Logout',
+    // ---- Dropdown ----
+    'dd_profile' => 'My Profile',
+    'dd_orders' => 'My Orders',
+    'dd_cart' => 'My Cart',
+    'dd_logout' => 'Logout',
 
-        // ---- Page title default ----
-        'page_dashboard'  => 'Dashboard',
+    // ---- Page title default ----
+    'page_dashboard' => 'Dashboard',
     ]);
 
     /* ============================================================
-       Resolve the currently logged-in customer's name.
-       Prefer the fresh DB lookup via session('user_id') so the
-       top-right corner always shows the correct person,
-       even if session('customer_name') is stale.
-       ============================================================ */
+    Resolve the currently logged-in customer's name.
+    Prefer the fresh DB lookup via session('user_id') so the
+    top-right corner always shows the correct person,
+    even if session('customer_name') is stale.
+    ============================================================ */
     $authCustomer = null;
     if (session('user_id')) {
-        $authCustomer = \App\Models\Customer::find(session('user_id'));
+    $authCustomer = \App\Models\Customer::find(session('user_id'));
     }
-    $displayName = $authCustomer->name  ?? session('customer_name') ?? 'Customer';
-@endphp
+
+    // Get the raw name
+    $rawName = $authCustomer->name ?? session('customer_name') ?? 'Customer';
+
+    // Translate the name dynamically for the topbar
+    $displayName = GoogleTranslator::translate($rawName);
+    @endphp
 
     <div id="sidebarOverlay"></div>
 
@@ -531,9 +606,9 @@
         <div class="sidebar-brand">
             <div class="brand-icon">
                 @if(file_exists(public_path('images/Sanjivani.jpeg')))
-                    <img src="{{ asset('images/Sanjivani.jpeg') }}" alt="Sanjivani">
+                <img src="{{ asset('images/Sanjivani.jpeg') }}" alt="Sanjivani">
                 @else
-                    <i class="fas fa-leaf"></i>
+                <i class="fas fa-leaf"></i>
                 @endif
             </div>
             <div class="brand-info">
@@ -557,7 +632,7 @@
                 <i class="fas fa-shopping-cart"></i>
                 <span class="link-title">{{ $custLayoutStrings['link_cart'] }}</span>
                 @if(session('cart_count') && session('cart_count') > 0)
-                    <span class="cart-count">{{ session('cart_count') }}</span>
+                <span class="cart-count">{{ session('cart_count') }}</span>
                 @endif
             </a>
             <a href="{{ url('/customer/orders') }}" class="sidebar-link {{ request()->is('customer/orders*') ? 'active' : '' }}">
@@ -614,7 +689,7 @@
                 <a href="{{ url('/customer/cart') }}" class="topbar-icon" title="{{ $custLayoutStrings['cart_title'] }}">
                     <i class="fas fa-shopping-cart"></i>
                     @if(session('cart_count') && session('cart_count') > 0)
-                        <span class="cart-badge">{{ session('cart_count') }}</span>
+                    <span class="cart-badge">{{ session('cart_count') }}</span>
                     @endif
                 </a>
 
@@ -634,7 +709,9 @@
                         <li><a class="dropdown-item" href="{{ url('/customer/profile') }}"><i class="fas fa-user me-2"></i> {{ $custLayoutStrings['dd_profile'] }}</a></li>
                         <li><a class="dropdown-item" href="{{ url('/customer/orders') }}"><i class="fas fa-box me-2"></i> {{ $custLayoutStrings['dd_orders'] }}</a></li>
                         <li><a class="dropdown-item" href="{{ url('/customer/cart') }}"><i class="fas fa-shopping-cart me-2"></i> {{ $custLayoutStrings['dd_cart'] }}</a></li>
-                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
                         <li><a class="dropdown-item text-danger" href="{{ url('/logout') }}"><i class="fas fa-sign-out-alt me-2"></i> {{ $custLayoutStrings['dd_logout'] }}</a></li>
                     </ul>
                 </div>
@@ -645,15 +722,15 @@
         <div class="page-content">
 
             @if(session('success'))
-                <div class="flash-alert success">
-                    <i class="fas fa-check-circle"></i> {{ session('success') }}
-                </div>
+            <div class="flash-alert success">
+                <i class="fas fa-check-circle"></i> {{ session('success') }}
+            </div>
             @endif
 
             @if(session('error'))
-                <div class="flash-alert error">
-                    <i class="fas fa-exclamation-circle"></i> {{ session('error') }}
-                </div>
+            <div class="flash-alert error">
+                <i class="fas fa-exclamation-circle"></i> {{ session('error') }}
+            </div>
             @endif
 
             @yield('content')
@@ -665,37 +742,37 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        $(document).ready(function () {
-            $('#sidebarToggleDesktop').on('click', function () {
+        $(document).ready(function() {
+            $('#sidebarToggleDesktop').on('click', function() {
                 $('#sidebar').toggleClass('collapsed');
                 $('#mainContent').toggleClass('expanded');
             });
 
-            $('#sidebarToggleMobile').on('click', function () {
+            $('#sidebarToggleMobile').on('click', function() {
                 $('#sidebar').toggleClass('show');
                 $('#sidebarOverlay').toggleClass('show');
             });
 
-            $('#sidebarOverlay').on('click', function () {
+            $('#sidebarOverlay').on('click', function() {
                 $('#sidebar').removeClass('show');
                 $('#sidebarOverlay').removeClass('show');
             });
 
-            $('.sidebar-link').on('click', function () {
+            $('.sidebar-link').on('click', function() {
                 if ($(window).width() <= 991) {
                     $('#sidebar').removeClass('show');
                     $('#sidebarOverlay').removeClass('show');
                 }
             });
 
-            $(window).on('resize', function () {
+            $(window).on('resize', function() {
                 if ($(window).width() > 991) {
                     $('#sidebar').removeClass('show');
                     $('#sidebarOverlay').removeClass('show');
                 }
             });
 
-            setTimeout(function () {
+            setTimeout(function() {
                 $('.flash-alert').fadeOut(500);
             }, 5000);
         });
@@ -703,4 +780,5 @@
 
     @yield('scripts')
 </body>
+
 </html>

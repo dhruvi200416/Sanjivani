@@ -1029,46 +1029,46 @@ $strings = GoogleTranslator::translateBatch([
 
         /* ============ TRANSLATED JS STRINGS ============ */
         var jsStrings = {
-            reorderConfirm: @json($strings['js_reorder_confirm']),
-            reorderAdded: @json($strings['js_reorder_added']),
-            reorderFailed: @json($strings['js_reorder_failed']),
-            cancelConfirm1: @json($strings['js_cancel_confirm_1']),
-            cancelConfirm2: @json($strings['js_cancel_confirm_2'])
+            reorderConfirm: "{{ $strings['js_reorder_confirm'] ?? 'Add all items from this order to your cart?' }}",
+            reorderAdded: "{{ $strings['js_reorder_added'] ?? 'All items added to cart!' }}",
+            reorderFailed: "{{ $strings['js_reorder_failed'] ?? 'Failed to reorder' }}",
+            cancelConfirm1: "{{ $strings['js_cancel_confirm_1'] ?? 'Are you sure you want to cancel order ' }}",
+            cancelConfirm2: "{{ $strings['js_cancel_confirm_2'] ?? '? This action cannot be undone.' }}"
         };
 
         /* ============ TIMELINE LABELS (already translated server-side) ============ */
         var timelineData = {
             'pending': {
-                label: @json($strings['tl_order_placed']),
+                label: "{{ $strings['tl_order_placed'] ?? 'Order Placed' }}",
                 icon: 'fa-clock',
-                desc: @json($strings['tl_order_placed_desc'])
+                desc: "{{ $strings['tl_order_placed_desc'] ?? 'Your order has been received and is awaiting confirmation.' }}"
             },
             'confirmed': {
-                label: @json($strings['tl_order_confirmed']),
+                label: "{{ $strings['tl_order_confirmed'] ?? 'Order Confirmed' }}",
                 icon: 'fa-check',
-                desc: @json($strings['tl_order_confirmed_desc'])
+                desc: "{{ $strings['tl_order_confirmed_desc'] ?? 'Pharmacy has confirmed your order.' }}"
             },
             'processing': {
-                label: @json($strings['tl_processing']),
+                label: "{{ $strings['tl_processing'] ?? 'Processing' }}",
                 icon: 'fa-cogs',
-                desc: @json($strings['tl_processing_desc'])
+                desc: "{{ $strings['tl_processing_desc'] ?? 'Your medicines are being packed and prepared.' }}"
             },
             'out_for_delivery': {
-                label: @json($strings['tl_out_for_delivery']),
+                label: "{{ $strings['tl_out_for_delivery'] ?? 'Out for Delivery' }}",
                 icon: 'fa-motorcycle',
-                desc: @json($strings['tl_out_for_delivery_desc'])
+                desc: "{{ $strings['tl_out_for_delivery_desc'] ?? 'Delivery partner is on the way to your address.' }}"
             },
             'delivered': {
-                label: @json($strings['tl_delivered']),
+                label: "{{ $strings['tl_delivered'] ?? 'Delivered' }}",
                 icon: 'fa-check-circle',
-                desc: @json($strings['tl_delivered_desc'])
+                desc: "{{ $strings['tl_delivered_desc'] ?? 'Order successfully delivered to your doorstep.' }}"
             }
         };
 
         var tlLabels = {
-            completed: @json($strings['tl_completed']),
-            current: @json($strings['tl_current']),
-            pending: @json($strings['tl_pending'])
+            completed: "{{ $strings['tl_completed'] ?? 'Completed' }}",
+            current: "{{ $strings['tl_current'] ?? 'Current Status' }}",
+            pending: "{{ $strings['tl_pending'] ?? 'Pending' }}"
         };
 
         /* ============ STATUS FILTER ============ */

@@ -858,7 +858,10 @@ $strings = GoogleTranslator::translateBatch([
             @foreach($cartItems as $item)
             <div class="cart-item" data-cart-id="{{ $item->id }}" data-price="{{ $item->price }}" data-mrp="{{ $item->mrp }}" data-stock="{{ $item->stock }}">
                 <div class="cart-item-img">
-                    @if(!empty($item->image) && file_exists(public_path('uploads/medicines/'.$item->image)))
+                    {{-- FIXED: Image path checks both images/ and uploads/medicines/ --}}
+                    @if(!empty($item->image) && file_exists(public_path('images/'.$item->image)))
+                    <img src="{{ asset('images/'.$item->image) }}" alt="{{ $item->name }}">
+                    @elseif(!empty($item->image) && file_exists(public_path('uploads/medicines/'.$item->image)))
                     <img src="{{ asset('uploads/medicines/'.$item->image) }}" alt="{{ $item->name }}">
                     @else
                     <i class="fas fa-pills"></i>
@@ -1065,24 +1068,24 @@ $strings = GoogleTranslator::translateBatch([
 
         /* ============ TRANSLATED JS STRINGS ============ */
         var jsStrings = {
-            removeConfirm: @json($strings['js_remove_confirm'] ?? 'Remove ":name" from cart?'),
-            removeTitle: @json($strings['js_remove_title'] ?? '✓ Item removed from cart'),
-            removeFail: @json($strings['js_remove_fail'] ?? '⚠ Failed to remove'),
-            clearConfirm: @json($strings['js_clear_confirm'] ?? '⚠ Are you sure you want to clear your entire cart?\nThis will remove all items.'),
-            clearing: @json($strings['js_clearing'] ?? 'Clearing...'),
-            couponEmpty: @json($strings['js_coupon_empty'] ?? '⚠ Please enter a coupon code.'),
-            couponInvalid: @json($strings['js_coupon_invalid'] ?? '⚠ Invalid coupon code.'),
-            couponSuccess: @json($strings['js_coupon_success'] ?? '✓ Coupon applied successfully!'),
-            couponFailed: @json($strings['js_coupon_failed'] ?? '⚠ Invalid coupon code'),
-            couponRemove: @json($strings['js_coupon_remove'] ?? 'Remove applied coupon?'),
-            stockWarn: @json($strings['js_stock_warn'] ?? '⚠ Only :n items available in stock'),
-            cartUpdated: @json($strings['js_cart_updated'] ?? 'Cart updated!'),
-            updateFailed: @json($strings['js_update_failed'] ?? '⚠ Failed to update'),
-            free: @json($strings['free'] ?? 'FREE'),
-            freeShipAdd: @json($strings['free_ship_add'] ?? 'Add'),
-            freeShipMore: @json($strings['free_ship_more'] ?? 'more for'),
-            freeShipFree: @json($strings['free_ship_free'] ?? 'FREE delivery!'),
-            freeShipQualified: @json($strings['free_ship_qualified'] ?? 'Congrats! You qualify for FREE delivery.')
+            removeConfirm: "{{ $strings['js_remove_confirm'] ?? 'Remove :name from cart?' }}",
+            removeTitle: "{{ $strings['js_remove_title'] ?? '✓ Item removed from cart' }}",
+            removeFail: "{{ $strings['js_remove_fail'] ?? '⚠ Failed to remove' }}",
+            clearConfirm: "{{ $strings['js_clear_confirm'] ?? '⚠ Are you sure you want to clear your entire cart?\\nThis will remove all items.' }}",
+            clearing: "{{ $strings['js_clearing'] ?? 'Clearing...' }}",
+            couponEmpty: "{{ $strings['js_coupon_empty'] ?? '⚠ Please enter a coupon code.' }}",
+            couponInvalid: "{{ $strings['js_coupon_invalid'] ?? '⚠ Invalid coupon code.' }}",
+            couponSuccess: "{{ $strings['js_coupon_success'] ?? '✓ Coupon applied successfully!' }}",
+            couponFailed: "{{ $strings['js_coupon_failed'] ?? '⚠ Invalid coupon code' }}",
+            couponRemove: "{{ $strings['js_coupon_remove'] ?? 'Remove applied coupon?' }}",
+            stockWarn: "{{ $strings['js_stock_warn'] ?? '⚠ Only :n items available in stock' }}",
+            cartUpdated: "{{ $strings['js_cart_updated'] ?? 'Cart updated!' }}",
+            updateFailed: "{{ $strings['js_update_failed'] ?? '⚠ Failed to update' }}",
+            free: "{{ $strings['free'] ?? 'FREE' }}",
+            freeShipAdd: "{{ $strings['free_ship_add'] ?? 'Add' }}",
+            freeShipMore: "{{ $strings['free_ship_more'] ?? 'more for' }}",
+            freeShipFree: "{{ $strings['free_ship_free'] ?? 'FREE delivery!' }}",
+            freeShipQualified: "{{ $strings['free_ship_qualified'] ?? 'Congrats! You qualify for FREE delivery.' }}"
         };
 
         function tpl(str, key, val) {

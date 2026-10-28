@@ -2,7 +2,7 @@
 
 @section('title', 'My Profile - Sanjivani Admin')
 @section('page_title')
-<i class="fas fa-user-circle"></i> My Profile
+<i class="fas fa-user-circle"></i> {{ app(\App\Services\GoogleTranslator::class)->translate('My Profile') }}
 @endsection
 
 @section('styles')
@@ -255,6 +255,8 @@
 @section('content')
 
 @php
+use App\Services\GoogleTranslator;
+
 $admin = $admin ?? (object)[
 'name' => session('admin_name') ?? 'Dhara Desai',
 'email' => 'dhara@gmail.com',
@@ -265,6 +267,20 @@ $admin = $admin ?? (object)[
 'avatar' => null,
 'rating' => 4.7
 ];
+
+// GATHER ALL UI STRINGS AND TRANSLATE THEM SAFELY
+$uiStrings = [
+'My Profile', 'Administrator', 'Orders Managed', 'Pharmacies Verified', 'Delivery Partners',
+'Total Customers', 'Personal Information', 'Full Name', 'Email Address', 'Mobile Number',
+'Account Role', 'Address', 'Account Activity', 'Member Since', 'Last Login', 'Account Status',
+'Active & Verified', 'Quick Actions', 'Edit Profile', 'Change Password', 'Logout',
+'Administrator (Super User)', 'Since'
+];
+
+$strings = [];
+foreach($uiStrings as $str) {
+$strings[$str] = GoogleTranslator::translate($str);
+}
 @endphp
 
 <div class="profile-header-card" data-aos="fade-down">
@@ -273,7 +289,7 @@ $admin = $admin ?? (object)[
         <!-- Avatar -->
         <div class="profile-avatar-big">
             @if(!empty($admin->avatar) && file_exists(public_path('images/'.$admin->avatar)))
-            <img src="{{ asset('images/'.$admin->avatar) }}" alt="{{ $admin->name }}">
+            <img src="{{ asset('images/'.$admin->avatar) }}" alt="{{ GoogleTranslator::translate($admin->name) }}">
             @else
             {{ strtoupper(substr($admin->name, 0, 1)) }}
             @endif
@@ -282,14 +298,14 @@ $admin = $admin ?? (object)[
         <!-- Info -->
         <div class="profile-header-info">
             <div class="name-row">
-                <h2>{{ $admin->name }}</h2>
+                <h2>{{ GoogleTranslator::translate($admin->name) }}</h2>
                 <span class="rating-badge"><i class="fas fa-star"></i> {{ $admin->rating }}</span>
             </div>
-            <span class="role"><i class="fas fa-shield-halved me-1"></i> Administrator</span>
+            <span class="role"><i class="fas fa-shield-halved me-1"></i> {{ $strings['Administrator'] }}</span>
             <div class="meta">
                 <span><i class="fas fa-phone"></i> {{ $admin->phone }}</span>
-                <span><i class="fas fa-envelope"></i> {{ $admin->email }}</span>
-                <span><i class="fas fa-calendar"></i> Since {{ date('M Y', strtotime($admin->created_at)) }}</span>
+                <span><i class="fas fa-envelope"></i> {{ GoogleTranslator::translate($admin->email) }}</span>
+                <span><i class="fas fa-calendar"></i> {{ $strings['Since'] }} {{ date('M Y', strtotime($admin->created_at)) }}</span>
             </div>
         </div>
 
@@ -302,28 +318,28 @@ $admin = $admin ?? (object)[
         <div class="activity-stat">
             <div class="ast-icon" style="background:linear-gradient(135deg,#2E7D32,#66BB6A);"><i class="fas fa-shopping-cart"></i></div>
             <div class="ast-val">{{ $totalOrders ?? 128 }}</div>
-            <div class="ast-lbl">Orders Managed</div>
+            <div class="ast-lbl">{{ $strings['Orders Managed'] }}</div>
         </div>
     </div>
     <div class="col-md-3 col-6">
         <div class="activity-stat">
             <div class="ast-icon" style="background:linear-gradient(135deg,#1565C0,#42A5F5);"><i class="fas fa-store"></i></div>
             <div class="ast-val">{{ $totalPharmacies ?? 152 }}</div>
-            <div class="ast-lbl">Pharmacies Verified</div>
+            <div class="ast-lbl">{{ $strings['Pharmacies Verified'] }}</div>
         </div>
     </div>
     <div class="col-md-3 col-6">
         <div class="activity-stat">
             <div class="ast-icon" style="background:linear-gradient(135deg,#E65100,#FFA726);"><i class="fas fa-motorcycle"></i></div>
             <div class="ast-val">{{ $totalPartners ?? 45 }}</div>
-            <div class="ast-lbl">Delivery Partners</div>
+            <div class="ast-lbl">{{ $strings['Delivery Partners'] }}</div>
         </div>
     </div>
     <div class="col-md-3 col-6">
         <div class="activity-stat">
             <div class="ast-icon" style="background:linear-gradient(135deg,#7B1FA2,#AB47BC);"><i class="fas fa-users"></i></div>
             <div class="ast-val">{{ $totalCustomers ?? 5240 }}</div>
-            <div class="ast-lbl">Total Customers</div>
+            <div class="ast-lbl">{{ $strings['Total Customers'] }}</div>
         </div>
     </div>
 </div>
@@ -331,15 +347,15 @@ $admin = $admin ?? (object)[
 <div class="row g-4">
     <div class="col-lg-8">
         <div class="info-block" data-aos="fade-up">
-            <h6><i class="fas fa-id-card"></i> Personal Information</h6>
+            <h6><i class="fas fa-id-card"></i> {{ $strings['Personal Information'] }}</h6>
 
             <div class="row">
                 <div class="col-md-6">
                     <div class="info-item">
                         <div class="info-ico"><i class="fas fa-user"></i></div>
                         <div class="info-txt">
-                            <div class="lbl">Full Name</div>
-                            <div class="val">{{ $admin->name }}</div>
+                            <div class="lbl">{{ $strings['Full Name'] }}</div>
+                            <div class="val">{{ GoogleTranslator::translate($admin->name) }}</div>
                         </div>
                     </div>
                 </div>
@@ -347,8 +363,8 @@ $admin = $admin ?? (object)[
                     <div class="info-item">
                         <div class="info-ico"><i class="fas fa-envelope"></i></div>
                         <div class="info-txt">
-                            <div class="lbl">Email Address</div>
-                            <div class="val">{{ $admin->email }}</div>
+                            <div class="lbl">{{ $strings['Email Address'] }}</div>
+                            <div class="val">{{ GoogleTranslator::translate($admin->email) }}</div>
                         </div>
                     </div>
                 </div>
@@ -356,7 +372,7 @@ $admin = $admin ?? (object)[
                     <div class="info-item">
                         <div class="info-ico"><i class="fas fa-phone"></i></div>
                         <div class="info-txt">
-                            <div class="lbl">Mobile Number</div>
+                            <div class="lbl">{{ $strings['Mobile Number'] }}</div>
                             <div class="val">{{ $admin->phone }}</div>
                         </div>
                     </div>
@@ -365,8 +381,8 @@ $admin = $admin ?? (object)[
                     <div class="info-item">
                         <div class="info-ico"><i class="fas fa-shield-halved"></i></div>
                         <div class="info-txt">
-                            <div class="lbl">Account Role</div>
-                            <div class="val">Administrator (Super User)</div>
+                            <div class="lbl">{{ $strings['Account Role'] }}</div>
+                            <div class="val">{{ $strings['Administrator (Super User)'] }}</div>
                         </div>
                     </div>
                 </div>
@@ -374,8 +390,8 @@ $admin = $admin ?? (object)[
                     <div class="info-item">
                         <div class="info-ico"><i class="fas fa-home"></i></div>
                         <div class="info-txt">
-                            <div class="lbl">Address</div>
-                            <div class="val">{{ $admin->address }}</div>
+                            <div class="lbl">{{ $strings['Address'] }}</div>
+                            <div class="val">{{ GoogleTranslator::translate($admin->address) }}</div>
                         </div>
                     </div>
                 </div>
@@ -385,12 +401,12 @@ $admin = $admin ?? (object)[
 
     <div class="col-lg-4">
         <div class="info-block" data-aos="fade-up" data-aos-delay="100">
-            <h6><i class="fas fa-history"></i> Account Activity</h6>
+            <h6><i class="fas fa-history"></i> {{ $strings['Account Activity'] }}</h6>
 
             <div class="info-item">
                 <div class="info-ico"><i class="fas fa-calendar-check"></i></div>
                 <div class="info-txt">
-                    <div class="lbl">Member Since</div>
+                    <div class="lbl">{{ $strings['Member Since'] }}</div>
                     <div class="val">{{ date('d M Y', strtotime($admin->created_at)) }}</div>
                 </div>
             </div>
@@ -398,7 +414,7 @@ $admin = $admin ?? (object)[
             <div class="info-item">
                 <div class="info-ico"><i class="fas fa-clock"></i></div>
                 <div class="info-txt">
-                    <div class="lbl">Last Login</div>
+                    <div class="lbl">{{ $strings['Last Login'] }}</div>
                     <div class="val">{{ date('d M Y, h:i A', strtotime($admin->last_login)) }}</div>
                 </div>
             </div>
@@ -406,23 +422,23 @@ $admin = $admin ?? (object)[
             <div class="info-item">
                 <div class="info-ico" style="background:#E8F5E9;color:#2E7D32;"><i class="fas fa-check-circle"></i></div>
                 <div class="info-txt">
-                    <div class="lbl">Account Status</div>
-                    <div class="val" style="color:#2E7D32;font-weight:700;">Active & Verified</div>
+                    <div class="lbl">{{ $strings['Account Status'] }}</div>
+                    <div class="val" style="color:#2E7D32;font-weight:700;">{{ $strings['Active & Verified'] }}</div>
                 </div>
             </div>
         </div>
 
         <div class="info-block" data-aos="fade-up" data-aos-delay="150">
-            <h6><i class="fas fa-cog"></i> Quick Actions</h6>
+            <h6><i class="fas fa-cog"></i> {{ $strings['Quick Actions'] }}</h6>
 
             <a href="{{ url('/admin/edit-profile') }}" class="btn-primary-custom w-100 justify-content-center mb-2" style="background:linear-gradient(135deg,#1976D2,#42A5F5);color:white;border:none;padding:11px 22px;border-radius:10px;font-weight:600;font-size:0.88rem;display:flex;align-items:center;gap:6px;text-decoration:none;">
-                <i class="fas fa-edit"></i> Edit Profile
+                <i class="fas fa-edit"></i> {{ $strings['Edit Profile'] }}
             </a>
             <a href="{{ url('/admin/edit-profile#password') }}" class="btn-primary-custom w-100 justify-content-center mb-2" style="background:linear-gradient(135deg,#E65100,#FFA726);color:white;border:none;padding:11px 22px;border-radius:10px;font-weight:600;font-size:0.88rem;display:flex;align-items:center;gap:6px;text-decoration:none;">
-                <i class="fas fa-key"></i> Change Password
+                <i class="fas fa-key"></i> {{ $strings['Change Password'] }}
             </a>
             <a href="{{ url('/logout') }}" class="btn-primary-custom w-100 justify-content-center" style="background:linear-gradient(135deg,#C62828,#EF5350);color:white;border:none;padding:11px 22px;border-radius:10px;font-weight:600;font-size:0.88rem;display:flex;align-items:center;gap:6px;text-decoration:none;">
-                <i class="fas fa-sign-out-alt"></i> Logout
+                <i class="fas fa-sign-out-alt"></i> {{ $strings['Logout'] }}
             </a>
         </div>
     </div>

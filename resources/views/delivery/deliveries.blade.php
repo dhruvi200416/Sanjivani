@@ -557,8 +557,8 @@ $strings = GoogleTranslator::translateBatch([
     $(document).ready(function() {
 
         var jsStrings = {
-            pickupConfirm: @json($strings['js_pickup_confirm']),
-            deliveredConfirm: @json($strings['js_delivered_confirm'])
+            pickupConfirm: "{{ $strings['js_pickup_confirm'] ?? 'Confirm you have picked up the order?' }}",
+            deliveredConfirm: "{{ $strings['js_delivered_confirm'] ?? 'Confirm you have delivered the order?' }}"
         };
 
         /* ============ FILTER TABS ============ */

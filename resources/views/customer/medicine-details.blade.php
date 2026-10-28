@@ -862,6 +862,8 @@
 @section('content')
 
 @php
+    use App\Services\GoogleTranslator;
+
     // Demo medicine data with fallback
     $medicine = $medicine ?? (object)[
         'id' => 1,
@@ -905,17 +907,94 @@
 
     $stockClass = $medicine->stock <= 0 ? 'out' : ($medicine->stock < 20 ? 'low' : 'in');
     $stockText = $medicine->stock <= 0 ? 'Out of Stock' : ($medicine->stock < 20 ? 'Only '.$medicine->stock.' left!' : 'In Stock');
+
+    // Translate DB values
+    $tMedName = GoogleTranslator::translate($medicine->name);
+    $tMedBrand = GoogleTranslator::translate($medicine->brand);
+    $tMedCat = GoogleTranslator::translate($medicine->category);
+    $tMedDesc = GoogleTranslator::translate($medicine->description);
+    $tMedDosage = GoogleTranslator::translate($medicine->dosage);
+    $tMedSide = GoogleTranslator::translate($medicine->side_effects);
+    $tMedStorage = GoogleTranslator::translate($medicine->storage);
+    $tPharmacyName = GoogleTranslator::translate($medicine->pharmacy->pharmacy_name ?? 'Sanjivani');
+
+    $uiStrings = [
+        'breadcrumb_home' => 'Home',
+        'breadcrumb_medicines' => 'Medicines',
+        'rx_required' => 'Rx Required',
+        'featured' => 'Featured',
+        'brand_label' => 'Brand:',
+        'reviews_count' => 'reviews',
+        'read_reviews' => 'Read reviews',
+        'mrp_label' => 'MRP',
+        'price_note' => 'Inclusive of all taxes · Free delivery on orders above ₹500',
+        'lbl_avail' => 'Availability',
+        'lbl_sold_by' => 'Sold By',
+        'lbl_delivery' => 'Delivery',
+        'lbl_delivery_val' => 'Within 2-4 hours',
+        'lbl_prescription' => 'Prescription',
+        'lbl_req' => 'Required',
+        'lbl_not_req' => 'Not Required',
+        'lbl_qty' => 'Quantity:',
+        'only_available' => 'Only :n available',
+        'btn_add_cart' => 'Add to Cart',
+        'btn_buy_now' => 'Buy Now',
+        'trust_genuine' => 'Genuine Product',
+        'trust_genuine_sub' => '100% Original',
+        'trust_fast' => 'Fast Delivery',
+        'trust_fast_sub' => '2-4 Hours',
+        'trust_support' => '24/7 Support',
+        'trust_support_sub' => 'Always Available',
+        'tab_desc' => 'Description',
+        'tab_details' => 'Product Details',
+        'tab_reviews' => 'Reviews',
+        'about_med' => 'About This Medicine',
+        'dosage' => 'Dosage',
+        'side_effects' => 'Side Effects',
+        'storage' => 'Storage Instructions',
+        'product_info' => 'Product Information',
+        'tbl_name' => 'Product Name',
+        'tbl_brand' => 'Brand',
+        'tbl_cat' => 'Category',
+        'tbl_comp' => 'Composition',
+        'tbl_manu' => 'Manufacturer',
+        'tbl_expiry' => 'Expiry Date',
+        'tbl_prescription' => 'Prescription',
+        'tbl_sold_by' => 'Sold By',
+        'tbl_country' => 'Country of Origin',
+        'country_val' => 'India',
+        'total_reviews' => 'total reviews',
+        'cust_reviews' => 'Customer Reviews',
+        'no_reviews' => 'No reviews yet. Be the first to review!',
+        'write_review' => 'Write a Review',
+        'your_rating' => 'Your Rating',
+        'your_review' => 'Your Review',
+        'submit_review' => 'Submit Review',
+        'you_may_like' => 'You May Also Like',
+        'js_please_rating' => '⚠ Please select a rating.',
+        'js_review_req' => '⚠ Please write your review.',
+        'js_review_min' => '⚠ Review must be at least 10 characters.',
+        'js_review_max' => '⚠ Review must not exceed 500 characters.',
+        'js_added_cart' => ':qty item(s) added to cart!',
+        'js_login_confirm' => 'Please login to add items to cart. Continue to login?',
+        'js_submitting' => 'Submitting...'
+    ];
+
+    $strings = [];
+    foreach($uiStrings as $key => $str) {
+        $strings[$key] = GoogleTranslator::translate($str);
+    }
 @endphp
 
 <!-- Breadcrumb -->
 <div class="breadcrumb-c">
     <a href="{{ url('/customer/dashboard') }}"><i class="fas fa-home"></i></a>
     <span class="separator">/</span>
-    <a href="{{ url('/customer/medicines') }}">Medicines</a>
+    <a href="{{ url('/customer/medicines') }}">{{ $strings['breadcrumb_medicines'] }}</a>
     <span class="separator">/</span>
-    <a href="{{ url('/customer/medicines?category='.urlencode($medicine->category)) }}">{{ $medicine->category }}</a>
+    <a href="{{ url('/customer/medicines?category='.urlencode($medicine->category)) }}">{{ $tMedCat }}</a>
     <span class="separator">/</span>
-    <span class="current">{{ $medicine->name }}</span>
+    <span class="current">{{ $tMedName }}</span>
 </div>
 
 <!-- Main Product Card -->
@@ -926,15 +1005,15 @@
             <div class="product-gallery">
                 <div class="main-image-wrap">
                     @if(!empty($medicine->image) && file_exists(public_path('uploads/medicines/'.$medicine->image)))
-                        <img src="{{ asset('uploads/medicines/'.$medicine->image) }}" alt="{{ $medicine->name }}" id="mainProductImage">
+                        <img src="{{ asset('uploads/medicines/'.$medicine->image) }}" alt="{{ $tMedName }}" id="mainProductImage">
                     @else
                         <i class="fas fa-pills no-img-big"></i>
                     @endif
 
                     @if($medicine->prescription_required)
-                        <span class="badge-corner rx"><i class="fas fa-file-prescription"></i> Rx Required</span>
+                        <span class="badge-corner rx"><i class="fas fa-file-prescription"></i> {{ $strings['rx_required'] }}</span>
                     @elseif($medicine->featured)
-                        <span class="badge-corner featured"><i class="fas fa-star"></i> Featured</span>
+                        <span class="badge-corner featured"><i class="fas fa-star"></i> {{ $strings['featured'] }}</span>
                     @endif
 
                     @if($discount > 0)
@@ -965,10 +1044,10 @@
 
         <!-- Right: Product Info -->
         <div class="col-lg-7">
-            <span class="product-cat-tag">{{ $medicine->category }}</span>
-            <h1 class="product-title">{{ $medicine->name }}</h1>
+            <span class="product-cat-tag">{{ $tMedCat }}</span>
+            <h1 class="product-title">{{ $tMedName }}</h1>
             <div class="product-brand">
-                <i class="fas fa-tag"></i> Brand: <strong>{{ $medicine->brand }}</strong>
+                <i class="fas fa-tag"></i> {{ $strings['brand_label'] }} <strong>{{ $tMedBrand }}</strong>
             </div>
 
             <div class="product-rating">
@@ -979,60 +1058,60 @@
                 </span>
                 <span class="rating-value">{{ $avgRating }}</span>
                 <span class="rating-count">
-                    ({{ $totalReviews }} reviews) · <a href="#reviewsTab" id="scrollToReviews">Read reviews</a>
+                    ({{ $totalReviews }} {{ $strings['reviews_count'] }}) · <a href="#reviewsTab" id="scrollToReviews">{{ $strings['read_reviews'] }}</a>
                 </span>
             </div>
 
             <div class="price-section">
                 <span class="current-price">₹{{ number_format($medicine->price, 2) }}</span>
                 @if($medicine->mrp > $medicine->price)
-                    <span class="old-price">MRP ₹{{ number_format($medicine->mrp, 2) }}</span>
+                    <span class="old-price">{{ $strings['mrp_label'] }} ₹{{ number_format($medicine->mrp, 2) }}</span>
                     <span class="discount-percent">{{ $discount }}% OFF</span>
                 @endif
-                <small class="price-note">Inclusive of all taxes · Free delivery on orders above ₹500</small>
+                <small class="price-note">{{ $strings['price_note'] }}</small>
             </div>
 
             <div class="product-info-grid">
                 <div class="pi-item">
                     <div class="pi-icon"><i class="fas fa-cubes"></i></div>
                     <div class="pi-text">
-                        <div class="lbl">Availability</div>
+                        <div class="lbl">{{ $strings['lbl_avail'] }}</div>
                         <div class="val {{ $stockClass }}">{{ $stockText }}</div>
                     </div>
                 </div>
                 <div class="pi-item">
                     <div class="pi-icon"><i class="fas fa-store"></i></div>
                     <div class="pi-text">
-                        <div class="lbl">Sold By</div>
-                        <div class="val">{{ $medicine->pharmacy->pharmacy_name ?? 'Sanjivani' }}</div>
+                        <div class="lbl">{{ $strings['lbl_sold_by'] }}</div>
+                        <div class="val">{{ $tPharmacyName }}</div>
                     </div>
                 </div>
                 <div class="pi-item">
                     <div class="pi-icon"><i class="fas fa-truck"></i></div>
                     <div class="pi-text">
-                        <div class="lbl">Delivery</div>
-                        <div class="val">Within 2-4 hours</div>
+                        <div class="lbl">{{ $strings['lbl_delivery'] }}</div>
+                        <div class="val">{{ $strings['lbl_delivery_val'] }}</div>
                     </div>
                 </div>
                 <div class="pi-item">
                     <div class="pi-icon"><i class="fas fa-file-prescription"></i></div>
                     <div class="pi-text">
-                        <div class="lbl">Prescription</div>
-                        <div class="val">{{ $medicine->prescription_required ? 'Required' : 'Not Required' }}</div>
+                        <div class="lbl">{{ $strings['lbl_prescription'] }}</div>
+                        <div class="val">{{ $medicine->prescription_required ? $strings['lbl_req'] : $strings['lbl_not_req'] }}</div>
                     </div>
                 </div>
             </div>
 
             @if($medicine->stock > 0)
                 <div class="qty-section">
-                    <span class="qty-label">Quantity:</span>
+                    <span class="qty-label">{{ $strings['lbl_qty'] }}</span>
                     <div class="qty-selector">
                         <button type="button" class="qty-btn" id="qtyMinus" disabled>−</button>
                         <input type="number" class="qty-input" id="qtyInput" value="1" min="1" max="{{ $medicine->stock }}">
                         <button type="button" class="qty-btn" id="qtyPlus">+</button>
                     </div>
                     @if($medicine->stock < 20)
-                        <span class="stock-warning"><i class="fas fa-exclamation-triangle me-1"></i>Only {{ $medicine->stock }} available</span>
+                        <span class="stock-warning"><i class="fas fa-exclamation-triangle me-1"></i>{{ str_replace(':n', $medicine->stock, $strings['only_available']) }}</span>
                     @endif
                 </div>
             @endif
@@ -1040,29 +1119,29 @@
             <div class="action-buttons">
                 <button type="button" class="btn-large btn-cart-lg" id="addToCartBtn"
                         {{ $medicine->stock <= 0 ? 'disabled' : '' }}>
-                    <i class="fas fa-cart-plus"></i> Add to Cart
+                    <i class="fas fa-cart-plus"></i> {{ $strings['btn_add_cart'] }}
                 </button>
                 <button type="button" class="btn-large btn-buy-lg" id="buyNowBtn"
                         {{ $medicine->stock <= 0 ? 'disabled' : '' }}>
-                    <i class="fas fa-bolt"></i> Buy Now
+                    <i class="fas fa-bolt"></i> {{ $strings['btn_buy_now'] }}
                 </button>
             </div>
 
             <div class="trust-row">
                 <div class="trust-item-p">
                     <i class="fas fa-shield-halved"></i>
-                    <strong>Genuine Product</strong>
-                    <span>100% Original</span>
+                    <strong>{{ $strings['trust_genuine'] }}</strong>
+                    <span>{{ $strings['trust_genuine_sub'] }}</span>
                 </div>
                 <div class="trust-item-p">
                     <i class="fas fa-truck-fast"></i>
-                    <strong>Fast Delivery</strong>
-                    <span>2-4 Hours</span>
+                    <strong>{{ $strings['trust_fast'] }}</strong>
+                    <span>{{ $strings['trust_fast_sub'] }}</span>
                 </div>
                 <div class="trust-item-p">
                     <i class="fas fa-headset"></i>
-                    <strong>24/7 Support</strong>
-                    <span>Always Available</span>
+                    <strong>{{ $strings['trust_support'] }}</strong>
+                    <span>{{ $strings['trust_support_sub'] }}</span>
                 </div>
             </div>
         </div>
@@ -1073,44 +1152,44 @@
 <div class="tabs-card" id="reviewsTab">
     <div class="tabs-header">
         <button type="button" class="tab-btn active" data-tab="description">
-            <i class="fas fa-info-circle"></i> Description
+            <i class="fas fa-info-circle"></i> {{ $strings['tab_desc'] }}
         </button>
         <button type="button" class="tab-btn" data-tab="details">
-            <i class="fas fa-list-check"></i> Product Details
+            <i class="fas fa-list-check"></i> {{ $strings['tab_details'] }}
         </button>
         <button type="button" class="tab-btn" data-tab="reviews">
-            <i class="fas fa-star"></i> Reviews ({{ $totalReviews }})
+            <i class="fas fa-star"></i> {{ $strings['tab_reviews'] }} ({{ $totalReviews }})
         </button>
     </div>
 
     <!-- Description -->
     <div class="tab-content-panel active" id="tab-description">
-        <h6><i class="fas fa-info-circle me-1" style="color:var(--primary-green);"></i> About This Medicine</h6>
-        <p>{{ $medicine->description }}</p>
+        <h6><i class="fas fa-info-circle me-1" style="color:var(--primary-green);"></i> {{ $strings['about_med'] }}</h6>
+        <p>{{ $tMedDesc }}</p>
 
-        <h6 style="margin-top:20px;"><i class="fas fa-flask me-1" style="color:var(--primary-green);"></i> Dosage</h6>
-        <p>{{ $medicine->dosage }}</p>
+        <h6 style="margin-top:20px;"><i class="fas fa-flask me-1" style="color:var(--primary-green);"></i> {{ $strings['dosage'] }}</h6>
+        <p>{{ $tMedDosage }}</p>
 
-        <h6 style="margin-top:20px;"><i class="fas fa-triangle-exclamation me-1" style="color:#FB8C00;"></i> Side Effects</h6>
-        <p>{{ $medicine->side_effects }}</p>
+        <h6 style="margin-top:20px;"><i class="fas fa-triangle-exclamation me-1" style="color:#FB8C00;"></i> {{ $strings['side_effects'] }}</h6>
+        <p>{{ $tMedSide }}</p>
 
-        <h6 style="margin-top:20px;"><i class="fas fa-box-open me-1" style="color:var(--primary-green);"></i> Storage Instructions</h6>
-        <p>{{ $medicine->storage }}</p>
+        <h6 style="margin-top:20px;"><i class="fas fa-box-open me-1" style="color:var(--primary-green);"></i> {{ $strings['storage'] }}</h6>
+        <p>{{ $tMedStorage }}</p>
     </div>
 
     <!-- Details -->
     <div class="tab-content-panel" id="tab-details">
-        <h6><i class="fas fa-list-check me-1" style="color:var(--primary-green);"></i> Product Information</h6>
+        <h6><i class="fas fa-list-check me-1" style="color:var(--primary-green);"></i> {{ $strings['product_info'] }}</h6>
         <table class="info-table">
-            <tr><td>Product Name</td><td>{{ $medicine->name }}</td></tr>
-            <tr><td>Brand</td><td>{{ $medicine->brand }}</td></tr>
-            <tr><td>Category</td><td>{{ $medicine->category }}</td></tr>
-            <tr><td>Composition</td><td>{{ $medicine->composition ?? 'N/A' }}</td></tr>
-            <tr><td>Manufacturer</td><td>{{ $medicine->manufacturer ?? 'N/A' }}</td></tr>
-            <tr><td>Expiry Date</td><td>{{ !empty($medicine->expiry_date) ? date('M Y', strtotime($medicine->expiry_date)) : 'N/A' }}</td></tr>
-            <tr><td>Prescription</td><td>{{ $medicine->prescription_required ? 'Required' : 'Not Required' }}</td></tr>
-            <tr><td>Sold By</td><td>{{ $medicine->pharmacy->pharmacy_name ?? 'Sanjivani' }}</td></tr>
-            <tr><td>Country of Origin</td><td>India</td></tr>
+            <tr><td>{{ $strings['tbl_name'] }}</td><td>{{ $tMedName }}</td></tr>
+            <tr><td>{{ $strings['tbl_brand'] }}</td><td>{{ $tMedBrand }}</td></tr>
+            <tr><td>{{ $strings['tbl_cat'] }}</td><td>{{ $tMedCat }}</td></tr>
+            <tr><td>{{ $strings['tbl_comp'] }}</td><td>{{ GoogleTranslator::translate($medicine->composition ?? 'N/A') }}</td></tr>
+            <tr><td>{{ $strings['tbl_manu'] }}</td><td>{{ GoogleTranslator::translate($medicine->manufacturer ?? 'N/A') }}</td></tr>
+            <tr><td>{{ $strings['tbl_expiry'] }}</td><td>{{ !empty($medicine->expiry_date) ? date('M Y', strtotime($medicine->expiry_date)) : 'N/A' }}</td></tr>
+            <tr><td>{{ $strings['tbl_prescription'] }}</td><td>{{ $medicine->prescription_required ? $strings['lbl_req'] : $strings['lbl_not_req'] }}</td></tr>
+            <tr><td>{{ $strings['tbl_sold_by'] }}</td><td>{{ $tPharmacyName }}</td></tr>
+            <tr><td>{{ $strings['tbl_country'] }}</td><td>{{ $strings['country_val'] }}</td></tr>
         </table>
     </div>
 
@@ -1124,7 +1203,7 @@
                         <i class="fa{{ $i <= round($avgRating) ? 's' : 'r' }} fa-star"></i>
                     @endfor
                 </div>
-                <div class="rating-total">{{ $totalReviews }} total reviews</div>
+                <div class="rating-total">{{ $totalReviews }} {{ $strings['total_reviews'] }}</div>
             </div>
 
             <div class="rating-bars">
@@ -1144,14 +1223,14 @@
         </div>
 
         <!-- Reviews List -->
-        <h6 style="margin-bottom:15px;">Customer Reviews</h6>
+        <h6 style="margin-bottom:15px;">{{ $strings['cust_reviews'] }}</h6>
         @if(count($reviews) > 0)
             @foreach($reviews as $rv)
                 <div class="review-item">
                     <div class="review-header">
                         <div class="review-avatar">{{ strtoupper(substr($rv->name, 0, 1)) }}</div>
                         <div class="review-author">
-                            <strong>{{ $rv->name }}</strong>
+                            <strong>{{ GoogleTranslator::translate($rv->name) }}</strong>
                             <span><i class="fas fa-calendar me-1"></i>{{ date('d M Y', strtotime($rv->date)) }}</span>
                         </div>
                         <span class="review-stars">
@@ -1160,21 +1239,21 @@
                             @endfor
                         </span>
                     </div>
-                    <p class="review-text">{{ $rv->comment }}</p>
+                    <p class="review-text">{{ GoogleTranslator::translate($rv->comment) }}</p>
                 </div>
             @endforeach
         @else
-            <p style="text-align:center;color:var(--gray-text);padding:30px;">No reviews yet. Be the first to review!</p>
+            <p style="text-align:center;color:var(--gray-text);padding:30px;">{{ $strings['no_reviews'] }}</p>
         @endif
 
         <!-- Write Review -->
         <div class="write-review-card">
-            <h6><i class="fas fa-pen me-1" style="color:var(--primary-green);"></i> Write a Review</h6>
+            <h6><i class="fas fa-pen me-1" style="color:var(--primary-green);"></i> {{ $strings['write_review'] }}</h6>
             <form id="reviewForm" action="{{ url('/customer/medicine/'.$medicine->id.'/review') }}" method="POST" novalidate>
                 @csrf
                 <input type="hidden" name="rating" id="ratingInput" value="0">
 
-                <label style="font-size:0.85rem;font-weight:600;color:var(--dark-text);margin-bottom:6px;display:block;">Your Rating <span style="color:#E53935;">*</span></label>
+                <label style="font-size:0.85rem;font-weight:600;color:var(--dark-text);margin-bottom:6px;display:block;">{{ $strings['your_rating'] }} <span style="color:#E53935;">*</span></label>
                 <div class="star-input" id="starInput">
                     <i class="fas fa-star" data-value="1"></i>
                     <i class="fas fa-star" data-value="2"></i>
@@ -1182,14 +1261,14 @@
                     <i class="fas fa-star" data-value="4"></i>
                     <i class="fas fa-star" data-value="5"></i>
                 </div>
-                <span id="ratingError" style="color:#E53935;font-size:0.78rem;display:none;margin-bottom:8px;">⚠ Please select a rating.</span>
+                <span id="ratingError" style="color:#E53935;font-size:0.78rem;display:none;margin-bottom:8px;">{{ $strings['js_please_rating'] }}</span>
 
-                <label style="font-size:0.85rem;font-weight:600;color:var(--dark-text);margin:12px 0 6px;display:block;">Your Review <span style="color:#E53935;">*</span></label>
+                <label style="font-size:0.85rem;font-weight:600;color:var(--dark-text);margin:12px 0 6px;display:block;">{{ $strings['your_review'] }} <span style="color:#E53935;">*</span></label>
                 <textarea name="comment" id="reviewComment" class="review-textarea" placeholder="Share your experience with this medicine..." maxlength="500"></textarea>
                 <span id="commentError" style="color:#E53935;font-size:0.78rem;display:none;margin-top:5px;"></span>
 
                 <button type="submit" class="btn-submit-review" id="submitReviewBtn">
-                    <i class="fas fa-paper-plane"></i> Submit Review
+                    <i class="fas fa-paper-plane"></i> {{ $strings['submit_review'] }}
                 </button>
             </form>
         </div>
@@ -1197,19 +1276,19 @@
 </div>
 
 <!-- ============ RELATED MEDICINES ============ -->
-<h4 class="related-title"><i class="fas fa-thumbs-up"></i> You May Also Like</h4>
+<h4 class="related-title"><i class="fas fa-thumbs-up"></i> {{ $strings['you_may_like'] }}</h4>
 <div class="row g-3">
     @foreach($relatedMedicines as $rel)
         <div class="col-lg-2 col-md-4 col-6">
             <a href="{{ url('/customer/medicine/'.$rel->id) }}" class="related-card">
                 <div class="related-img">
                     @if(!empty($rel->image))
-                        <img src="{{ asset('uploads/medicines/'.$rel->image) }}" alt="{{ $rel->name }}">
+                        <img src="{{ asset('uploads/medicines/'.$rel->image) }}" alt="{{ GoogleTranslator::translate($rel->name) }}">
                     @else
                         <i class="fas fa-pills"></i>
                     @endif
                 </div>
-                <h6>{{ $rel->name }}</h6>
+                <h6>{{ GoogleTranslator::translate($rel->name) }}</h6>
                 <div class="related-price">₹{{ number_format($rel->price) }}</div>
             </a>
         </div>
@@ -1230,11 +1309,24 @@ $(document).ready(function () {
 
     var maxStock = {{ $medicine->stock }};
 
+    var jsStrings = {
+        pleaseRating: "{{ $strings['js_please_rating'] ?? 'Please select a rating.' }}",
+        reviewReq: "{{ $strings['js_review_req'] ?? 'Please write your review.' }}",
+        reviewMin: "{{ $strings['js_review_min'] ?? 'Review must be at least 10 characters.' }}",
+        reviewMax: "{{ $strings['js_review_max'] ?? 'Review must not exceed 500 characters.' }}",
+        addedCart: "{{ $strings['js_added_cart'] ?? ':qty item(s) added to cart!' }}",
+        loginConfirm: "{{ $strings['js_login_confirm'] ?? 'Please login to add items to cart. Continue to login?' }}",
+        submitting: "{{ $strings['js_submitting'] ?? 'Submitting...' }}"
+    };
+
+    function tpl(str, key, val) {
+        return str.replace(':' + key, val);
+    }
+
     /* ============ THUMBNAIL GALLERY ============ */
     $('.thumbnail-item').on('click', function () {
         $('.thumbnail-item').removeClass('active');
         $(this).addClass('active');
-        // In real app: change main image based on thumbnail data
     });
 
     /* ============ QUANTITY SELECTOR ============ */
@@ -1308,7 +1400,7 @@ $(document).ready(function () {
             success: function (res) {
                 if (res.success) {
                     $btn.html('<i class="fas fa-check"></i> Added!');
-                    showToast('✓ ' + qty + ' item(s) added to cart!');
+                    showToast('✓ ' + tpl(jsStrings.addedCart, 'qty', qty));
 
                     if (res.cart_count !== undefined) {
                         $('.cart-badge').text(res.cart_count).show();
@@ -1325,7 +1417,7 @@ $(document).ready(function () {
             },
             error: function (xhr) {
                 if (xhr.status === 401) {
-                    if (confirm('Please login to add items to cart. Continue to login?')) {
+                    if (confirm(jsStrings.loginConfirm)) {
                         window.location.href = '{{ url("/login") }}';
                     } else {
                         $btn.html(original).prop('disabled', false);
@@ -1333,7 +1425,7 @@ $(document).ready(function () {
                 } else {
                     // Demo fallback
                     $btn.html('<i class="fas fa-check"></i> Added!');
-                    showToast('✓ ' + qty + ' item(s) added to cart!');
+                    showToast('✓ ' + tpl(jsStrings.addedCart, 'qty', qty));
                     setTimeout(function () {
                         $btn.html(original).prop('disabled', false);
                     }, 2000);
@@ -1410,15 +1502,15 @@ $(document).ready(function () {
         }
 
         if (comment === '') {
-            $('#commentError').text('⚠ Please write your review.').fadeIn();
+            $('#commentError').text(jsStrings.reviewReq).fadeIn();
             $('#reviewComment').addClass('error');
             isValid = false;
         } else if (comment.length < 10) {
-            $('#commentError').text('⚠ Review must be at least 10 characters.').fadeIn();
+            $('#commentError').text(jsStrings.reviewMin).fadeIn();
             $('#reviewComment').addClass('error');
             isValid = false;
         } else if (comment.length > 500) {
-            $('#commentError').text('⚠ Review must not exceed 500 characters.').fadeIn();
+            $('#commentError').text(jsStrings.reviewMax).fadeIn();
             $('#reviewComment').addClass('error');
             isValid = false;
         }
@@ -1426,7 +1518,7 @@ $(document).ready(function () {
         if (!isValid) return false;
 
         var $btn = $('#submitReviewBtn');
-        $btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Submitting...');
+        $btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> ' + jsStrings.submitting);
         this.submit();
     });
 
